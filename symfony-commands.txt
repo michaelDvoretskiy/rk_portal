@@ -1,0 +1,17 @@
+/*Test doctrine settings by exec sql query*/
+php bin/console doctrine:query:sql "SELECT * FROM sklad where kod=115"
+
+php bin/console doctrine:database:create --connection=customer
+php bin/console doctrine:schema:update --force --em=customer
+php app/console doctrine:schema:update --dump-sql
+
+FOSUserBundle Command Line Tools
+http://symfony.com/doc/master/bundles/FOSUserBundle/command_line_tools.html
+php bin/console fos:user:create admin m.dvoretskiy@gmail.com 1111
+php bin/console fos:user:promote admin --super
+
+VIDEOS Getting Started with FOSUserBundle
+https://codereviewvideos.com/course/getting-started-with-fosuserbundle
+
+git add . fatal: LF would be replaced by CRLF in .gitignore
+Делаем git config --global core.safecrlf false
