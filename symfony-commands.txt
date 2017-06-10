@@ -15,3 +15,14 @@ https://codereviewvideos.com/course/getting-started-with-fosuserbundle
 
 git add . fatal: LF would be replaced by CRLF in .gitignore
 Делаем git config --global core.safecrlf false
+
+git remote add origin https://github.com/michaelDvoretskiy/rk_portal.git
+
+php bin/console cache:clear --no-warmup --env=prod
+
+php bin/console cache:clear --no-warmup -e prod
+
+//integrate knp_menu with bootstrap
+https://gist.github.com/vladab/7180ec8eb31a0f3e581c
+
+git rm -r --cached .idea
