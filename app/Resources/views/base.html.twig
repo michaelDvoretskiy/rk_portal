@@ -5,6 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/font-awesome.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/main.css') }}">
         {% block stylesheets %}{% endblock %}
         <script type="text/javascript" src="{{ asset('resources/js/jquery-3.2.1.min.js') }}"></script>
@@ -21,10 +22,9 @@
                 {#</div>#}
             {#</nav>#}
         {#{% endblock %}#}
-        {% include '@App/Menu/mainMenu.html.twig' %}
-        <div class="container">
-            {% block body %}{% endblock %}
-        </div>
+
+        {% block mainmenu %}{% endblock %}
+        {% block content %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

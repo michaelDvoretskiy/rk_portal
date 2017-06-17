@@ -1,3 +1,38 @@
+body {
+    background-color: #fbfbfb;
+}
 .centered {
      text-align: center;
  }
+.navbar-brand {
+    padding: 2px;
+    padding-right: 10px;
+}
+.navbar-brand img {
+    height: 45px;
+}
+/*section#buttom {*/
+    /*background: url('../images/retail-industry2.jpg') center top;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: 100% 100%;*/
+    /*background-position: center top;*/
+    /*min-height: 250px;*/
+/*}*/
+
+.buttom-home {
+    margin-top: 40px;
+}
+
+.img-home {
+    width: 100%
+}
+
+.title-home {
+    margin-bottom: 20px;
+}
+
+.i-home {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

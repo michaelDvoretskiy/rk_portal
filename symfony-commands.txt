@@ -26,3 +26,7 @@ php bin/console cache:clear --no-warmup -e prod
 https://gist.github.com/vladab/7180ec8eb31a0f3e581c
 
 git rm -r --cached .idea
+
+php bin/console generate:bundle
+
+php bin/console router:match /logout
