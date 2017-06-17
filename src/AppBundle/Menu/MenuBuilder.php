@@ -26,9 +26,9 @@ class MenuBuilder implements ContainerAwareInterface {
         $menu = $factiory->createItem("root");
         $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
         if($user instanceof User) {
-            $menu->addChild("Logout", ['route' => 'fos_user_security_logout'])->setAttribute('icon', 'glyphicon glyphicon-log-in');
+            $menu->addChild("Logout", ['route' => 'fos_user_security_logout'])->setAttribute('icon', 'glyphicon glyphicon-log-out');
         } else {
-            $menu->addChild("Login", ['route' => 'fos_user_security_login'])->setAttribute('icon', 'glyphicon glyphicon-user');
+            $menu->addChild("Login", ['route' => 'fos_user_security_login'])->setAttribute('icon', 'glyphicon glyphicon-log-in');
         }
         return $menu;
     }
