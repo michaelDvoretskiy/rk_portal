@@ -14,4 +14,18 @@ class DefaultController extends Controller
     {
         return $this->render('KvintBundle:Default:index.html.twig');
     }
+    /**
+     * @Route("/accounts", name="kvint_accounts")
+     */
+    public function accountsAction()
+    {
+        return $this->render('KvintBundle:Default:index.html.twig');
+    }
+    /**
+     * @Route("/documents", name="kvint_documents")
+     */
+    public function documentsAction()
+    {
+        return $this->render('KvintBundle:Default:index.html.twig');
+    }
 }

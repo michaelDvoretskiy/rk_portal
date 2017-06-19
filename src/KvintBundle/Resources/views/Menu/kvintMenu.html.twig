@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    {# Brand and toggle get grouped for better mobile display #}
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse-kvint">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        {#<div class="navbar-brand"><img src="{{ asset('resources/images/logo.png') }}"></div>#}
+        <div class="navbar-brand navbar-brand-kvint"><i class="fa fa-truck"></i></div>
+    </div>
+
+    {# Collect the nav links, forms, and other content for toggling #}
+    <div class="collapse navbar-collapse" id="admin-navbar-collapse-kvint">
+        {{ knp_menu_render('KvintBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+    </div>
+</div>

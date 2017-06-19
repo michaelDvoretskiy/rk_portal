@@ -36,3 +36,9 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.navbar-brand-kvint {
+    font-size: 30px;
+    padding: 10px;
+    padding-left: 30px;
+}
