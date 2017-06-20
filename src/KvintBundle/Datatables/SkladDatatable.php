@@ -44,6 +44,8 @@ class SkladDatatable extends AbstractDatatable
             'individual_filtering' => true,
             'individual_filtering_position' => 'head',
             'order_cells_top' => true,
+            'classes' => Style::BOOTSTRAP_3_STYLE, // or Style::BOOTSTRAP_3_STYLE.' table-condensed'
+
         ));
 
         $this->features->set(array(
@@ -51,25 +53,28 @@ class SkladDatatable extends AbstractDatatable
 
         $this->columnBuilder
             ->add('kod', Column::class, array(
-                'title' => 'Kod',
+                'title' => 'Код',
+                'width' => "80px",
                 ))
             ->add('sname', Column::class, array(
-                'title' => 'Sname',
+                'title' => 'Наименование',
+                'width' => "350px",
                 ))
             ->add(null, ActionColumn::class, array(
                 'title' => $this->translator->trans('sg.datatables.actions.title'),
+                'width' => "70px",
                 'actions' => array(
                     array(
                         'route' => 'kvint_sklad_show',
                         'route_parameters' => array(
                             'id' => 'kod'
                         ),
-                        'label' => $this->translator->trans('sg.datatables.actions.show'),
+                        'label' => '', /*$this->translator->trans('sg.datatables.actions.show'),*/
                         'icon' => 'glyphicon glyphicon-eye-open',
                         'attributes' => array(
                             'rel' => 'tooltip',
                             'title' => $this->translator->trans('sg.datatables.actions.show'),
-                            'class' => 'btn btn-primary btn-xs',
+                            'class' => 'btn btn-success btn-xs',
                             'role' => 'button'
                         ),
                     ),
@@ -78,7 +83,7 @@ class SkladDatatable extends AbstractDatatable
                         'route_parameters' => array(
                             'id' => 'kod'
                         ),
-                        'label' => $this->translator->trans('sg.datatables.actions.edit'),
+                        'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
                         'icon' => 'glyphicon glyphicon-edit',
                         'attributes' => array(
                             'rel' => 'tooltip',

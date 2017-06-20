@@ -36,7 +36,6 @@ class AccountController extends Controller
 //        $sklad = $this->getDoctrine()->getManager("kvint") ->getRepository("KvintBundle:Sklad")->find(115);
 //        dump($sklad);
 
-
         $isAjax = $request->isXmlHttpRequest();
 
         $datatable = $this->get('sg_datatables.factory')->create(SkladDatatable::class);
