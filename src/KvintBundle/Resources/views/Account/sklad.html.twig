@@ -1,5 +1,6 @@
 {% extends '@Kvint/Default/index.html.twig' %}
 
 {% block content %}
-    Hello sklad !
+    <h2>Склады : </h2>
+    {{ sg_datatables_render(datatable) }}
 {% endblock %}

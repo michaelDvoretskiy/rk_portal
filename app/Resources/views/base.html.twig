@@ -3,13 +3,28 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/font-awesome.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/main.css') }}">
-        {% block stylesheets %}{% endblock %}
-        <script type="text/javascript" src="{{ asset('resources/js/jquery-3.2.1.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('resources/js/bootstrap.min.js') }}"></script>
+        {% block stylesheets %}
+            <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/datatables.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/font-awesome.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/daterangepicker.min.css') }}">
+            {#<link rel="stylesheet" type="text/css" href="{{ asset('resources/css/bootstrap-editable.css') }}">#}
+            {#<link rel="stylesheet" type="text/css" href="{{ asset('resources/css/featherlight.min.css') }}">#}
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/main.css') }}">
+        {% endblock %}
+        {% block jshead %}
+            <script type="text/javascript" src="{{ asset('resources/js/jquery-3.2.1.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/moment-with-locales.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/daterangepicker.min.js') }}" charset="utf-8"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/datatables.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/bootstrap-editable.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('resources/js/featherlight.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/sgdatatables/js/pipeline.js') }}"></script>
+        {% endblock %}
+
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -24,6 +39,6 @@
         {% endblock %}
         {% block content %}
         {% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block jsfooter %}{% endblock %}
     </body>
 </html>
