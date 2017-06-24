@@ -42,3 +42,12 @@ body {
     padding: 10px;
     padding-left: 30px;
 }
+
+.btn-new {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-new i {
+    margin-right: 20px;
+}

@@ -33,3 +33,5 @@ php bin/console router:match /logout
 
 https://symfony.com/doc/master/bundles/FOSJsRoutingBundle/installation.html
 https://github.com/stwe/DatatablesBundle/blob/master/Resources/doc/installation.md
+
+php bin/console generate:doctrine:form AcmeBlogBundle:Post

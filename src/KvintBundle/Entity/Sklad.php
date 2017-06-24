@@ -23,6 +23,14 @@ class Sklad {
     /**
      * @return mixed
      */
+    public function getKod()
+    {
+        return $this->kod;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getSname()
     {
         return $this->sname;

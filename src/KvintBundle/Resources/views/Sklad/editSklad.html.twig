@@ -1,0 +1,31 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme skladForm 'bootstrap_3_layout.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                {% if (type == 'edit') %}
+                    <h1>Редактирование склада {{ skladForm.sname.vars.value }}</h1>
+                {% endif %}
+                {% if (type == 'new') %}
+                    <h1>Добавление склада</h1>
+                {% endif %}
+                {{ form_start(skladForm) }}
+                {% if (type == 'edit') %}
+                    {{ form_row(skladForm.kod, { 'attr':{'style': 'width: 80px'} }) }}
+                {% endif %}
+                {{ form_row(skladForm.sname, { 'attr':{'style': 'width: 400px'} }) }}
+                {{ form_widget(skladForm.ok) }}
+                {#{{ form_row(skladForm.subFamily) }}#}
+                {#{{ form_row(skladForm.speciesCount, {#}
+                {#'label': 'Number of Species'#}
+                {#}) }}#}
+                {#{{ form_row(genusForm.funFact) }}#}
+                {#{{ form_row(genusForm.isPublished) }}#}
+                {#{{ form_row(genusForm.firstDiscoveredAt) }}#}
+                {#<button type="submit" class="btn btn-primary" formnovalidate>Save</button>#}
+                {{ form_end(skladForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

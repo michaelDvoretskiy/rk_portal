@@ -44,8 +44,8 @@ class SkladDatatable extends AbstractDatatable
             'individual_filtering' => true,
             'individual_filtering_position' => 'head',
             'order_cells_top' => true,
-            'classes' => Style::BOOTSTRAP_3_STYLE, // or Style::BOOTSTRAP_3_STYLE.' table-condensed'
-
+            'classes' => Style::BOOTSTRAP_3_STYLE, // or Style::BOOTSTRAP_3_STYLE.' table-condensed',
+//            'dom' => '<lf>Btip',
         ));
 
         $this->features->set(array(
@@ -61,7 +61,7 @@ class SkladDatatable extends AbstractDatatable
                 'width' => "350px",
                 ))
             ->add(null, ActionColumn::class, array(
-                'title' => $this->translator->trans('sg.datatables.actions.title'),
+                'title' => '',//$this->translator->trans('sg.datatables.actions.title'),
                 'width' => "70px",
                 'actions' => array(
                     array(
@@ -70,7 +70,7 @@ class SkladDatatable extends AbstractDatatable
                             'id' => 'kod'
                         ),
                         'label' => '', /*$this->translator->trans('sg.datatables.actions.show'),*/
-                        'icon' => 'glyphicon glyphicon-eye-open',
+                        'icon' => 'fa fa-tv',
                         'attributes' => array(
                             'rel' => 'tooltip',
                             'title' => $this->translator->trans('sg.datatables.actions.show'),
@@ -84,11 +84,25 @@ class SkladDatatable extends AbstractDatatable
                             'id' => 'kod'
                         ),
                         'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
-                        'icon' => 'glyphicon glyphicon-edit',
+                        'icon' => 'fa fa-pencil',
                         'attributes' => array(
                             'rel' => 'tooltip',
                             'title' => $this->translator->trans('sg.datatables.actions.edit'),
                             'class' => 'btn btn-primary btn-xs',
+                            'role' => 'button'
+                        ),
+                    ),
+                    array(
+                        'route' => 'kvint_sklad_remove',
+                        'route_parameters' => array(
+                            'id' => 'kod'
+                        ),
+                        'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
+                        'icon' => 'glyphicon glyphicon-trash',
+                        'attributes' => array(
+                            'rel' => 'tooltip',
+                            'title' => 'delete',
+                            'class' => 'btn btn-danger btn-xs',
                             'role' => 'button'
                         ),
                     )
