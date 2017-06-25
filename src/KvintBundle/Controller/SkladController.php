@@ -6,7 +6,6 @@ use KvintBundle\Entity\Sklad;
 use KvintBundle\Form\SkladType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use KvintBundle\Datatables\SkladDatatable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,12 +26,14 @@ class SkladController extends Controller
         $datatable = $this->get('sg_datatables.factory')->create(SkladDatatable::class);
         $datatable->buildDatatable();
 
+
         if ($isAjax) {
             $responseService = $this->get('sg_datatables.response');
             $responseService->setDatatable($datatable);
 
             $datatableQueryBuilder = $responseService->getDatatableQueryBuilder();
             $datatableQueryBuilder->buildQuery();
+            dump($datatable->getOptions());
 
             return $responseService->getResponse();
         }
@@ -115,11 +116,21 @@ class SkladController extends Controller
      *
      * @return Response
      */
-    public function addSkladAction() {
+    public function addSkladAction(Request $request) {
         $sklad = new Sklad();
 //        $sklad->setSname('Новый склад');
         $form = $this->createForm(SkladType::class, $sklad);
         $form->remove('kod');
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sklad = $form->getData();
+            $em = $this->getDoctrine()->getManager("kvint");
+            $sklad->setKod($em->getRepository("KvintBundle:Sklad")->generateKod());
+            $em->persist($sklad);
+            $em->flush();
+            return $this->redirectToRoute('kvint_sklad');
+        }
         return $this->render('@Kvint/Sklad/editSklad.html.twig', [
             'skladForm' => $form->createView(),
             'type' => 'new',

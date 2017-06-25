@@ -49,6 +49,7 @@ class SkladDatatable extends AbstractDatatable
         ));
 
         $this->features->set(array(
+            "state_save" => true,
         ));
 
         $this->columnBuilder
