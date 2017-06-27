@@ -64,6 +64,7 @@ class SkladDatatable extends AbstractDatatable
             ->add(null, ActionColumn::class, array(
                 'title' => '',//$this->translator->trans('sg.datatables.actions.title'),
                 'width' => "70px",
+                'class_name' => 'centered',
                 'actions' => array(
                     array(
                         'route' => 'kvint_sklad_show',
@@ -98,6 +99,8 @@ class SkladDatatable extends AbstractDatatable
                         'route_parameters' => array(
                             'id' => 'kod'
                         ),
+                        'confirm' => true,
+                        'confirm_message' => 'Удалить склад ?',
                         'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
                         'icon' => 'glyphicon glyphicon-trash',
                         'attributes' => array(

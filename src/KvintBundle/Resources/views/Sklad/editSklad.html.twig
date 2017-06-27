@@ -15,16 +15,14 @@
                     {{ form_row(skladForm.kod, { 'attr':{'style': 'width: 80px'} }) }}
                 {% endif %}
                 {{ form_row(skladForm.sname, { 'attr':{'style': 'width: 400px'} }) }}
+                <hr class="separator">
+                {{ form_row(skladForm.entKod, { 'attr':{'style': 'width: 400px'} }) }}
+                {{ form_row(skladForm.zoneKod, { 'attr':{'style': 'width: 400px'} }) }}
+                <hr class="separator">
                 {{ form_widget(skladForm.rozn) }}
+                {{ form_widget(skladForm.obpRozn) }}
+                {{ form_row(skladForm.autoClose, { 'attr':{'style': 'width: 400px'} }) }}
                 {{ form_widget(skladForm.ok) }}
-                {#{{ form_row(skladForm.subFamily) }}#}
-                {#{{ form_row(skladForm.speciesCount, {#}
-                {#'label': 'Number of Species'#}
-                {#}) }}#}
-                {#{{ form_row(genusForm.funFact) }}#}
-                {#{{ form_row(genusForm.isPublished) }}#}
-                {#{{ form_row(genusForm.firstDiscoveredAt) }}#}
-                {#<button type="submit" class="btn btn-primary" formnovalidate>Save</button>#}
                 {{ form_end(skladForm) }}
             </div>
         </div>

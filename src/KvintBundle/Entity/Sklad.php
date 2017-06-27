@@ -1,7 +1,6 @@
 <?php
 namespace KvintBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +24,43 @@ class Sklad {
      */
     protected $rozn;
 
+    /**
+     * @ORM\Column(name="IsObpRozn", type="string", length=1)
+     */
+    protected $obpRozn;
+
+    /**
+     * @ORM\Column(name="AutoClose", type="string", length=1)
+     */
+    protected $autoClose;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Ent", inversedBy="skladList")
+     * @ORM\JoinColumn(name="ekod", referencedColumnName="kod")
+     */
+    protected $entKod;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TradeZone", inversedBy="skladList")
+     * @ORM\JoinColumn(name="kodZone", referencedColumnName="kod")
+     */
+    protected $zoneKod;
+
+    /**
+     * @return mixed
+     */
+    public function getZoneKod()
+    {
+        return $this->zoneKod;
+    }
+
+    /**
+     * @param mixed $zoneKod
+     */
+    public function setZoneKod($zoneKod)
+    {
+        $this->zoneKod = $zoneKod;
+    }
     /**
      * @return mixed
      */
@@ -78,7 +114,70 @@ class Sklad {
             $this->rozn = "T";
         } else {
             $this->rozn = "F";
+            $this->setObpRozn(false);
         }
         return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isObpRozn()
+    {
+        if ($this->obpRozn == "T") {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param mixed $isObpRozn
+     */
+    public function setObpRozn($obpRozn)
+    {
+        if ($obpRozn && $this->isRozn()) {
+            $this->obpRozn = "T";
+        } else {
+            $this->obpRozn = "F";
+        }
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAutoClose()
+    {
+        if (is_null($this->autoClose)) {
+            return "F";
+        }
+        return $this->autoClose;
+    }
+
+    /**
+     * @param mixed $autoClose
+     */
+    public function setAutoClose($autoClose)
+    {
+        $this->autoClose = $autoClose;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntKod()
+    {
+        return $this->entKod;
+    }
+
+    /**
+     * @param mixed $entKod
+     */
+    public function setEntKod($entKod)
+    {
+        $this->entKod = $entKod;
+    }
+
+
 }

@@ -33,8 +33,6 @@ class SkladController extends Controller
 
             $datatableQueryBuilder = $responseService->getDatatableQueryBuilder();
             $datatableQueryBuilder->buildQuery();
-            dump($datatable->getOptions());
-
             return $responseService->getResponse();
         }
 
