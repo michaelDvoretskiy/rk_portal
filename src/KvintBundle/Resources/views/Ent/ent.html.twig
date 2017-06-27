@@ -1,0 +1,17 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8">
+                <h2>Организации : </h2>
+                <div>
+                    <a href=" {{ path('kvint_ent_add') }} " class="btn btn-success btn-default active btn-new">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
+                    </a>
+                </div>
+                {{ sg_datatables_render(datatable) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
