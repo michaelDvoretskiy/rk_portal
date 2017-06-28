@@ -19,7 +19,7 @@ class SkladController extends Controller
      * @Route("/sklad", name="kvint_sklad")
      * @Template()
      */
-    public function skladAction(Request $request)
+    public function skladListAction(Request $request)
     {
         $isAjax = $request->isXmlHttpRequest();
 
@@ -46,7 +46,6 @@ class SkladController extends Controller
      *
      * @Route("/sklad/show/{id}", name = "kvint_sklad_show", options = {"expose" = true})
      * @Security("has_role('ROLE_USER')")
-     * @Template()
      *
      * @return Response
      */
@@ -58,9 +57,11 @@ class SkladController extends Controller
             return $this->redirectToRoute('kvint_sklad');
         }
 
-        return [
+        return $this->render('@Kvint/Sklad/skladElement.html.twig', [
             'skladForm' => $form->createView(),
-        ];
+            'title' => ' склада ' . $sklad->getSname(),
+            'type' => 'show',
+        ]);
     }
 
     /**
@@ -68,7 +69,6 @@ class SkladController extends Controller
      *
      * @Route("/sklad/edit/{id}", name = "kvint_sklad_edit", options = {"expose" = true})
      * @Security("has_role('ROLE_USER')")
-     * @Template()
      *
      * @return Response
      */
@@ -85,10 +85,11 @@ class SkladController extends Controller
             return $this->redirectToRoute('kvint_sklad');
         }
 
-        return [
+        return $this->render('@Kvint/Sklad/skladElement.html.twig', [
             'skladForm' => $form->createView(),
+            'title' => ' склада ' . $sklad->getSname(),
             'type' => 'edit',
-        ];
+        ]);
     }
 
     /**
@@ -116,7 +117,6 @@ class SkladController extends Controller
      */
     public function addSkladAction(Request $request) {
         $sklad = new Sklad();
-//        $sklad->setSname('Новый склад');
         $form = $this->createForm(SkladType::class, $sklad);
         $form->remove('kod');
 
@@ -129,8 +129,9 @@ class SkladController extends Controller
             $em->flush();
             return $this->redirectToRoute('kvint_sklad');
         }
-        return $this->render('@Kvint/Sklad/editSklad.html.twig', [
+        return $this->render('@Kvint/Sklad/skladElement.html.twig', [
             'skladForm' => $form->createView(),
+            'title' => ' склада',
             'type' => 'new',
         ]);
     }

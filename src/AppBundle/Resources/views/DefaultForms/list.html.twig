@@ -1,13 +1,10 @@
-{% extends '@Kvint/Default/index.html.twig' %}
-
-{% block content %}
+{% macro show_list(title, add_path, datatable) %}
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-8">
-                <h2>Склады : </h2>
+                <h2>{{ title }}</h2>
                 <div>
-                    {#<button class="btn btn-success btn-new"><i class="fa fa-plus-circle"></i>Добавить</button>#}
-                    <a href=" {{ path('kvint_sklad_add') }} " class="btn btn-success btn-default active btn-new">
+                    <a href=" {{ path(add_path) }} " class="btn btn-success btn-default active btn-new">
                         <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
                     </a>
                 </div>
@@ -15,4 +12,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endmacro %}

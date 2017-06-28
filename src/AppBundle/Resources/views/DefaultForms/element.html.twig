@@ -1,0 +1,29 @@
+{% macro show_elem_start(form, type, title = "") %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                {% if (type == 'edit') %}
+                    <h2>Редактирование {{ title }}</h2>
+                {% endif %}
+                {% if (type == 'new') %}
+                    <h2>Добавление {{ title }}</h2>
+                {% endif %}
+                {% if (type == 'show') %}
+                    <h2>Просмотр {{ title }}</h2>
+                {% endif %}
+                {{ form_start(form) }}
+{% endmacro %}
+
+{% macro show_elem_end(form) %}
+    {{ form_widget(form.ok) }}
+    {{ form_end(form) }}
+{% endmacro %}
+
+{% macro show_elem_row(elem, type = "edit", attr = {}) %}
+    {% if (type == 'show') %}
+        {% set attr = attr|merge({
+            'disabled': 'disabled'
+        }) %}
+    {% endif %}
+    {{ form_row(elem, {'attr' : attr}) }}
+{% endmacro %}

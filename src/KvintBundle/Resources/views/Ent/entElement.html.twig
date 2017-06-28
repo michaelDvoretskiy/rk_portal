@@ -1,0 +1,12 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme entForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(entForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(entForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_row(entForm.name, type, {'style': 'width: 400px'}) }}
+    {{ elem_form.show_elem_end(entForm) }}
+{% endblock %}

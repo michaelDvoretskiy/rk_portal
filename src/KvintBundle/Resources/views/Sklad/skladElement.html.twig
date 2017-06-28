@@ -1,0 +1,19 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme skladForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(skladForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(skladForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_row(skladForm.sname, type, {'style': 'width: 400px'}) }}
+    <hr class="separator">
+    {{ elem_form.show_elem_row(skladForm.entKod, type, {'style': 'width: 400px'}) }}
+    {{ elem_form.show_elem_row(skladForm.zoneKod, type, {'style': 'width: 400px'}) }}
+    <hr class="separator">
+    {{ elem_form.show_elem_row(skladForm.rozn, type, {}) }}
+    {{ elem_form.show_elem_row(skladForm.obpRozn, type, {}) }}
+    {{ elem_form.show_elem_row(skladForm.autoClose, type, {'style': 'width: 400px'}) }}
+    {{ elem_form.show_elem_end(skladForm) }}
+{% endblock %}

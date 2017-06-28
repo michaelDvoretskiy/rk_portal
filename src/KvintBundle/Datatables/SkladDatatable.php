@@ -2,6 +2,7 @@
 
 namespace KvintBundle\Datatables;
 
+use AppBundle\Utils\DataTableUtil;
 use Sg\DatatablesBundle\Datatable\AbstractDatatable;
 use Sg\DatatablesBundle\Datatable\Style;
 use Sg\DatatablesBundle\Datatable\Column\Column;
@@ -40,17 +41,13 @@ class SkladDatatable extends AbstractDatatable
         $this->ajax->set(array(
         ));
 
-        $this->options->set(array(
-            'individual_filtering' => true,
-            'individual_filtering_position' => 'head',
-            'order_cells_top' => true,
-            'classes' => Style::BOOTSTRAP_3_STYLE, // or Style::BOOTSTRAP_3_STYLE.' table-condensed',
-//            'dom' => '<lf>Btip',
-        ));
+        $this->options->set(
+            DataTableUtil::getOptions()
+        );
 
-        $this->features->set(array(
-            "state_save" => true,
-        ));
+        $this->features->set(
+            DataTableUtil::getFeatures()
+        );
 
         $this->columnBuilder
             ->add('kod', Column::class, array(
@@ -61,58 +58,12 @@ class SkladDatatable extends AbstractDatatable
                 'title' => 'Наименование',
                 'width' => "350px",
                 ))
-            ->add(null, ActionColumn::class, array(
-                'title' => '',//$this->translator->trans('sg.datatables.actions.title'),
-                'width' => "70px",
-                'class_name' => 'centered',
-                'actions' => array(
-                    array(
-                        'route' => 'kvint_sklad_show',
-                        'route_parameters' => array(
-                            'id' => 'kod'
-                        ),
-                        'label' => '', /*$this->translator->trans('sg.datatables.actions.show'),*/
-                        'icon' => 'fa fa-tv',
-                        'attributes' => array(
-                            'rel' => 'tooltip',
-                            'title' => $this->translator->trans('sg.datatables.actions.show'),
-                            'class' => 'btn btn-success btn-xs',
-                            'role' => 'button'
-                        ),
-                    ),
-                    array(
-                        'route' => 'kvint_sklad_edit',
-                        'route_parameters' => array(
-                            'id' => 'kod'
-                        ),
-                        'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
-                        'icon' => 'fa fa-pencil',
-                        'attributes' => array(
-                            'rel' => 'tooltip',
-                            'title' => $this->translator->trans('sg.datatables.actions.edit'),
-                            'class' => 'btn btn-primary btn-xs',
-                            'role' => 'button'
-                        ),
-                    ),
-                    array(
-                        'route' => 'kvint_sklad_remove',
-                        'route_parameters' => array(
-                            'id' => 'kod'
-                        ),
-                        'confirm' => true,
-                        'confirm_message' => 'Удалить склад ?',
-                        'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
-                        'icon' => 'glyphicon glyphicon-trash',
-                        'attributes' => array(
-                            'rel' => 'tooltip',
-                            'title' => 'delete',
-                            'class' => 'btn btn-danger btn-xs',
-                            'role' => 'button'
-                        ),
-                    )
-                )
-            ))
-        ;
+            ->add(null, ActionColumn::class, DataTableUtil::getActions(
+                'kvint_sklad',
+                $this->translator->trans('sg.datatables.actions.show'),
+                $this->translator->trans('sg.datatables.actions.edit'),
+                "delete"
+            ));
     }
 
     /**

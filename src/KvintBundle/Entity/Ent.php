@@ -6,10 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\EntRepository")
  * @ORM\Table(name="sprent")
  */
 class Ent {
+
     /**
      * @ORM\Id()
      * @ORM\Column(name="kod", type="integer")
@@ -56,8 +57,12 @@ class Ent {
         return $this;
     }
 
-//    function __toString()
-//    {
-//        return $this->getName()
-//    }
+    /**
+     * @param mixed $kod
+     */
+    public function setKod($kod)
+    {
+        $this->kod = $kod;
+        return $this;
+    }
 }
