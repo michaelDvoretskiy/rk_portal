@@ -74,7 +74,7 @@ class DataTableUtil {
             'individual_filtering' => true,
             'individual_filtering_position' => 'head',
             'order_cells_top' => true,
-            'classes' => Style::BOOTSTRAP_3_STYLE, // or Style::BOOTSTRAP_3_STYLE.' table-condensed',
+            'classes' => Style::BOOTSTRAP_3_STYLE . " table-hover", // or Style::BOOTSTRAP_3_STYLE.' table-condensed',
         ];
     }
 

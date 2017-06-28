@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\TradeZoneRepository")
  * @ORM\Table(name="temp_spr_zones")
  */
 class TradeZone {
@@ -55,4 +55,14 @@ class TradeZone {
         $this->name = $name;
         return $this;
     }
+
+    /**
+     * @param mixed $kod
+     */
+    public function setKod($kod)
+    {
+        $this->kod = $kod;
+        return $this;
+    }
+
 }

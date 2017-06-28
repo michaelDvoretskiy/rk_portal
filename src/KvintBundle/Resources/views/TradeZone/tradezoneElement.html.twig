@@ -1,0 +1,12 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme zoneForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(zoneForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(zoneForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_row(zoneForm.name, type, {'style': 'width: 400px'}) }}
+    {{ elem_form.show_elem_end(zoneForm) }}
+{% endblock %}

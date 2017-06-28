@@ -19,6 +19,7 @@ class MenuBuilder implements ContainerAwareInterface {
         $menu['accounts']->addChild('kvint_tovar', array('route' => 'kvint_tovar', 'label' => 'Товары'));
         $menu['accounts']->addChild('kvint_klient', array('route' => 'kvint_klient', 'label' => 'Клиенты'))->setAttribute('divider_append', true);
         $menu['accounts']->addChild('kvint_sklad', array('route' => 'kvint_sklad', 'label' => 'Склады'));
+        $menu['accounts']->addChild('kvint_trade_zone', array('route' => 'kvint_trade_zone', 'label' => 'Торг. зоны'));
 //        $menu['accounts']->addChild('divider1', ['divider' => true, 'label' => '', 'class'=>'divider']);
         $menu['accounts']->addChild('kvint_ent', array('route' => 'kvint_ent', 'label' => 'Организации'));
         return $menu;

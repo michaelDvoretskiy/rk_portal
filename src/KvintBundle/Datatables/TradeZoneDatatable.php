@@ -12,7 +12,7 @@ use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
  *
  * @package KvintBundle\Datatables
  */
-class EntDatatable extends AbstractDatatable
+class TradeZoneDatatable extends AbstractDatatable
 {
     /**
      * {@inheritdoc}
@@ -45,7 +45,7 @@ class EntDatatable extends AbstractDatatable
                 'width' => "350px",
             ))
             ->add(null, ActionColumn::class, DataTableUtil::getActions(
-                "kvint_ent",
+                "kvint_trade_zone",
                 $this->translator->trans('sg.datatables.actions.show'),
                 $this->translator->trans('sg.datatables.actions.edit'),
                 ""
@@ -57,7 +57,7 @@ class EntDatatable extends AbstractDatatable
      */
     public function getEntity()
     {
-        return 'KvintBundle\Entity\Ent';
+        return 'KvintBundle\Entity\TradeZone';
     }
 
     /**
@@ -65,6 +65,6 @@ class EntDatatable extends AbstractDatatable
      */
     public function getName()
     {
-        return 'ent_datatable';
+        return 'tradezone_datatable';
     }
 }
