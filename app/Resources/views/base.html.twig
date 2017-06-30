@@ -31,7 +31,7 @@
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
             {% block mainmenu %}
-                {% include '@App/Menu/mainMenu.html.twig' %}
+                {% include '@App/Menu/mainMenu.html.twig' with {'show_user_info': true} %}
             {% endblock %}
             {% block mainmenu2 %}
             {% endblock %}

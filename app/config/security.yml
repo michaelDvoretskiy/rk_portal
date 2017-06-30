@@ -7,7 +7,9 @@ security:
 
     role_hierarchy:
       ROLE_ADMIN:       ROLE_USER
-      ROLE_SUPER_ADMIN: ROLE_ADMIN
+      ROLE_KVINT:       ROLE_USER
+      ROLE_PORTAL:       ROLE_USER
+      ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_USER, ROLE_KVINT, ROLE_PORTAL]
 
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -44,4 +46,6 @@ security:
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/resetting, role: ROLE_ADMIN }
         - { path: ^/admin, role: ROLE_ADMIN }
+        - { path: ^/kvint, role: ROLE_KVINT }
+        - { path: ^/portal, role: ROLE_PORTAL }
         - { path: ^/, role: ROLE_USER }

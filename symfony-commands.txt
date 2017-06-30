@@ -39,3 +39,8 @@ php bin/console sg:datatable:generate AppBundle:Post
 php bin/console generate:doctrine:form AcmeBlogBundle:Post
 
 php bin/console assets:install
+
+composer require javiereguiluz/easyadmin-bundle
+https://level7systems.co.uk/symfony2-admin-panel-in-30-seconds/
+http://symfony.com/doc/current/bundles/EasyAdminBundle/integration/fosuserbundle.html
+

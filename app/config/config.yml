@@ -85,6 +85,7 @@ doctrine:
               mappings:
                 AppBundle: ~
                 FOSUserBundle: ~
+                EasyAdminBundle: ~
           kvint:
               connection: kvint
               mappings:
@@ -117,3 +118,18 @@ knp_menu:
     templating: false
     # the renderer to use, list is also available by default
     default_renderer: twig
+
+easy_admin:
+    entities:
+      User:
+        class: AppBundle\Entity\User
+        list:
+            fields: ['id', 'username', 'email', 'enabled']
+        form:
+            fields:
+                - username
+                - email
+                - enabled
+                # if administrators are allowed to edit users' passwords and roles, add this:
+                - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+                - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'Пользователь': 'ROLE_USER', 'Квинт': 'ROLE_KVINT', 'Портал': 'ROLE_PORTAL', 'Администратор': 'ROLE_ADMIN', 'Супер админ': 'ROLE_SUPER_ADMIN'} } }
