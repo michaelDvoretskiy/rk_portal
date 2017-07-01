@@ -106,6 +106,8 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
     user_class: AppBundle\Entity\User
+    group:
+        group_class: AppBundle\Entity\Group
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
@@ -123,8 +125,9 @@ easy_admin:
     entities:
       User:
         class: AppBundle\Entity\User
+        label: Пользователи
         list:
-            fields: ['id', 'username', 'email', 'enabled']
+            fields: ['username', 'email', 'enabled']
         form:
             fields:
                 - username
@@ -133,3 +136,26 @@ easy_admin:
                 # if administrators are allowed to edit users' passwords and roles, add this:
                 - { property: 'plainPassword', type: 'text', type_options: { required: false } }
                 - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'Пользователь': 'ROLE_USER', 'Квинт': 'ROLE_KVINT', 'Портал': 'ROLE_PORTAL', 'Администратор': 'ROLE_ADMIN', 'Супер админ': 'ROLE_SUPER_ADMIN'} } }
+                - groups
+      Group:
+        label: Группы
+        class: AppBundle\Entity\Group
+        list:
+            fields: ['name']
+        form:
+          fields:
+            - name
+            - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'Пользователь': 'ROLE_USER', 'Квинт': 'ROLE_KVINT', 'Портал': 'ROLE_PORTAL', 'Администратор': 'ROLE_ADMIN', 'Супер админ': 'ROLE_SUPER_ADMIN'} } }
+      Entity:
+        label: Сущности
+        class: AppBundle\Entity\PEntity
+        list:
+          fields: ['name']
+        form:
+          fields:
+            - name
+      Rights:
+        label: Права
+        class: AppBundle\Entity\Right
+        list:
+          fields: ['group', 'pEntity', 'view', 'add', 'edit', 'delete']

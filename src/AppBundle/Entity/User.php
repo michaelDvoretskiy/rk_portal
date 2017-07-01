@@ -17,6 +17,15 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\ManyToMany(targetEntity = "AppBundle\Entity\Group")
+     * @ORM\JoinTable(name = "rk_portal_users_groups",
+     *     joinColumns={@ORM\JoinColumn(name = "user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name = "group_id", referencedColumnName="id")}
+     *     )
+     */
+    protected $groups;
+
     public function __construct()
     {
         parent::__construct();
