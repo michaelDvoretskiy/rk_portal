@@ -5,14 +5,14 @@ namespace AppBundle\Utils;
 use Sg\DatatablesBundle\Datatable\Style;
 
 class DataTableUtil {
-    public static function getActions($path, $show, $edit, $delete) {
+    public static function getActions($path, $show, $edit, $delete, $rights = ['view' => true, 'add' => 'false', 'edit' => false, 'delete' => false]) {
         $res = [
-            'title' => '',//$this->translator->trans('sg.datatables.actions.title'),
+            'title' => '', //$this->translator->trans('sg.datatables.actions.title'),
             'width' => "70px",
             'class_name' => 'centered'
         ];
         $actions = [];
-        if ($show) {
+        if ($show && $rights['view']) {
             $actions[] = [
                 'route' => $path . '_show',
                 'route_parameters' => array(
@@ -28,7 +28,7 @@ class DataTableUtil {
                 ),
             ];
         }
-        if ($edit) {
+        if ($edit && $rights['edit']) {
             $actions[] = [
                 'route' => $path . '_edit',
                 'route_parameters' => array(
@@ -44,7 +44,7 @@ class DataTableUtil {
                 ),
             ];
         }
-        if ($delete) {
+        if ($delete && $rights['delete']) {
             $actions[] = [
                 'route' => $path . '_remove',
                 'route_parameters' => array(

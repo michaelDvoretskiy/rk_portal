@@ -2,6 +2,7 @@
 
 namespace KvintBundle\Controller;
 
+use AppBundle\Utils\EntityRightsChecker;
 use KvintBundle\Entity\Sklad;
 use KvintBundle\Form\SkladType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,15 +16,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SkladController extends Controller
 {
+    use EntityRightsChecker;
+    private $entity_name = 'kvint_spr_sklad';
     /**
      * @Route("/sklad", name="kvint_sklad")
      * @Template()
      */
     public function skladListAction(Request $request)
     {
+        if (!$this->hasRight('list')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Warehouse dictionary. Access deny']);
+        }
         $isAjax = $request->isXmlHttpRequest();
 
         $datatable = $this->get('sg_datatables.factory')->create(SkladDatatable::class);
+        $datatable->rights = $this->getRights();
         $datatable->buildDatatable();
 
 
@@ -38,6 +45,7 @@ class SkladController extends Controller
 
         return [
             'datatable' => $datatable,
+            'is_add_btn' => $datatable->rights['add'],
         ];
     }
 
@@ -51,6 +59,10 @@ class SkladController extends Controller
      */
     public function showSkladAction(Request $request, Sklad $sklad)
     {
+        if (!$this->hasRight('view')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'View warehouse dictinary element. Access deny']);
+        }
+
         $form = $this->createForm(SkladType::class, $sklad);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,6 +85,10 @@ class SkladController extends Controller
      * @return Response
      */
     public function editSkladAction(Request $request, Sklad $sklad) {
+        if (!$this->hasRight('edit')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Edit warehouse dictinary element. Access deny']);
+        }
+
         $form = $this->createForm(SkladType::class, $sklad);
 //        // only handles data on POST
         $form->handleRequest($request);
@@ -101,6 +117,10 @@ class SkladController extends Controller
      * @return Response
      */
     public function removeSkladAction(Request $request, Sklad $sklad) {
+        if (!$this->hasRight('delete')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Delete warehouse dictinary element. Access deny']);
+        }
+
         $em = $this->getDoctrine()->getManager("kvint");
         $em->remove($sklad);
         $em->flush();
@@ -116,6 +136,10 @@ class SkladController extends Controller
      * @return Response
      */
     public function addSkladAction(Request $request) {
+        if (!$this->hasRight('add')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Add warehouse dictinary element. Access deny']);
+        }
+
         $sklad = new Sklad();
         $form = $this->createForm(SkladType::class, $sklad);
         $form->remove('kod');

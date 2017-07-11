@@ -2,6 +2,7 @@
 
 namespace KvintBundle\Datatables;
 
+use AppBundle\Utils\DataTableRightsChecker;
 use AppBundle\Utils\DataTableUtil;
 use Sg\DatatablesBundle\Datatable\AbstractDatatable;
 use Sg\DatatablesBundle\Datatable\Column\Column;
@@ -14,6 +15,7 @@ use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
  */
 class EntDatatable extends AbstractDatatable
 {
+    use DataTableRightsChecker;
     /**
      * {@inheritdoc}
      */
@@ -43,13 +45,12 @@ class EntDatatable extends AbstractDatatable
             ->add('name', Column::class, array(
                 'title' => 'Наименование',
                 'width' => "350px",
-            ))
-            ->add(null, ActionColumn::class, DataTableUtil::getActions(
-                "kvint_ent",
-                $this->translator->trans('sg.datatables.actions.show'),
-                $this->translator->trans('sg.datatables.actions.edit'),
-                ""
             ));
+        $this->addActions("kvint_ent",
+            $this->translator->trans('sg.datatables.actions.show'),
+            $this->translator->trans('sg.datatables.actions.edit'),
+            "delete"
+        );
     }
 
     /**

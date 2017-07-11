@@ -2,5 +2,5 @@
 
 {% import '@App/DefaultForms/list.html.twig' as list_form %}
 {% block content %}
-    {{ list_form.show_list("Склады :", "kvint_sklad_add", datatable) }}
+    {{ list_form.show_list("Склады :", "kvint_sklad_add", datatable, is_add_btn) }}
 {% endblock %}

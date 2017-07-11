@@ -18,13 +18,13 @@ class Right
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PEntity", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PEntity", inversedBy="rights")
      * @ORM\JoinColumn(name="pentity_id", referencedColumnName="id")
      */
     protected $pEntity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Group", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Group", inversedBy="rights")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
     protected $group;
@@ -48,6 +48,27 @@ class Right
      * @ORM\Column(name = "r_add", type = "boolean", nullable=true)
      */
     protected $add;
+
+    /**
+     * @ORM\Column(name = "r_list", type = "boolean", nullable=true)
+     */
+    protected $list;
+
+    /**
+     * @return mixed
+     */
+    public function getList()
+    {
+        return $this->list;
+    }
+
+    /**
+     * @param mixed $list
+     */
+    public function setList($list)
+    {
+        $this->list = $list;
+    }
 
     /**
      * @return mixed

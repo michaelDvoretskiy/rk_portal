@@ -158,4 +158,4 @@ easy_admin:
         label: Права
         class: AppBundle\Entity\Right
         list:
-          fields: ['group', 'pEntity', 'view', 'add', 'edit', 'delete']
+          fields: ['group', 'pEntity', 'list', 'view', 'add', 'edit', 'delete']

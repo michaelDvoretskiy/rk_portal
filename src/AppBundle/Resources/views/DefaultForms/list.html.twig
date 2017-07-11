@@ -1,13 +1,15 @@
-{% macro show_list(title, add_path, datatable) %}
+{% macro show_list(title, add_path, datatable, is_add_btn = false) %}
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-8">
                 <h2>{{ title }}</h2>
+                {% if (is_add_btn) %}
                 <div>
                     <a href=" {{ path(add_path) }} " class="btn btn-success btn-default active btn-new">
                         <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
                     </a>
                 </div>
+                {% endif %}
                 {{ sg_datatables_render(datatable) }}
             </div>
         </div>

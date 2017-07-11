@@ -2,6 +2,7 @@
 
 namespace KvintBundle\Controller;
 
+use AppBundle\Utils\EntityRightsChecker;
 use KvintBundle\Datatables\EntDatatable;
 use KvintBundle\Entity\Ent;
 use KvintBundle\Form\EntType;
@@ -13,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EntController extends Controller
 {
+    use EntityRightsChecker;
+    private $entity_name = 'kvint_spr_organization';
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/ent", name="kvint_ent")
@@ -20,9 +23,13 @@ class EntController extends Controller
      */
     public function entListAction(Request $request)
     {
+        if (!$this->hasRight('list')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Organization dictionary. Access deny']);
+        }
         $isAjax = $request->isXmlHttpRequest();
 
         $datatable = $this->get('sg_datatables.factory')->create(EntDatatable::class);
+        $datatable->rights = $this->getRights();
         $datatable->buildDatatable();
 
         if ($isAjax) {
@@ -36,6 +43,7 @@ class EntController extends Controller
 
         return [
             'datatable' => $datatable,
+            'is_add_btn' => $datatable->rights['add'],
         ];
     }
 
@@ -49,6 +57,9 @@ class EntController extends Controller
      */
     public function showEntAction(Request $request, Ent $ent)
     {
+        if (!$this->hasRight('view')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'View organization dictinary element. Access deny']);
+        }
         $form = $this->createForm(EntType::class, $ent);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -71,6 +82,10 @@ class EntController extends Controller
      * @return Response
      */
     public function editEntAction(Request $request, Ent $ent) {
+        if (!$this->hasRight('edit')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Edit organization dictinary element. Access deny']);
+        }
+
         $form = $this->createForm(EntType::class, $ent);
 //        // only handles data on POST
         $form->handleRequest($request);
@@ -99,6 +114,10 @@ class EntController extends Controller
      * @return Response
      */
     public function removeSkladAction(Request $request, Ent $ent) {
+        if (!$this->hasRight('delete')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Delete organization dictinary element. Access deny']);
+        }
+
         $em = $this->getDoctrine()->getManager("kvint");
         $em->remove($ent);
         $em->flush();
@@ -114,6 +133,10 @@ class EntController extends Controller
      * @return Response
      */
     public function addSkladAction(Request $request) {
+        if (!$this->hasRight('add')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Add organization dictinary element. Access deny']);
+        }
+
         $ent = new Ent();
         $form = $this->createForm(EntType::class, $ent);
         $form->remove('kod');

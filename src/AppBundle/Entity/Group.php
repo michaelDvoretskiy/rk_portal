@@ -18,8 +18,8 @@ class Group extends BaseGroup
      */
     protected $id;
 
-    /*
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Right", mappedBy="pEntity")
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Right", mappedBy="group")
      */
     protected $rights;
 
@@ -32,4 +32,21 @@ class Group extends BaseGroup
     public function __toString() {
         return $this->getName();
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRights()
+    {
+        return $this->rights;
+    }
+
+    /**
+     * @param ArrayCollection $rights
+     */
+    public function setRights($rights)
+    {
+        $this->rights = $rights;
+    }
+
 }

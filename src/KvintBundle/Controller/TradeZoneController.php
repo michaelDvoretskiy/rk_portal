@@ -2,11 +2,9 @@
 
 namespace KvintBundle\Controller;
 
-use KvintBundle\Datatables\EntDatatable;
+use AppBundle\Utils\EntityRightsChecker;
 use KvintBundle\Datatables\TradeZoneDatatable;
-use KvintBundle\Entity\Ent;
 use KvintBundle\Entity\TradeZone;
-use KvintBundle\Form\EntType;
 use KvintBundle\Form\TradeZoneType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -16,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TradeZoneController extends Controller
 {
+    use EntityRightsChecker;
+    private $entity_name = 'kvint_spr_trade_zone';
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/trade_zone", name="kvint_trade_zone")
@@ -23,9 +23,13 @@ class TradeZoneController extends Controller
      */
     public function tradezoneListAction(Request $request)
     {
+        if (!$this->hasRight('list')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Trade zone dictionary. Access deny']);
+        }
         $isAjax = $request->isXmlHttpRequest();
 
         $datatable = $this->get('sg_datatables.factory')->create(TradeZoneDatatable::class);
+        $datatable->rights = $this->getRights();
         $datatable->buildDatatable();
 
         if ($isAjax) {
@@ -39,6 +43,7 @@ class TradeZoneController extends Controller
 
         return [
             'datatable' => $datatable,
+            'is_add_btn' => $datatable->rights['add'],
         ];
     }
 
@@ -52,6 +57,9 @@ class TradeZoneController extends Controller
      */
     public function showTradezoneAction(Request $request, TradeZone $zone)
     {
+        if (!$this->hasRight('view')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'View trade zone dictinary element. Access deny']);
+        }
         $form = $this->createForm(TradeZoneType::class, $zone);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,6 +82,9 @@ class TradeZoneController extends Controller
      * @return Response
      */
     public function editTradeZoneAction(Request $request, TradeZone $zone) {
+        if (!$this->hasRight('edit')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Edit trade zone dictinary element. Access deny']);
+        }
         $form = $this->createForm(TradeZoneType::class, $zone);
 //        // only handles data on POST
         $form->handleRequest($request);
@@ -102,6 +113,10 @@ class TradeZoneController extends Controller
      * @return Response
      */
     public function removeTradezoneAction(Request $request, TradeZone $zone) {
+        if (!$this->hasRight('delete')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Delete trade zone dictinary element. Access deny']);
+        }
+
         $em = $this->getDoctrine()->getManager("kvint");
         $em->remove($zone);
         $em->flush();
@@ -115,6 +130,9 @@ class TradeZoneController extends Controller
      * @return Response
      */
     public function addTradezoneAction(Request $request) {
+        if (!$this->hasRight('add')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Add trade zone dictinary element. Access deny']);
+        }
         $zone = new TradeZone();
         $form = $this->createForm(TradeZoneType::class, $zone);
         $form->remove('kod');
