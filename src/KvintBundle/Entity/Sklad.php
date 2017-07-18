@@ -99,10 +99,11 @@ class Sklad {
      */
     public function isRozn()
     {
-        if ($this->rozn == "T") {
-            return true;
-        }
-        return false;
+//        if ($this->rozn == "T") {
+//            return true;
+//        }
+//        return false;
+        return KvintTypeConverter::TFasBOOL($this->rozn);
     }
 
     /**
@@ -110,10 +111,15 @@ class Sklad {
      */
     public function setRozn($rozn)
     {
-        if ($rozn) {
-            $this->rozn = "T";
-        } else {
-            $this->rozn = "F";
+//        if ($rozn) {
+//            $this->rozn = "T";
+//        } else {
+//            $this->rozn = "F";
+//            $this->setObpRozn(false);
+//        }
+
+        $this->rozn =  KvintTypeConverter::BOOLasTF($rozn);
+        if (!$rozn) {
             $this->setObpRozn(false);
         }
         return $this;
@@ -124,10 +130,11 @@ class Sklad {
      */
     public function isObpRozn()
     {
-        if ($this->obpRozn == "T") {
-            return true;
-        }
-        return false;
+//        if ($this->obpRozn == "T") {
+//            return true;
+//        }
+//        return false;
+        return KvintTypeConverter::TFasBOOL($this->obpRozn);
     }
 
     /**
@@ -135,11 +142,12 @@ class Sklad {
      */
     public function setObpRozn($obpRozn)
     {
-        if ($obpRozn && $this->isRozn()) {
-            $this->obpRozn = "T";
-        } else {
-            $this->obpRozn = "F";
-        }
+//        if ($obpRozn && $this->isRozn()) {
+//            $this->obpRozn = "T";
+//        } else {
+//            $this->obpRozn = "F";
+//        }
+        $this->obpRozn =  KvintTypeConverter::BOOLasTF($obpRozn && $this->isRozn());
         return $this;
     }
 

@@ -9,7 +9,7 @@ trait DataTableRightsChecker {
 
     public function addActions($path, $show, $edit, $delete) {
         $preparedActions = DataTableUtil::getActions(
-            'kvint_sklad',
+            $path,
             $this->translator->trans('sg.datatables.actions.show'),
             $this->translator->trans('sg.datatables.actions.edit'),
             "delete",

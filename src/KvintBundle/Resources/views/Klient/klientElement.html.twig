@@ -1,0 +1,48 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme klientForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(klientForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(klientForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_row(klientForm.kname, type, {'style': 'width: 600px'}) }}
+    <br>
+    {#<hr class="separator">#}
+
+    {#https://codepen.io/wizly/pen/BlKxo/#}
+    <div id="exTab" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#1" data-toggle="tab">Основные</a>
+            </li>
+            <li><a href="#2" data-toggle="tab">Банк</a>
+            </li>
+            <li><a href="#3" data-toggle="tab">Договор</a>
+            </li>
+            <li><a href="#3" data-toggle="tab">Организации</a>
+            </li>
+        </ul>
+
+        <div class="tab-content ">
+            <br>
+            <div class="tab-pane active" id="1">
+                {{ elem_form.show_elem_row(klientForm.inn, type, {'style': 'width: 200px'}) }}
+                {{ elem_form.show_elem_row(klientForm.fullName, type, {'style': 'width: 600px'}) }}
+                {{ elem_form.show_elem_row(klientForm.address, type, {'style': 'width: 600px'}) }}
+                {{ elem_form.show_elem_row(klientForm.telephone, type, {'style': 'width: 300px'}) }}
+            </div>
+            <div class="tab-pane" id="2">
+                {{ elem_form.show_elem_row(klientForm.bank_name, type, {'style': 'width: 500px'}) }}
+                {{ elem_form.show_elem_row(klientForm.bank_okpo, type, {'style': 'width: 200px'}) }}
+                {{ elem_form.show_elem_row(klientForm.bank_mfo, type, {'style': 'width: 200px'}) }}
+                {{ elem_form.show_elem_row(klientForm.bank_schet, type, {'style': 'width: 300px'}) }}
+            </div>
+            <div class="tab-pane" id="3">
+            </div>
+        </div>
+    </div>
+    <hr class="separator">
+    {{ elem_form.show_elem_end(klientForm) }}
+{% endblock %}

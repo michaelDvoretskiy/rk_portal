@@ -6,14 +6,8 @@ use AppBundle\Utils\DataTableRightsChecker;
 use AppBundle\Utils\DataTableUtil;
 use Sg\DatatablesBundle\Datatable\AbstractDatatable;
 use Sg\DatatablesBundle\Datatable\Column\Column;
-use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
 
-/**
- * Class EntDatatable
- *
- * @package KvintBundle\Datatables
- */
-class EntDatatable extends AbstractDatatable
+class KlientDatatable extends AbstractDatatable
 {
     use DataTableRightsChecker;
     /**
@@ -23,7 +17,6 @@ class EntDatatable extends AbstractDatatable
     {
         $this->language->set(array(
             'cdn_language_by_locale' => true
-            //'language' => 'de'
         ));
 
         $this->ajax->set(array(
@@ -40,13 +33,18 @@ class EntDatatable extends AbstractDatatable
         $this->columnBuilder
             ->add('kod', Column::class, array(
                 'title' => 'Код',
-                'width' => "50px",
+                'width' => "60px",
             ))
-            ->add('name', Column::class, array(
+            ->add('kname', Column::class, array(
                 'title' => 'Наименование',
-                'width' => "200px",
-            ));
-        $this->addActions("kvint_ent",
+                'width' => "250px",
+            ))
+            ->add('inn', Column::class, array(
+            'title' => 'ИНН',
+            'width' => "100px",
+        ));
+
+        $this->addActions('kvint_klient',
             $this->translator->trans('sg.datatables.actions.show'),
             $this->translator->trans('sg.datatables.actions.edit'),
             "delete"
@@ -58,7 +56,7 @@ class EntDatatable extends AbstractDatatable
      */
     public function getEntity()
     {
-        return 'KvintBundle\Entity\Ent';
+        return 'KvintBundle\Entity\Klient';
     }
 
     /**
@@ -66,6 +64,6 @@ class EntDatatable extends AbstractDatatable
      */
     public function getName()
     {
-        return 'ent_datatable';
+        return 'klient_datatable';
     }
 }

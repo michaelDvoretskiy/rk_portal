@@ -1,0 +1,6 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+
+{% import '@App/DefaultForms/list.html.twig' as list_form %}
+{% block content %}
+    {{ list_form.show_list("Клиенты :", "kvint_klient_add", datatable, is_add_btn, {'sm': 12, 'md': 12, 'lg': 10}) }}
+{% endblock %}

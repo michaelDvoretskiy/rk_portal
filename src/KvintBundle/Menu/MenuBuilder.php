@@ -21,13 +21,18 @@ class MenuBuilder implements ContainerAwareInterface {
         $menu->addChild("accounts", ['label' => 'Справочники'])->setAttribute('icon', 'fa fa-list')->setAttribute('dropdown', true);
         $menu->addChild("Документы", ['route' => 'kvint_documents'])->setAttribute('icon', 'fa fa-file-text');
         $menu['accounts']->addChild('kvint_tovar', array('route' => 'kvint_tovar', 'label' => 'Товары'));
-        $menu['accounts']->addChild('kvint_klient', array('route' => 'kvint_klient', 'label' => 'Клиенты'))->setAttribute('divider_append', true);
+        if (in_array('kvint_spr_klient', $listAllowed)) {
+            $menu['accounts']->addChild('kvint_klient', array('route' => 'kvint_klient', 'label' => 'Клиенты'))->setAttribute('divider_append', true);
+        }
         if (in_array('kvint_spr_sklad', $listAllowed)) {
             $menu['accounts']->addChild('kvint_sklad', array('route' => 'kvint_sklad', 'label' => 'Склады'));
         }
-        $menu['accounts']->addChild('kvint_trade_zone', array('route' => 'kvint_trade_zone', 'label' => 'Торг. зоны'));
-//        $menu['accounts']->addChild('divider1', ['divider' => true, 'label' => '', 'class'=>'divider']);
-        $menu['accounts']->addChild('kvint_ent', array('route' => 'kvint_ent', 'label' => 'Организации'));
+        if (in_array('kvint_spr_trade_zone', $listAllowed)) {
+            $menu['accounts']->addChild('kvint_trade_zone', array('route' => 'kvint_trade_zone', 'label' => 'Торг. зоны'));
+        }
+        if (in_array('kvint_spr_organization', $listAllowed)) {
+            $menu['accounts']->addChild('kvint_ent', array('route' => 'kvint_ent', 'label' => 'Организации'));
+        }
         return $menu;
     }
 }
