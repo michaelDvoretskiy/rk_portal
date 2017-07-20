@@ -2,9 +2,15 @@
 
 namespace KvintBundle\Form;
 
+use KvintBundle\Entity\KvintListedEntities;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -105,6 +111,91 @@ class KlientType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Счет',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'filial',
+                TextType::class,
+                [
+                    'label' => 'Код филиала',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'ediniyNalog',
+                CheckboxType::class,
+                [
+                    'label' => 'Единый налог',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'fisLitso',
+                CheckboxType::class,
+                [
+                    'label' => 'Физ.лицо',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'label' => 'e-mail',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'priceNum',
+                ChoiceType::class,
+                [
+                    'label' => 'Цена по умолчанию',
+                    'choices' => array_merge([ 'Нет' => '0',], KvintListedEntities::Prices()),
+                ]
+            )
+            ->add(
+                'dogovorNumber',
+                TextType::class,
+                [
+                    'label' => 'Номер',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'dogovorData',
+                DateType::class,
+                [
+                    'label' => 'Дата',
+                    'required' => false,
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'attr' => ['class' => 'js-datepicker'],
+                    'property_path' => 'dogovorDate',
+                ]
+            )
+//            ->add(
+//                'dogovorData',
+//                TextType::class,
+//                [
+//                    'label' => 'Дата',
+//                    'required' => false,
+//                    'attr' => ['class' => 'js-datepicker'],
+//                ]
+//            )
+            ->add(
+                'dogovorType',
+                TextType::class,
+                [
+                    'label' => 'Вид',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'additionalInfo',
+                TextareaType::class,
+                [
+                    'label' => 'Доп.информация',
                     'required' => false,
                 ]
             )

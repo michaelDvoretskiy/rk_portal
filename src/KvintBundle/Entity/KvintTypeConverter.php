@@ -23,4 +23,16 @@ class KvintTypeConverter
         }
         return "F";
     }
+    public static function NullToVal($variable, $nullVal) {
+        if (is_null($variable)) {
+            return $nullVal;
+        }
+        return $variable;
+    }
+    public static function ValToNull($variable, $nullVal) {
+        if ($variable == $nullVal) {
+            return null;
+        }
+        return $variable;
+    }
 }

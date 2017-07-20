@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\KlientRepository")
  * @ORM\Table(name="klient")
  */
 class Klient {
@@ -22,7 +22,7 @@ class Klient {
     protected $kname;
 
     /**
-     * ORM\Column(name = "fullname", type = "string", length = 150)
+     * @ORM\Column(name = "fullname", type = "string", length = 150)
      */
     protected $fullName;
 
@@ -64,12 +64,12 @@ class Klient {
     /**
      * @ORM\Column(name = "flEN", type = "string", length = 1)
      */
-    protected $ediniyNalog;
+    protected $ediniyNalog = 'F';
 
     /**
      * @ORM\Column(name = "flCP", type = "string", length = 1)
      */
-    protected $fisLitso;
+    protected $fisLitso = 'F';
 
     /**
      * @ORM\Column(name = "kFil", type = "string", length = 4)
@@ -77,9 +77,28 @@ class Klient {
     protected $filial;
 
     /**
-     * @ORM\Column(name = "ddog", type = "date")
+     * @ORM\Column(name = "ddog", type = "string")
      */
     protected $dogovor_data;
+
+    protected $dogovorDate;
+
+    public function setDogovorDate($dogovorDate)
+    {
+        $this->dogovorDate = $dogovorDate;
+        if (!is_null($dogovorDate)) {
+            $this->dogovor_data = $dogovorDate->format("Y-m-d");
+        } else {
+            $this->dogovor_data = null;
+        }
+        return $this;
+    }
+
+    public function getDogovorDate()
+    {
+        return $this->dogovorDate;
+    }
+
 
     /**
      * @ORM\Column(name = "ndog", type = "string", length = 30)
@@ -214,6 +233,7 @@ class Klient {
     public function setBankName($bank_name)
     {
         $this->bank_name = $bank_name;
+        return $this;
     }
 
     /**
@@ -230,6 +250,7 @@ class Klient {
     public function setBankOkpo($bank_okpo)
     {
         $this->bank_okpo = $bank_okpo;
+        return $this;
     }
 
     /**
@@ -246,6 +267,7 @@ class Klient {
     public function setBankMfo($bank_mfo)
     {
         $this->bank_mfo = $bank_mfo;
+        return $this;
     }
 
     /**
@@ -262,14 +284,15 @@ class Klient {
     public function setBankSchet($bank_schet)
     {
         $this->bank_schet = $bank_schet;
+        return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getEdiniyNalog()
+    public function isEdiniyNalog()
     {
-        return $this->ediniyNalog;
+        return KvintTypeConverter::TFasBOOL($this->ediniyNalog);
     }
 
     /**
@@ -277,15 +300,16 @@ class Klient {
      */
     public function setEdiniyNalog($ediniyNalog)
     {
-        $this->ediniyNalog = $ediniyNalog;
+        $this->ediniyNalog = KvintTypeConverter::BOOLasTF($ediniyNalog);
+        return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getFisLitso()
+    public function isFisLitso()
     {
-        return $this->fisLitso;
+        return KvintTypeConverter::TFasBOOL($this->fisLitso);
     }
 
     /**
@@ -293,7 +317,8 @@ class Klient {
      */
     public function setFisLitso($fisLitso)
     {
-        $this->fisLitso = $fisLitso;
+        $this->fisLitso = KvintTypeConverter::BOOLasTF($fisLitso);
+        return $this;
     }
 
     /**
@@ -310,6 +335,7 @@ class Klient {
     public function setFilial($filial)
     {
         $this->filial = $filial;
+        return $this;
     }
 
     /**
@@ -317,7 +343,13 @@ class Klient {
      */
     public function getDogovorData()
     {
-        return $this->dogovor_data;
+        return substr($this->dogovor_data, 0, 10);
+//
+//        $timezone = new DateTimeZone("UTC");
+//        $date = new DateTime(substr($this->dogovor_data, 0, 10), $timezone);
+//        return $date->format("Y-m-d\TH:i:s");
+
+        //return new \DateTime(substr($this->dogovor_data, 0, 10));
     }
 
     /**
@@ -325,7 +357,11 @@ class Klient {
      */
     public function setDogovorData($dogovor_data)
     {
-        $this->dogovor_data = $dogovor_data;
+        $this->dogovor_data = substr($dogovor_data, 0, 10);
+    }
+
+    public function synchroAttr() {
+        $this->dogovorDate = new \DateTime($this->dogovor_data);
     }
 
     /**
@@ -365,7 +401,7 @@ class Klient {
      */
     public function getPriceNum()
     {
-        return $this->price_num;
+        return KvintTypeConverter::NullToVal($this->price_num, 0);
     }
 
     /**
@@ -373,7 +409,8 @@ class Klient {
      */
     public function setPriceNum($price_num)
     {
-        $this->price_num = $price_num;
+        $this->price_num = KvintTypeConverter::ValToNull($price_num, 0);
+        return $this;
     }
 
     /**
@@ -431,4 +468,13 @@ class Klient {
     {
         return $this->kod;
     }
+
+    /**
+     * @param mixed $kod
+     */
+    public function setKod($kod)
+    {
+        $this->kod = $kod;
+    }
+
 }

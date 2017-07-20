@@ -17,11 +17,15 @@
             <li class="active">
                 <a href="#1" data-toggle="tab">Основные</a>
             </li>
-            <li><a href="#2" data-toggle="tab">Банк</a>
+            <li><a href="#2" data-toggle="tab">Общие</a>
             </li>
-            <li><a href="#3" data-toggle="tab">Договор</a>
+            <li><a href="#3" data-toggle="tab">Банк</a>
             </li>
-            <li><a href="#3" data-toggle="tab">Организации</a>
+            <li><a href="#4" data-toggle="tab">Договор</a>
+            </li>
+            <li><a href="#5" data-toggle="tab">Дополнительно</a>
+            </li>
+            <li><a href="#6" data-toggle="tab">Организации</a>
             </li>
         </ul>
 
@@ -29,20 +33,44 @@
             <br>
             <div class="tab-pane active" id="1">
                 {{ elem_form.show_elem_row(klientForm.inn, type, {'style': 'width: 200px'}) }}
+                {{ elem_form.show_elem_row(klientForm.filial, type, {'style': 'width: 50px'}) }}
+                {{ elem_form.show_elem_row(klientForm.fisLitso, type, {}) }}
+                {{ elem_form.show_elem_row(klientForm.ediniyNalog, type, {}) }}
+                {{ elem_form.show_elem_row(klientForm.priceNum, type, {'style': 'width: 150px'}) }}
+            </div>
+            <div class="tab-pane" id="2">
                 {{ elem_form.show_elem_row(klientForm.fullName, type, {'style': 'width: 600px'}) }}
                 {{ elem_form.show_elem_row(klientForm.address, type, {'style': 'width: 600px'}) }}
                 {{ elem_form.show_elem_row(klientForm.telephone, type, {'style': 'width: 300px'}) }}
+                {{ elem_form.show_elem_row(klientForm.email, type, {'style': 'width: 400px'}) }}
             </div>
-            <div class="tab-pane" id="2">
+            <div class="tab-pane" id="3">
                 {{ elem_form.show_elem_row(klientForm.bank_name, type, {'style': 'width: 500px'}) }}
                 {{ elem_form.show_elem_row(klientForm.bank_okpo, type, {'style': 'width: 200px'}) }}
                 {{ elem_form.show_elem_row(klientForm.bank_mfo, type, {'style': 'width: 200px'}) }}
                 {{ elem_form.show_elem_row(klientForm.bank_schet, type, {'style': 'width: 300px'}) }}
             </div>
-            <div class="tab-pane" id="3">
+            <div class="tab-pane" id="4">
+                {{ elem_form.show_elem_row(klientForm.dogovorNumber, type, {'style': 'width: 150px'}) }}
+                {{ elem_form.show_elem_row(klientForm.dogovorData, type, {'style': 'width: 180px'}) }}
+                {{ elem_form.show_elem_row(klientForm.dogovorType, type, {'style': 'width: 200px'}) }}
+            </div>
+            <div class="tab-pane" id="5">
+                {{ elem_form.show_elem_row(klientForm.additionalInfo, type, {'style': 'width: 500px; height: 200px'}) }}
+            </div>
+            <div class="tab-pane" id="6">
             </div>
         </div>
     </div>
     <hr class="separator">
     {{ elem_form.show_elem_end(klientForm) }}
+{% endblock %}
+{% block jsfooter %}
+    <script !src="">
+        $(document).ready(function() {
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
 {% endblock %}

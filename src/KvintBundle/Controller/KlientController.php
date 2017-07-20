@@ -2,49 +2,26 @@
 
 namespace KvintBundle\Controller;
 
-use AppBundle\Utils\EntityRightsChecker;
 use KvintBundle\Datatables\KlientDatatable;
 use KvintBundle\Entity\Klient;
 use KvintBundle\Form\KlientType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class KlientController extends Controller
+class KlientController extends KvintFormsController
 {
-    use EntityRightsChecker;
-    private $entity_name = 'kvint_spr_klient';
+
+    protected $entity_name = 'kvint_spr_klient';
     /**
      * @Route("/klient", name="kvint_klient")
      * @Template()
      */
     public function klientListAction(Request $request)
     {
-        if (!$this->hasRight('list')) {
-            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Client dictionary. Access deny']);
-        }
-        $isAjax = $request->isXmlHttpRequest();
-
-        $datatable = $this->get('sg_datatables.factory')->create(KlientDatatable::class);
-        $datatable->rights = $this->getRights();
-        $datatable->buildDatatable();
-
-        if ($isAjax) {
-            $responseService = $this->get('sg_datatables.response');
-            $responseService->setDatatable($datatable);
-
-            $datatableQueryBuilder = $responseService->getDatatableQueryBuilder();
-            $datatableQueryBuilder->buildQuery();
-            return $responseService->getResponse();
-        }
-
-        return [
-            'datatable' => $datatable,
-            'is_add_btn' => $datatable->rights['add'],
-        ];
+        return $this->listAction($request, KlientDatatable::class, ['errTxt' => "Client"]);
     }
 
     /**
@@ -57,53 +34,39 @@ class KlientController extends Controller
      */
     public function showKlientAction(Request $request, Klient $klient)
     {
-        if (!$this->hasRight('view')) {
-            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'View client dictinary element. Access deny']);
-        }
-
-        $form = $this->createForm(KlientType::class, $klient);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('kvint_klient');
-        }
-
-        return $this->render('@Kvint/Klient/klientElement.html.twig', [
-            'klientForm' => $form->createView(),
-            'title' => ' клиента ' . $klient->getKname(),
-            'type' => 'show',
-        ]);
+        $klient->synchroAttr();
+        return $this->showAction($request, $klient,
+            [
+                'errTxt' => 'client',
+                'form_type' => KlientType::class,
+                'form_name' => 'klientForm',
+                'route_return' => 'kvint_klient',
+                'titleTxt' => ' клиента ' . $klient->getKname(),
+                'template' =>  '@Kvint/Klient/klientElement.html.twig',
+            ]
+        );
     }
 
     /**
      * @param Klient $klient
      *
-     * @Route("/sklad/edit/{id}", name = "kvint_klient_edit", options = {"expose" = true})
+     * @Route("/klient/edit/{id}", name = "kvint_klient_edit", options = {"expose" = true})
      * @Security("has_role('ROLE_USER')")
      *
      * @return Response
      */
     public function editKlientAction(Request $request, Klient $klient) {
-        if (!$this->hasRight('edit')) {
-            return $this->render("@Kvint/Default/err.html.twig", ['text' => 'Edit warehouse dictinary element. Access deny']);
-        }
-
-        $form = $this->createForm(SkladType::class, $klient);
-//        // only handles data on POST
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $sklad = $form->getData();
-            $em = $this->getDoctrine()->getManager("kvint");
-            $em->persist($sklad);
-            $em->flush();
-            $this->addFlash('success', 'Sklad updated!');
-            return $this->redirectToRoute('kvint_sklad');
-        }
-
-        return $this->render('@Kvint/Sklad/skladElement.html.twig', [
-            'skladForm' => $form->createView(),
-            'title' => ' склада ' . $sklad->getSname(),
-            'type' => 'edit',
-        ]);
+        $klient->synchroAttr();
+        return $this->editAction($request, $klient,
+            [
+                'errTxt' => 'client',
+                'form_type' => KlientType::class,
+                'form_name' => 'klientForm',
+                'route_return' => 'kvint_klient',
+                'titleTxt' => ' клиента ' . $klient->getKname(),
+                'template' =>  '@Kvint/Klient/klientElement.html.twig',
+            ]
+        );
     }
 
     /**
@@ -114,8 +77,13 @@ class KlientController extends Controller
      *
      * @return Response
      */
-    public function removeSkladAction(Request $request, Klient $klient) {
-        return new Response();
+    public function removeSkladAction(Klient $klient) {
+        return $this->removeAction($klient,
+            [
+                'errTxt' => 'client',
+                'route_return' => 'kvint_klient',
+            ]
+        );
     }
 
     /**
@@ -125,6 +93,16 @@ class KlientController extends Controller
      * @return Response
      */
     public function addSkladAction(Request $request) {
-        return new Response();
+        return $this->addAction($request, new Klient(),
+            [
+                'errTxt' => 'client',
+                'form_type' => KlientType::class,
+                'form_name' => 'klientForm',
+                'route_return' => 'kvint_klient',
+                'titleTxt' => ' клиента ',
+                'template' =>  '@Kvint/Klient/klientElement.html.twig',
+                'entity_name' => 'KvintBundle:Klient',
+            ]
+        );
     }
 }
