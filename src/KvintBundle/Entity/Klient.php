@@ -477,4 +477,8 @@ class Klient {
         $this->kod = $kod;
     }
 
+    public function __construct()
+    {
+        $this->org_list = new ArrayCollection();
+    }
 }

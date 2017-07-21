@@ -2,7 +2,9 @@
 
 namespace KvintBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use KvintBundle\Entity\KvintListedEntities;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -169,8 +171,9 @@ class KlientType extends AbstractType
                     'label' => 'Дата',
                     'required' => false,
                     'widget' => 'single_text',
-                    'html5' => false,
-                    'attr' => ['class' => 'js-datepicker'],
+                    'html5' => true,
+//                    'html5' => false,
+//                    'attr' => ['class' => 'js-datepicker'],
                     'property_path' => 'dogovorDate',
                 ]
             )
@@ -199,6 +202,16 @@ class KlientType extends AbstractType
                     'required' => false,
                 ]
             )
+            ->add('orgList', EntityType::class, array(
+                'class' => 'KvintBundle\Entity\Ent',
+                'expanded' => true,
+                'multiple' => true,
+                'label' => '',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->orderBy('e.name', 'ASC');
+                },
+            ))
             ->add(
                 'ok',
                 SubmitType::class

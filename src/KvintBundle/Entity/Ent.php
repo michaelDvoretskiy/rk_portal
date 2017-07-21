@@ -65,4 +65,9 @@ class Ent {
         $this->kod = $kod;
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
