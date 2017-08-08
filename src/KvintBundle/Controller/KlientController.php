@@ -34,7 +34,7 @@ class KlientController extends KvintFormsController
      */
     public function showKlientAction(Request $request, Klient $klient)
     {
-        $klient->synchroAttr();
+        //$klient->synchroAttr();
         return $this->showAction($request, $klient,
             [
                 'errTxt' => 'client',
@@ -56,7 +56,7 @@ class KlientController extends KvintFormsController
      * @return Response
      */
     public function editKlientAction(Request $request, Klient $klient) {
-        $klient->synchroAttr();
+        //$klient->synchroAttr();
         return $this->editAction($request, $klient,
             [
                 'errTxt' => 'client',

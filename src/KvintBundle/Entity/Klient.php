@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="KvintBundle\Repository\KlientRepository")
  * @ORM\Table(name="klient")
+ * @ORM\HasLifecycleCallbacks
  */
 class Klient {
     /**
@@ -86,11 +87,11 @@ class Klient {
     public function setDogovorDate($dogovorDate)
     {
         $this->dogovorDate = $dogovorDate;
-        if (!is_null($dogovorDate)) {
-            $this->dogovor_data = $dogovorDate->format("Y-m-d");
-        } else {
-            $this->dogovor_data = null;
-        }
+//        if (!is_null($dogovorDate)) {
+//            $this->dogovor_data = $dogovorDate->format("Y-m-d");
+//        } else {
+//            $this->dogovor_data = null;
+//        }
         return $this;
     }
 
@@ -360,8 +361,22 @@ class Klient {
         $this->dogovor_data = substr($dogovor_data, 0, 10);
     }
 
+    /**
+     * @ORM\PostLoad
+     */
     public function synchroAttr() {
         $this->dogovorDate = new \DateTime($this->dogovor_data);
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function synchroAttr2() {
+        if (!is_null($this->dogovorDate)) {
+            $this->dogovor_data = $this->dogovorDate->format("Y-m-d");
+        } else {
+            $this->dogovor_data = null;
+        }
     }
 
     /**
