@@ -44,3 +44,4 @@ composer require javiereguiluz/easyadmin-bundle
 https://level7systems.co.uk/symfony2-admin-panel-in-30-seconds/
 http://symfony.com/doc/current/bundles/EasyAdminBundle/integration/fosuserbundle.html
 
+composer require symfony-cmf/tree-browser-bundle

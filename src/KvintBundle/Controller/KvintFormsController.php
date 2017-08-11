@@ -7,6 +7,7 @@ use KvintBundle\Entity\Klient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class KvintFormsController extends Controller
 {
@@ -30,12 +31,31 @@ class KvintFormsController extends Controller
 
             $datatableQueryBuilder = $responseService->getDatatableQueryBuilder();
             $datatableQueryBuilder->buildQuery();
+
+            if (isset($options['filter']) && (!is_null($options['filter']))) {
+                $qb = $datatableQueryBuilder->getQb();
+                foreach($options['filter'] as $filter) {
+                    $qb->andWhere($filter['field'] . ' = :' . $filter['name']);
+                    $qb->setParameter($filter['name'], $filter['value']);
+                }
+                dump($qb);
+            }
+
+//            if (isset($options['order']) && (!is_null($options['order']))) {
+//                foreach($options['order'] as $order) {
+//                    $qb->addOrderBy($order['field'], $order['type']);
+//                }
+//            }
+
             return $responseService->getResponse();
         }
-
+        if (!isset($options['filterForm'])) {
+            $options['filterForm'] = null;
+        }
         return [
             'datatable' => $datatable,
             'is_add_btn' => $datatable->rights['add'],
+            'filterForm' => $options['filterForm'],
         ];
     }
 

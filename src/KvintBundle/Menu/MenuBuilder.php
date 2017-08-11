@@ -21,6 +21,7 @@ class MenuBuilder implements ContainerAwareInterface {
         $menu->addChild("accounts", ['label' => 'Справочники'])->setAttribute('icon', 'fa fa-list')->setAttribute('dropdown', true);
         $menu->addChild("Документы", ['route' => 'kvint_documents'])->setAttribute('icon', 'fa fa-file-text');
         $menu['accounts']->addChild('kvint_tovar', array('route' => 'kvint_tovar', 'label' => 'Товары'));
+        $menu['accounts']->addChild('kvint_grouptov', array('route' => 'kvint_grouptov', 'label' => 'Группы товара'));
         if (in_array('kvint_spr_klient', $listAllowed)) {
             $menu['accounts']->addChild('kvint_klient', array('route' => 'kvint_klient', 'label' => 'Клиенты'))->setAttribute('divider_append', true);
         }

@@ -23,10 +23,10 @@
             <script type="text/javascript" src="{{ asset('resources/js/bootstrap-editable.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('resources/js/featherlight.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
             <script type="text/javascript" src="{{ asset('bundles/sgdatatables/js/pipeline.js') }}"></script>
             {#<script type="text/javascript" src="{{ asset('resources/js/dataTables.buttons.min.js') }}"></script>#}
         {% endblock %}
-
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">

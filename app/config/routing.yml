@@ -2,7 +2,6 @@ portal:
     resource: "@PortalBundle/Controller/"
     type:     annotation
     prefix:   /portal
-
 kvint:
     resource: "@KvintBundle/Controller/"
     type:     annotation

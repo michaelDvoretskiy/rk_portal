@@ -1,0 +1,33 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme filterForm 'bootstrap_3_layout.html.twig' %}
+{% import '@App/DefaultForms/list.html.twig' as list_form %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-10  col-lg-8 ">
+                <h2>Группы товара</h2><br>
+            </div>
+            <div class="col-sm-12 col-md-10  col-lg-8 ">
+                {{ form_start(filterForm) }}
+                {{ form_row(filterForm.groupFilter) }}
+                {{ form_end(filterForm) }}
+            </div>
+        </div>
+    </div>
+    {{ list_form.show_list("Список подгрупп :", "kvint_grouptov_add", datatable, is_add_btn) }}
+{% endblock %}
+
+{%  block jsfooter %}
+    <script !src="">
+        $('#kvint_bundle_group_tovar_list_type_groupFilter').change(
+            function() {
+                //$('form[name="kvint_bundle_group_tovar_list_type"]').submit();
+                {#console.log('{{ path('kvint_grouptov', {'grp': $("#kvint_bundle_group_tovar_list_type_groupFilter").val() }) }}');#}
+                window.location.href = Routing.generate('kvint_grouptov', { 'grp': $('#kvint_bundle_group_tovar_list_type_groupFilter').val() }) ;
+            }
+        )
+    </script>
+{% endblock %}
+
+{# dynamic evints on FormType https://www.adayinthelifeof.nl/2014/03/19/dynamic-form-modification-in-symfony2/#}
