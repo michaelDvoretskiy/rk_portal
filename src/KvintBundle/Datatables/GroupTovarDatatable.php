@@ -36,8 +36,6 @@ class GroupTovarDatatable extends AbstractDatatable
         ];
         $this->options->set($opt);
 
-        dump($this->options->getOrder());
-
         $this->features->set(
             DataTableUtil::getFeatures()
         );
@@ -45,15 +43,15 @@ class GroupTovarDatatable extends AbstractDatatable
         $this->columnBuilder
             ->add('kod', Column::class, array(
                 'title' => 'Код',
-                'width' => "80px",
+                'width' => "60px",
                 ))
             ->add('gname', Column::class, array(
                 'title' => 'Группа',
-                'width' => "350px",
+                'width' => "220px",
                 ))
             ->add('gname2', Column::class, array(
                 'title' => 'Подгруппа',
-                'width' => "350px",
+                'width' => "220px",
         ));
 
         $this->addActions('kvint_grouptov',

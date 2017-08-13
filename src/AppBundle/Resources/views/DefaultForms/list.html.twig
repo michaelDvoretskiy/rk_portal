@@ -1,7 +1,7 @@
 {% macro show_list(title, add_path, datatable, is_add_btn = false, colnum = {sm: 12, md: 10, lg: 8}) %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-{{ colnum.sm }} col-md-{{ colnum.md }}  col-lg-{{ colnum.lg }} ">
+            <div class="col-sm-{{ colnum.sm }} col-md-{{ colnum.md }}  col-lg-{{ colnum.lg }}">
                 <h2>{{ title }}</h2>
                 {% if (is_add_btn) %}
                 <div>

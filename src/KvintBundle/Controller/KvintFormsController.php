@@ -23,6 +23,10 @@ class KvintFormsController extends Controller
 
         $datatable = $this->get('sg_datatables.factory')->create($dataTableType);
         $datatable->rights = $this->getRights();
+        if (isset($options['return_parameters'])) {
+            $datatable->returnParameters = $options['return_parameters'];
+        }
+
         $datatable->buildDatatable();
 
         if ($isAjax) {
@@ -38,7 +42,6 @@ class KvintFormsController extends Controller
                     $qb->andWhere($filter['field'] . ' = :' . $filter['name']);
                     $qb->setParameter($filter['name'], $filter['value']);
                 }
-                dump($qb);
             }
 
 //            if (isset($options['order']) && (!is_null($options['order']))) {
@@ -56,6 +59,7 @@ class KvintFormsController extends Controller
             'datatable' => $datatable,
             'is_add_btn' => $datatable->rights['add'],
             'filterForm' => $options['filterForm'],
+            'options' => $options,
         ];
     }
 
@@ -67,13 +71,22 @@ class KvintFormsController extends Controller
         $form = $this->createForm($options['form_type'], $element);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if (isset($options['return_parameters'])) {
+                return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
+            }
             return $this->redirectToRoute($options['route_return']);
+        }
+
+        $other_options = null;
+        if (isset($options['other_options'])) {
+            $other_options = $options['other_options'];
         }
 
         return $this->render($options['template'], [
             $options['form_name'] => $form->createView(),
             'title' => $options['titleTxt'],
             'type' => 'show',
+            'other_options' => $other_options,
         ]);
     }
 
@@ -91,13 +104,22 @@ class KvintFormsController extends Controller
             $em->persist($element);
             $em->flush();
             $this->addFlash('success', $options['errTxt'] . " updated!");
+            if (isset($options['return_parameters'])) {
+                return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
+            }
             return $this->redirectToRoute($options['route_return']);
+        }
+
+        $other_options = null;
+        if (isset($options['other_options'])) {
+            $other_options = $options['other_options'];
         }
 
         return $this->render($options['template'], [
             $options['form_name'] => $form->createView(),
             'title' => $options['titleTxt'],
             'type' => 'edit',
+            'other_options' => $other_options,
         ]);
     }
 
@@ -109,7 +131,7 @@ class KvintFormsController extends Controller
         $em = $this->getDoctrine()->getManager("kvint");
         $em->remove($element);
         $em->flush();
-        return $this->redirectToRoute($options['route_return']);
+        return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
     }
 
     protected function addAction(Request $request, $element, array $options) {

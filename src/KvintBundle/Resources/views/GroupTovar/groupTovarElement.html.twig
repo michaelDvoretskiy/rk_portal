@@ -1,0 +1,21 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme grouptovForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(grouptovForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(grouptovForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {% if (other_options.grp_type == 'group') %}
+        {{ elem_form.show_elem_row(grouptovForm.gname, type, {'style': 'width: 400px'}) }}
+    {% else %}
+        {{ elem_form.show_elem_row(grouptovForm.gname, 'hidden', {'style': 'width: 400px'}) }}
+    {% endif %}
+    {% if (other_options.grp_type == 'group') %}
+        {{ elem_form.show_elem_row(grouptovForm.gname2, 'hidden', {'style': 'width: 400px'}) }}
+    {% else %}
+        {{ elem_form.show_elem_row(grouptovForm.gname2, type, {'style': 'width: 400px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_end(grouptovForm) }}
+{% endblock %}

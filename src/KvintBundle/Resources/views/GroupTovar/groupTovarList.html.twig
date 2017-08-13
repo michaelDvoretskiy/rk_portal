@@ -5,17 +5,24 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 col-md-10  col-lg-8 ">
+            <div class="col-sm-12 col-md-10 col-lg-10 ">
                 <h2>Группы товара</h2><br>
             </div>
-            <div class="col-sm-12 col-md-10  col-lg-8 ">
+            <div class="col-sm-12 col-md-10 col-lg-10 ">
                 {{ form_start(filterForm) }}
                 {{ form_row(filterForm.groupFilter) }}
                 {{ form_end(filterForm) }}
             </div>
         </div>
     </div>
-    {{ list_form.show_list("Список подгрупп :", "kvint_grouptov_add", datatable, is_add_btn) }}
+    {% if options.return_parameters is defined %}
+        {% if (options.return_parameters.ffo_grp == 0) %}
+            {% set is_add_btn = false %}
+        {% endif %}
+    {% else %}
+        {% set is_add_btn = false %}
+    {% endif %}
+    {{ list_form.show_list("Список подгрупп :", "kvint_grouptov_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}) }}
 {% endblock %}
 
 {%  block jsfooter %}

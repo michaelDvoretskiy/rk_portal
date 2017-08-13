@@ -20,10 +20,16 @@
 {% endmacro %}
 
 {% macro show_elem_row(elem, type = "edit", attr = {}) %}
+    {% if (type == 'hidden') %}
+        <div style = 'display: none;'>
+    {% endif %}
     {% if (type == 'show') %}
         {% set attr = attr|merge({
             'disabled': 'disabled'
         }) %}
     {% endif %}
     {{ form_row(elem, {'attr' : attr}) }}
+    {% if (type == 'hidden') %}
+        </div>
+    {% endif %}
 {% endmacro %}

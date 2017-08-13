@@ -5,7 +5,8 @@ namespace AppBundle\Utils;
 use Sg\DatatablesBundle\Datatable\Style;
 
 class DataTableUtil {
-    public static function getActions($path, $show, $edit, $delete, $rights = ['view' => true, 'add' => 'false', 'edit' => false, 'delete' => false]) {
+    public static function getActions($path, $show, $edit, $delete, $rights = ['view' => true, 'add' => 'false', 'edit' => false, 'delete' => false], $returnParameters = array()) {
+        $returnParameters['id'] = 'kod';
         $res = [
             'title' => '', //$this->translator->trans('sg.datatables.actions.title'),
             'width' => "70px",
@@ -15,9 +16,7 @@ class DataTableUtil {
         if ($show && $rights['view']) {
             $actions[] = [
                 'route' => $path . '_show',
-                'route_parameters' => array(
-                    'id' => 'kod'
-                ),
+                'route_parameters' => $returnParameters,
                 'label' => '', /*$this->translator->trans('sg.datatables.actions.show'),*/
                 'icon' => 'fa fa-tv',
                 'attributes' => array(
@@ -31,9 +30,7 @@ class DataTableUtil {
         if ($edit && $rights['edit']) {
             $actions[] = [
                 'route' => $path . '_edit',
-                'route_parameters' => array(
-                    'id' => 'kod'
-                ),
+                'route_parameters' => $returnParameters,
                 'label' => '', /*$this->translator->trans('sg.datatables.actions.edit'),*/
                 'icon' => 'fa fa-pencil',
                 'attributes' => array(
@@ -47,9 +44,7 @@ class DataTableUtil {
         if ($delete && $rights['delete']) {
             $actions[] = [
                 'route' => $path . '_remove',
-                'route_parameters' => array(
-                    'id' => 'kod'
-                ),
+                'route_parameters' => $returnParameters,
                 'confirm' => true,
                 'confirm_message' => 'Удалить элемент ?',
                 'label' => '',

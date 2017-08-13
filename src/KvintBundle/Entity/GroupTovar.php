@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass = "KvintBundle\Repository\GroupTovarRepository")
  * @ORM\Table(name = "grouptov")
+ * @ORM\HasLifecycleCallbacks
  */
 class GroupTovar
 {
@@ -76,5 +77,12 @@ class GroupTovar
         return $this;
     }
 
-
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDef() {
+        if (is_null($this->gname2)) {
+            $this->gname2 = '';
+        }
+    }
 }
