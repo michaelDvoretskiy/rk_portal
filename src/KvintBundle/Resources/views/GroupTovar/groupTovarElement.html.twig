@@ -17,5 +17,26 @@
     {% else %}
         {{ elem_form.show_elem_row(grouptovForm.gname2, type, {'style': 'width: 400px'}) }}
     {% endif %}
+    <button type="button" class="btn" data-toggle="collapse" data-target="#demo">Автонаценка <i class="fa fa-percent mrg" aria-hidden="true"></i></button>
+    <div id="demo" class="collapse">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge1, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge1, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge2, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge2, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge3, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge3, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge4, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge4, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge5, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge5, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(grouptovForm.flagAutoExtraCharge6, type) }}
+        {{ elem_form.show_elem_row(grouptovForm.percentAutoExtraCharge6, type, {'style': 'width: 100px'}) }}
+    </div>
+    <hr class="separator">
     {{ elem_form.show_elem_end(grouptovForm) }}
 {% endblock %}

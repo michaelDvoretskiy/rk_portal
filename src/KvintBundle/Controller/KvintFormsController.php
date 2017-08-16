@@ -131,7 +131,10 @@ class KvintFormsController extends Controller
         $em = $this->getDoctrine()->getManager("kvint");
         $em->remove($element);
         $em->flush();
-        return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
+        if (isset($options['return_parameters'])) {
+            return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
+        }
+        return $this->redirectToRoute($options['route_return']);
     }
 
     protected function addAction(Request $request, $element, array $options) {
@@ -149,12 +152,22 @@ class KvintFormsController extends Controller
             $element->setKod($em->getRepository($options['entity_name'])->generateKod());
             $em->persist($element);
             $em->flush();
+            if (isset($options['return_parameters'])) {
+                return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
+            }
             return $this->redirectToRoute($options['route_return']);
         }
+
+        $other_options = null;
+        if (isset($options['other_options'])) {
+            $other_options = $options['other_options'];
+        }
+
         return $this->render($options['template'], [
             $options['form_name'] => $form->createView(),
             'title' => $options['titleTxt'],
             'type' => 'new',
+            'other_options' => $other_options,
         ]);
     }
 }

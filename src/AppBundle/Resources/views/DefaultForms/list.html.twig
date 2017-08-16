@@ -1,11 +1,11 @@
-{% macro show_list(title, add_path, datatable, is_add_btn = false, colnum = {sm: 12, md: 10, lg: 8}) %}
+{% macro show_list(title, add_path, datatable, is_add_btn = false, colnum = {sm: 12, md: 10, lg: 8}, add_path_par = {}) %}
     <div class="container">
         <div class="row">
             <div class="col-sm-{{ colnum.sm }} col-md-{{ colnum.md }}  col-lg-{{ colnum.lg }}">
                 <h2>{{ title }}</h2>
                 {% if (is_add_btn) %}
                 <div>
-                    <a href=" {{ path(add_path) }} " class="btn btn-success btn-default active btn-new">
+                    <a href=" {{ path(add_path, add_path_par) }} " class="btn btn-success btn-default active btn-new">
                         <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
                     </a>
                 </div>

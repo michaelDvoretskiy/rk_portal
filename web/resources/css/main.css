@@ -51,3 +51,7 @@ body {
 .btn-new i {
     margin-right: 10px;
 }
+
+.btn i.mrg {
+    margin-left: 10px;
+}

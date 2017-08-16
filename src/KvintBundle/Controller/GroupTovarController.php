@@ -42,6 +42,7 @@ class GroupTovarController extends KvintFormsController
             'errTxt' => "Client",
             'filterForm' => $form->createView(),
             'filter' => $filter,
+            'add_path2' => 'kvint_grouptov_add2',
         ];
 
         if (!is_null($grp)) {
@@ -127,22 +128,50 @@ class GroupTovarController extends KvintFormsController
     }
 
     /**
-     * @Route("/grouptov/add", name = "kvint_grouptov_add", options = {"expose" = true})
+     * @Route("/grouptovar/add", name = "kvint_grouptov_add", options = {"expose" = true})
      * @Security("has_role('ROLE_USER')")
      *
      * @return Response
      */
     public function addSubGroupTovarAction(Request $request) {
-        return $this->addAction($request, (new GroupTovar())->setGname(),
+        $params = MyHelper::getPrefixed('ffo', $request->query->all());
+        $parentGroup = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:GroupTovar')->find($params['grp']);
+        if (!is_null($parentGroup)) {
+            return $this->addAction($request, (new GroupTovar())->setGname($parentGroup->getGname()),
+                [
+                    'errTxt' => 'grouptovar',
+                    'form_type' => GroupTovarType::class,
+                    'form_name' => 'grouptovForm',
+                    'route_return' => 'kvint_grouptov',
+                    'titleTxt' => ' подгруппы ',
+                    'template' =>  '@Kvint/GroupTovar/groupTovarElement.html.twig',
+                    'entity_name' => 'KvintBundle:GroupTovar',
+                    'return_parameters' => $params,
+                    'other_options' => ['grp_type' => 'subgroup'],
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('kvint_grouptov', $params);
+        }
+    }
+
+    /**
+     * @Route("/grouptovar/add2", name = "kvint_grouptov_add2", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function addGroupTovarAction(Request $request) {
+        return $this->addAction($request, new GroupTovar(),
             [
                 'errTxt' => 'grouptovar',
                 'form_type' => GroupTovarType::class,
                 'form_name' => 'grouptovForm',
                 'route_return' => 'kvint_grouptov',
-                'titleTxt' => ' подгруппы ',
+                'titleTxt' => ' группы ',
                 'template' =>  '@Kvint/GroupTovar/groupTovarElement.html.twig',
                 'entity_name' => 'KvintBundle:GroupTovar',
-                'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+                'other_options' => ['grp_type' => 'group'],
             ]
         );
     }
