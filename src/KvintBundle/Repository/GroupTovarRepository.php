@@ -18,7 +18,7 @@ class GroupTovarRepository  extends EntityRepository {
     }
 
     public function getSubgroups(GroupTovar $grp) {
-        $q = $this->getEntityManager("kvint")->createQuery("select g from KvintBundle:GroupTovar where g.gname = :gname order by g.gname2");
+        $q = $this->getEntityManager("kvint")->createQuery("select g from KvintBundle:GroupTovar g where g.gname = :gname order by g.gname2");
         $q->setParameter("gname", $grp->getGname());
         return $q->getResult();
     }
@@ -36,4 +36,5 @@ class GroupTovarRepository  extends EntityRepository {
 
         return $res;
     }
+
 }

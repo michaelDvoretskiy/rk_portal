@@ -1,0 +1,52 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme filterForm 'bootstrap_3_layout.html.twig' %}
+{% import '@App/DefaultForms/list.html.twig' as list_form %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-10 ">
+                {{ form_start(filterForm) }}
+                {{ form_row(filterForm.groupFilter) }}
+                {{ form_end(filterForm) }}
+            </div>
+        </div>
+    </div>
+    {% if options.return_parameters is defined %}
+        {% if (options.return_parameters.ffo_grp == 0) %}
+            {% set is_add_btn = false %}
+        {% endif %}
+    {% else %}
+        {% set is_add_btn = false %}
+    {% endif %}
+    {% if(options.return_parameters is defined) %}
+        {{ list_form.show_list("Список товаров :", "kvint_grouptov_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}, {ffo_grp: options.return_parameters.ffo_grp}) }}
+    {% else %}
+        {{ list_form.show_list("Список товаров :", "kvint_grouptov_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}) }}
+    {% endif %}
+{% endblock %}
+
+{%  block jsfooter %}
+    <script !src="">
+        $('#kvint_bundle_group_tovar_list_type_groupFilter').change(
+            function() {
+                //$('form[name="kvint_bundle_group_tovar_list_type"]').submit();
+                {#console.log('{{ path('kvint_grouptov', {'grp': $("#kvint_bundle_group_tovar_list_type_groupFilter").val() }) }}');#}
+                window.location.href = Routing.generate('kvint_tovar', { 'grp': $('#kvint_bundle_group_tovar_list_type_groupFilter').val() }) ;
+            }
+        );
+        $('#kvint_bundle_group_tovar_list_type_subGroupFilter').change(
+            function() {
+                window.location.href = Routing.generate(
+                    'kvint_tovar',
+                    {
+                        'grp': $('#kvint_bundle_group_tovar_list_type_groupFilter').val(),
+                        'subgrp': $('#kvint_bundle_group_tovar_list_type_subGroupFilter').val()
+                    }
+                ) ;
+            }
+        );
+    </script>
+{% endblock %}
+
+{# dynamic evints on FormType https://www.adayinthelifeof.nl/2014/03/19/dynamic-form-modification-in-symfony2/#}

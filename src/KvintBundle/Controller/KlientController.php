@@ -77,7 +77,7 @@ class KlientController extends KvintFormsController
      *
      * @return Response
      */
-    public function removeSkladAction(Klient $klient) {
+    public function removeKlientAction(Klient $klient) {
         return $this->removeAction($klient,
             [
                 'errTxt' => 'client',
@@ -92,7 +92,7 @@ class KlientController extends KvintFormsController
      *
      * @return Response
      */
-    public function addSkladAction(Request $request) {
+    public function addKlientAction(Request $request) {
         return $this->addAction($request, new Klient(),
             [
                 'errTxt' => 'client',
