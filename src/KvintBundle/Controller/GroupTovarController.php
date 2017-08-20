@@ -120,7 +120,7 @@ class GroupTovarController extends KvintFormsController
     public function removeGroupTovarAction(Request $request, GroupTovar $groupTov) {
         return $this->removeAction($groupTov,
             [
-                'errTxt' => 'client',
+                'errTxt' => 'grouptovar',
                 'route_return' => 'kvint_grouptov',
                 'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
             ]

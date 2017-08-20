@@ -1,0 +1,33 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme tovarForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(tovarForm, type, title) }}
+    {% if (type != 'new') %}
+        {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 80px'}) }}
+    {% endif %}
+    {{ elem_form.show_elem_row(tovarForm.tname, type, {'style': 'width: 400px'}) }}
+    <button type="button" class="btn" data-toggle="collapse" data-target="#demo">Автонаценка <i class="fa fa-percent mrg" aria-hidden="true"></i></button>
+    <div id="demo" class="collapse">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge1, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge1, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge2, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge2, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge3, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge3, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge4, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge4, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge5, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge5, type, {'style': 'width: 100px'}) }}
+        <hr class="separator">
+        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge6, type) }}
+        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge6, type, {'style': 'width: 100px'}) }}
+    </div>
+    <hr class="separator">
+    {{ elem_form.show_elem_end(tovarForm) }}
+{% endblock %}

@@ -2,10 +2,14 @@
 
 namespace KvintBundle\Controller\Catalogs;
 
+use AppBundle\Utils\MyHelper;
 use KvintBundle\Controller\KvintFormsController;
 use KvintBundle\Datatables\TovarDatatable;
+use KvintBundle\Entity\Tovar;
 use KvintBundle\Form\GroupTovarListType;
 use KvintBundle\Form\TovarFilterType;
+use KvintBundle\Form\TovarType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,5 +58,104 @@ class TovarController extends KvintFormsController
         }
 
         return $this->listAction($request, TovarDatatable::class, $options);
+    }
+
+    /**
+     * @param Tovar $tovar
+     *
+     * @Route("/tov/show/{id}", name = "kvint_tovar_show", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function showTovarAction(Request $request, Tovar $tovar)
+    {
+        return $this->showAction($request, $tovar,
+            [
+                'errTxt' => 'tovar',
+                'form_type' => TovarType::class,
+                'form_name' => 'tovarForm',
+                'route_return' => 'kvint_tovar',
+                'titleTxt' => ' товар ' . trim($tovar->getTname()),
+                'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
+                'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+            ]
+        );
+    }
+
+    /**
+     * @param Tovar $tovar
+     *
+     * @Route("/tov/edit/{id}", name = "kvint_tovar_edit", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function editTovarAction(Request $request, Tovar $tovar) {
+        return $this->editAction($request, $tovar,
+            [
+                'errTxt' => 'tovar',
+                'form_type' => TovarType::class,
+                'form_name' => 'tovarForm',
+                'route_return' => 'kvint_tovar',
+                'titleTxt' => ' товар ' . trim($tovar->getTname()),
+                'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
+                'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+            ]
+        );
+    }
+
+    /**
+     * @param Tovar $tovar
+     *
+     * @Route("/tov/remove/{id}", name = "kvint_tovar_remove", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function removeGroupTovarAction(Request $request, Tovar $tovar) {
+        return $this->removeAction($tovar,
+            [
+                'errTxt' => 'tovar',
+                'route_return' => 'kvint_tovar',
+                'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/tov/add", name = "kvint_tovar_add", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function addTovarAction(Request $request) {
+        $params = MyHelper::getPrefixed('ffo', $request->query->all());
+        $newTovar = new Tovar();
+        $findgroup = 0;
+        if (isset($params['grp'])) {
+            $findgroup = $params['grp'];
+        }
+        if (isset($params['subgrp'])) {
+            $findgroup = $params['subgrp'];
+        }
+        if ($findgroup != 0) {
+            $parentGroup = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:GroupTovar')->find($findgroup);
+        }
+        if (isset($parentGroup) && !is_null($parentGroup)) {
+            $newTovar->setGroupTovar($parentGroup);
+        }
+        return $this->addAction($request, $newTovar,
+            [
+                'errTxt' => 'tovar',
+                'form_type' => TovarType::class,
+                'form_name' => 'tovarForm',
+                'route_return' => 'kvint_tovar',
+                'titleTxt' => ' товара ',
+                'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
+                'entity_name' => 'KvintBundle:Tovar',
+                'return_parameters' => $params,
+            ]
+        );
     }
 }

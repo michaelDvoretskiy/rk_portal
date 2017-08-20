@@ -20,9 +20,13 @@
         {% set is_add_btn = false %}
     {% endif %}
     {% if(options.return_parameters is defined) %}
-        {{ list_form.show_list("Список товаров :", "kvint_grouptov_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}, {ffo_grp: options.return_parameters.ffo_grp}) }}
+        {% if(options.return_parameters.ffo_subgrp is defined) %}
+            {{ list_form.show_list("Список товаров :", "kvint_tovar_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}, {ffo_grp: options.return_parameters.ffo_grp, ffo_subgrp: options.return_parameters.ffo_subgrp}) }}
+        {% else %}
+            {{ list_form.show_list("Список товаров :", "kvint_tovar_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}, {ffo_grp: options.return_parameters.ffo_grp}) }}
+        {% endif %}
     {% else %}
-        {{ list_form.show_list("Список товаров :", "kvint_grouptov_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}) }}
+        {{ list_form.show_list("Список товаров :", "kvint_tovar_add", datatable, is_add_btn, {sm: 12, md: 10, lg: 10}) }}
     {% endif %}
 {% endblock %}
 

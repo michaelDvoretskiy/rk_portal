@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass = "KvintBundle\Repository\TovarRepository")
  * @ORM\Table(name = "tovar")
+ * @ORM\HasLifecycleCallbacks
  */
 class Tovar
 {
@@ -19,6 +20,11 @@ class Tovar
      * @ORM\Column(length = 70)
      */
     protected $tname;
+
+    /**
+     * @ORM\Column(length = 6)
+     */
+    protected $fasov;
 
     /**
      * @ORM\Column(name = "pr1", type = "decimal", length = 5, scale = 2)
@@ -82,7 +88,7 @@ class Tovar
 
     /**
      * @ORM\ManyToOne(targetEntity = "KvintBundle\Entity\GroupTovar")
-     * @ORM\JoinColumn(name = "grouptovar")
+     * @ORM\JoinColumn(name = "grouptovar", referencedColumnName = "kod")
      */
     protected $groupTovar;
 
@@ -339,5 +345,32 @@ class Tovar
     {
         $this->tname = $tname;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFasov()
+    {
+        return $this->fasov;
+    }
+
+    /**
+     * @param mixed $fasov
+     */
+    public function setFasov($fasov)
+    {
+        $this->fasov = $fasov;
+        return $this;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     * @ORM\PrePersist
+     */
+    public function updateDef() {
+        if (is_null($this->fasov)) {
+            $this->fasov = '';
+        }
     }
 }
