@@ -93,6 +93,394 @@ class Tovar
     protected $groupTovar;
 
     /**
+     * @ORM\Column(name = "co1", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price1;
+
+    /**
+     * @ORM\Column(name = "co2", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price2;
+
+    /**
+     * @ORM\Column(name = "co3", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price3;
+
+    /**
+     * @ORM\Column(name = "co4", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price4;
+
+    /**
+     * @ORM\Column(name = "co5", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price5;
+
+    /**
+     * @ORM\Column(name = "co6", type = "decimal", length = 15, scale = 6)
+     */
+    protected $price6;
+
+    /**
+     * @ORM\ManyToOne(targetEntity = "KvintBundle\Entity\GroupNalog")
+     * @ORM\JoinColumn(name = "GRNLG", referencedColumnName = "kod")
+     */
+    protected $groupNalog;
+
+    /**
+     * @ORM\Column(name = "nds", type = "decimal", length = 8, scale = 2)
+     */
+    protected $nds;
+
+    /**
+     * @ORM\Column(name="act", type="string", length=1)
+     */
+    protected $active;
+
+    /**
+     * @ORM\Column(name="id_scan", length=24)
+     */
+    protected $idScan;
+
+    /**
+     * @ORM\Column(name="flConfKVED", type="string", length=1)
+     */
+    protected $kvedRight;
+
+    /**
+     * @ORM\Column(name="kved", length=20)
+     */
+    protected $kved;
+
+    /**
+     * @ORM\Column(name="FLIMP", type="string", length=1)
+     */
+    protected $import;
+
+    /**
+     * @ORM\Column(name = "dop", length = 20)
+     */
+    protected $dopName;
+
+    /**
+     * @ORM\Column(name = "optkol", type = "decimal", length = 15, scale = 3)
+     */
+    protected $optQuantity;
+
+    /**
+     * @ORM\Column(name = "min_kol", type = "decimal", length = 15, scale = 3)
+     */
+    protected $minQuantity;
+
+    /**
+     * @ORM\Column(name = "ves", type = "decimal", length = 12, scale = 3)
+     */
+    protected $weight;
+
+    /**
+     * @ORM\Column(name = "ob", type = "decimal", length = 15, scale = 3)
+     */
+    protected $volume;
+
+    /**
+     * @ORM\Column(name = "kolInUpak", type = "decimal", length = 8, scale = 3)
+     */
+    protected $quantityInPack;
+
+    /**
+     * @ORM\Column(name = "tara", length = 1)
+     */
+    protected $returntara;
+
+    /**
+     * @ORM\Column(name = "nvtara", length = 1)
+     */
+    protected $unReturnTara;
+
+    /**
+     * @ORM\Column(name = "flGP", length = 1)
+     */
+    protected $makedProduction;
+
+    /**
+     * @ORM\Column(name = "flVesTov", length = 1)
+     */
+    protected $weightTovar;
+
+    /**
+     * @return mixed
+     */
+    public function isWeightTovar()
+    {
+        return KvintTypeConverter::TFasBOOL($this->weightTovar);
+    }
+
+    /**
+     * @param mixed $weightTovar
+     */
+    public function setWeightTovar($weightTovar)
+    {
+        $this->weightTovar =  KvintTypeConverter::BOOLasTF($weightTovar);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isReturntara()
+    {
+        return KvintTypeConverter::TFasBOOL($this->returntara);
+    }
+
+    /**
+     * @param mixed $returntara
+     */
+    public function setReturntara($returntara)
+    {
+        $this->returntara =  KvintTypeConverter::BOOLasTF($returntara);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isUnReturnTara()
+    {
+        return KvintTypeConverter::TFasBOOL($this->unReturnTara);
+    }
+
+    /**
+     * @param mixed $unReturnTara
+     */
+    public function setUnReturnTara($unReturnTara)
+    {
+        $this->unReturnTara =  KvintTypeConverter::BOOLasTF($unReturnTara);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isMakedProduction()
+    {
+        return KvintTypeConverter::TFasBOOL($this->makedProduction);
+    }
+
+    /**
+     * @param mixed $makedProduction
+     */
+    public function setMakedProduction($makedProduction)
+    {
+        $this->makedProduction =  KvintTypeConverter::BOOLasTF($makedProduction);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDopName()
+    {
+        return $this->dopName;
+    }
+
+    /**
+     * @param mixed $dopName
+     */
+    public function setDopName($dopName)
+    {
+        $this->dopName = $dopName;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOptQuantity()
+    {
+        return $this->optQuantity;
+    }
+
+    /**
+     * @param mixed $optQuantity
+     */
+    public function setOptQuantity($optQuantity)
+    {
+        $this->optQuantity = $optQuantity;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMinQuantity()
+    {
+        return $this->minQuantity;
+    }
+
+    /**
+     * @param mixed $minQuantity
+     */
+    public function setMinQuantity($minQuantity)
+    {
+        $this->minQuantity = $minQuantity;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param mixed $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    /**
+     * @param mixed $volume
+     */
+    public function setVolume($volume)
+    {
+        $this->volume = $volume;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantityInPack()
+    {
+        return $this->quantityInPack;
+    }
+
+    /**
+     * @param mixed $quantityInPack
+     */
+    public function setQuantityInPack($quantityInPack)
+    {
+        $this->quantityInPack = $quantityInPack;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isKvedRight()
+    {
+        return KvintTypeConverter::TFasBOOL($this->kvedRight);
+    }
+
+    /**
+     * @param mixed $kvedRight
+     */
+    public function setKvedRight($kvedRight)
+    {
+        $this->kvedRight =  KvintTypeConverter::BOOLasTF($kvedRight);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKved()
+    {
+        return $this->kved;
+    }
+
+    /**
+     * @param mixed $kved
+     */
+    public function setKved($kved)
+    {
+        $this->kved = $kved;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isImport()
+    {
+        return KvintTypeConverter::TFasBOOL($this->import);
+    }
+
+    /**
+     * @param mixed $import
+     */
+    public function setImport($import)
+    {
+        $this->import =  KvintTypeConverter::BOOLasTF($import);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdScan()
+    {
+        return $this->idScan;
+    }
+
+    /**
+     * @param mixed $idScan
+     */
+    public function setIdScan($idScan)
+    {
+        $this->idScan = $idScan;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isActive()
+    {
+        return KvintTypeConverter::TFasBOOL($this->active);
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active)
+    {
+        $this->active =  KvintTypeConverter::BOOLasTF($active);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroupNalog()
+    {
+        return $this->groupNalog;
+    }
+
+    /**
+     * @param mixed $groupNalog
+     */
+    public function setGroupNalog($groupNalog)
+    {
+        $this->groupNalog = $groupNalog;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getGroupTovar()
@@ -365,6 +753,108 @@ class Tovar
     }
 
     /**
+     * @return mixed
+     */
+    public function getPrice1()
+    {
+        return $this->price1;
+    }
+
+    /**
+     * @param mixed $price1
+     */
+    public function setPrice1($price1)
+    {
+        $this->price1 = $price1;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice2()
+    {
+        return $this->price2;
+    }
+
+    /**
+     * @param mixed $price2
+     */
+    public function setPrice2($price2)
+    {
+        $this->price2 = $price2;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice3()
+    {
+        return $this->price3;
+    }
+
+    /**
+     * @param mixed $price3
+     */
+    public function setPrice3($price3)
+    {
+        $this->price3 = $price3;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice4()
+    {
+        return $this->price4;
+    }
+
+    /**
+     * @param mixed $price4
+     */
+    public function setPrice4($price4)
+    {
+        $this->price4 = $price4;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice5()
+    {
+        return $this->price5;
+    }
+
+    /**
+     * @param mixed $price5
+     */
+    public function setPrice5($price5)
+    {
+        $this->price5 = $price5;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice6()
+    {
+        return $this->price6;
+    }
+
+    /**
+     * @param mixed $price6
+     */
+    public function setPrice6($price6)
+    {
+        $this->price6 = $price6;
+        return $this;
+    }
+
+    /**
      * @ORM\PreUpdate
      * @ORM\PrePersist
      */
@@ -372,5 +862,7 @@ class Tovar
         if (is_null($this->fasov)) {
             $this->fasov = '';
         }
+
+        $this->nds = $this->groupNalog->getPersent();
     }
 }

@@ -350,4 +350,12 @@ class GroupTovar
             $this->gname2 = '';
         }
     }
+
+    public function getFullName() {
+        $fullName = $this->getGname();
+        if (trim($this->getGname2()) != "") {
+            $fullName .= " -> " . $this->getGname2();
+        }
+        return $fullName;
+    }
 }

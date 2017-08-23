@@ -8,26 +8,108 @@
         {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 80px'}) }}
     {% endif %}
     {{ elem_form.show_elem_row(tovarForm.tname, type, {'style': 'width: 400px'}) }}
-    <button type="button" class="btn" data-toggle="collapse" data-target="#demo">Автонаценка <i class="fa fa-percent mrg" aria-hidden="true"></i></button>
-    <div id="demo" class="collapse">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge1, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge1, type, {'style': 'width: 100px'}) }}
-        <hr class="separator">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge2, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge2, type, {'style': 'width: 100px'}) }}
-        <hr class="separator">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge3, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge3, type, {'style': 'width: 100px'}) }}
-        <hr class="separator">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge4, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge4, type, {'style': 'width: 100px'}) }}
-        <hr class="separator">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge5, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge5, type, {'style': 'width: 100px'}) }}
-        <hr class="separator">
-        {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge6, type) }}
-        {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge6, type, {'style': 'width: 100px'}) }}
+
+    <div id="exTab" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#1" data-toggle="tab">Основные</a>
+            </li>
+            <li><a href="#2" data-toggle="tab">Общие</a>
+            </li>
+            <li><a href="#3" data-toggle="tab">Цены</a>
+            </li>
+            <li><a href="#4" data-toggle="tab">Наценка</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <br>
+            <div class="tab-pane active" id="1">
+                <div class="col-md-7 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.fasov, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.groupTovar, type, {'style': 'width: 500px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.groupNalog, type, {'style': 'width: 250px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.weightTovar, type) }}
+                    {{ elem_form.show_elem_row(tovarForm.active, type) }}
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.idScan, type, {'style': 'width: 250px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.kved, type, {'style': 'width: 250px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.kvedRight, type) }}
+                    {{ elem_form.show_elem_row(tovarForm.import, type) }}
+                </div>
+            </div>
+            <div class="tab-pane" id="2">
+                <div class="col-md-7 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.dopName, type, {'style': 'width: 300px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.optQuantity, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.minQuantity, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.weight, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.volume, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.quantityInPack, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.returntara, type) }}
+                    {{ elem_form.show_elem_row(tovarForm.unReturnTara, type) }}
+                    {{ elem_form.show_elem_row(tovarForm.makedProduction, type) }}
+                </div>
+            </div>
+            <div class="tab-pane" id="3">
+                {{ elem_form.show_elem_row(tovarForm.price1, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.price2, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.price3, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.price4, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.price5, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.price6, type, {'style': 'width: 100px'}) }}
+            </div>
+            <div class="tab-pane" id="4">
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge1, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge1, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge2, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge2, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge3, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge3, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge4, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge4, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge5, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge5, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge6, type) }}
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge6, type, {'style': 'width: 100px'}) }}
+                </div>
+            </div>
+        </div>
     </div>
     <hr class="separator">
     {{ elem_form.show_elem_end(tovarForm) }}
+{% endblock %}
+
+{% block jsfooter %}
+    <script type="text/javascript">
+        $('#kvint_bundle_tovar_type_groupTovar').select2({
+            theme: "bootstrap"
+        });
+    </script>
 {% endblock %}
