@@ -1,0 +1,7 @@
+{% form_theme scanCodeForm 'bootstrap_3_layout.html.twig' %}
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+
+{{ form_start(scanCodeForm) }}
+{{ elem_form.show_elem_row(scanCodeForm.idScan, type) }}
+{{ elem_form.show_elem_row(scanCodeForm.quantity, type) }}
+{{ form_end(scanCodeForm) }}

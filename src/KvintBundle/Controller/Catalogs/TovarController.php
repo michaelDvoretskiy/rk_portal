@@ -5,12 +5,15 @@ namespace KvintBundle\Controller\Catalogs;
 use AppBundle\Utils\MyHelper;
 use KvintBundle\Controller\KvintFormsController;
 use KvintBundle\Datatables\TovarDatatable;
+use KvintBundle\Entity\KvintListedEntities;
+use KvintBundle\Entity\ScanCode;
 use KvintBundle\Entity\Tovar;
-use KvintBundle\Form\GroupTovarListType;
+use KvintBundle\Form\ScanCodeType;
 use KvintBundle\Form\TovarFilterType;
 use KvintBundle\Form\TovarType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -79,6 +82,13 @@ class TovarController extends KvintFormsController
                 'titleTxt' => ' товар ' . trim($tovar->getTname()),
                 'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
                 'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+                'other_options' => [
+                    'remains' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getRemains($tovar),
+                    'id_scans' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getDopScanCodes($tovar->getKod()),
+                    'extra1name' => array_search(1, KvintListedEntities::Prices()),
+                    'extra2name' => array_search(2, KvintListedEntities::Prices()),
+                ],
+
             ]
         );
     }
@@ -101,6 +111,12 @@ class TovarController extends KvintFormsController
                 'titleTxt' => ' товар ' . trim($tovar->getTname()),
                 'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
                 'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
+                'other_options' => [
+                    'remains' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getRemains($tovar),
+                    'id_scans' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getDopScanCodes($tovar->getKod()),
+                    'extra1name' => array_search(1, KvintListedEntities::Prices()),
+                    'extra2name' => array_search(2, KvintListedEntities::Prices()),
+                ],
             ]
         );
     }
@@ -157,5 +173,57 @@ class TovarController extends KvintFormsController
                 'return_parameters' => $params,
             ]
         );
+    }
+
+    /**
+     * @param $kod
+     * @Route("/tov/dopscankod/{kod}", name = "kvint_tovar_dopscankod", options = {"expose" = true})
+     * @return JsonResponse
+     */
+    public function getJSONscanCodesAction($kod) {
+        if (!$this->hasRight('view')) {
+            return new JsonResponse();
+        }
+        return new JsonResponse($this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getDopScanCodes($kod));
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
+     */
+    public function dopScanCodesFormAction($kodtov, $scanCode = null) {
+        if (is_null($scanCode)) {
+            $tovar = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->find($kodtov);
+            $scanCode = (new ScanCode())->setKodtov($tovar)->setIdScan('')->setQuantity(1);
+        } else {
+            $scanCode = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:ScanCode')->find(['kodtov' => $kodtov, 'idScan' => $scanCode]);
+        }
+        $form = $this->createForm(ScanCodeType::class, $scanCode);
+        return [
+            'scanCodeForm' => $form->createView(),
+            'type' => 'edit',
+        ];
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/tov/dopscankodadd", name = "kvint_tovar_dopscankod_add", options = {"expose" = true})
+     * @return JsonResponse
+     */
+    public function dopScanCodesAddAction(Request $request) {
+        if ($this->hasRight('edit')) {
+            $kodtov = $request->request->get('kodtov');
+            $id_scan = $request->request->get('id_scan');
+            $quantity = $request->request->get('quantity');
+            dump($kodtov);
+            if (!is_null($kodtov) && !is_null($id_scan) && !is_null($quantity)) {
+                $em = $this->getDoctrine()->getManager('kvint');
+                $tovar = $em->getRepository('KvintBundle:Tovar')->find($kodtov);
+                $scanCode = (new ScanCode())->setKodtov($tovar)->setIdScan($id_scan)->setQuantity($quantity);
+                $em->persist($scanCode);
+                $em->flush();
+            }
+        }
+        return $this->getJSONscanCodesAction($kodtov);
     }
 }

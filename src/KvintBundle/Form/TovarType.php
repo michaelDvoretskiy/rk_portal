@@ -238,6 +238,7 @@ class TovarType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Штрих-код',
+                    'required' => false,
                 ]
             )
             ->add(

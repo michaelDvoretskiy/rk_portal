@@ -3,6 +3,15 @@
 
 {% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
 {% block content %}
+    {#<button type="button" data-toggle="modal" data-target="#myModal">I register !</button>#}
+
+    {#<div id="myModal" class="modal hide fade">#}
+        {##}
+    {#</div>#}
+
+    {#<a data-toggle="modal" href="{{ path('fos_user_registration_register') }}" data-target="#myModal">click me</a>#}
+
+    {#<div id="myModal"></div>#}
     {{ elem_form.show_elem_start(tovarForm, type, title) }}
     {% if (type != 'new') %}
         {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 80px'}) }}
@@ -15,6 +24,8 @@
                 <a href="#1" data-toggle="tab">Основные</a>
             </li>
             <li><a href="#2" data-toggle="tab">Общие</a>
+            </li>
+            <li><a href="#5" data-toggle="tab">Штрих-коды</a>
             </li>
             <li><a href="#3" data-toggle="tab">Цены</a>
             </li>
@@ -33,7 +44,6 @@
                     {{ elem_form.show_elem_row(tovarForm.active, type) }}
                 </div>
                 <div class="col-md-5 col-xs-12">
-                    {{ elem_form.show_elem_row(tovarForm.idScan, type, {'style': 'width: 250px'}) }}
                     {{ elem_form.show_elem_row(tovarForm.kved, type, {'style': 'width: 250px'}) }}
                     {{ elem_form.show_elem_row(tovarForm.kvedRight, type) }}
                     {{ elem_form.show_elem_row(tovarForm.import, type) }}
@@ -55,12 +65,36 @@
                 </div>
             </div>
             <div class="tab-pane" id="3">
-                {{ elem_form.show_elem_row(tovarForm.price1, type, {'style': 'width: 100px'}) }}
-                {{ elem_form.show_elem_row(tovarForm.price2, type, {'style': 'width: 100px'}) }}
-                {{ elem_form.show_elem_row(tovarForm.price3, type, {'style': 'width: 100px'}) }}
-                {{ elem_form.show_elem_row(tovarForm.price4, type, {'style': 'width: 100px'}) }}
-                {{ elem_form.show_elem_row(tovarForm.price5, type, {'style': 'width: 100px'}) }}
-                {{ elem_form.show_elem_row(tovarForm.price6, type, {'style': 'width: 100px'}) }}
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.price1, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.price2, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.price3, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.price4, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-4 col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.price5, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(tovarForm.price6, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-xs-12">
+                    {#<table id="table" data-height="150">#}
+                    {% if (other_options.remains is defined) %}
+                    <table id="table" class="table table-striped table-condensed">
+                        <thead>
+                        <tr>
+                            <th data-field="warehouse" data-halign="center" data-align="left">Склад</th>
+                            <th data-field="supplier" data-halign="center" data-align="left">Поставщик</th>
+                            <th data-field="productCost" data-halign="center" data-align="right">Цена<br>учетная</th>
+                            <th data-field="quantity" data-halign="center" data-align="right">Кол-во</th>
+                            <th data-field="extra1" data-halign="center" data-align="right">Наценка<br>{{ other_options.extra1name }}</th>
+                            <th data-field="extra2" data-halign="center" data-align="right">Наценка<br>{{ other_options.extra2name }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    {% endif %}
+                    {#<div style="height: 100px;"></div>#}
+                </div>
             </div>
             <div class="tab-pane" id="4">
                 <div class="col-md-4 col-xs-12">
@@ -100,6 +134,40 @@
                     {{ elem_form.show_elem_row(tovarForm.percentAutoExtraCharge6, type, {'style': 'width: 100px'}) }}
                 </div>
             </div>
+            <div class="tab-pane" id="5">
+                {{ elem_form.show_elem_row(tovarForm.idScan, type, {'style': 'width: 250px'}) }}
+                <button class="btn btn-primary btn-new" data-toggle="modal" data-target="#agregarRonda">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
+                </button>
+
+                <div  style="display: none;"  class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Добавить штрих-код</h4>
+                            </div>
+                            <div class="modal-body">
+                                {% if(tovarForm.kod.vars.data is defined) %}
+                                    {{ render(controller('KvintBundle:Catalogs/Tovar:dopScanCodesForm', {'kodtov': tovarForm.kod.vars.value})) }}
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="table_id_scan" class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th data-field="scanCode" data-halign="center" data-align="left">Штрих-код</th>
+                        <th data-field="quantity" data-halign="center" data-align="right">Кол-во</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
     <hr class="separator">
@@ -111,5 +179,38 @@
         $('#kvint_bundle_tovar_type_groupTovar').select2({
             theme: "bootstrap"
         });
+
+        $('#add-new-idscan').click(function(){
+            $.ajax({
+                url : "{{ path("kvint_tovar_dopscankod_add") }}",
+                type: 'post',
+                data: {
+                    kodtov: {{ tovarForm.kod.vars.data }},
+                    id_scan: $('#kvint_bundle_scan_code_type_idScan').val(),
+                    quantity: $('#kvint_bundle_scan_code_type_quantity').val()
+                },
+                success: function(json_data) {
+//                    $('#table_id_scan').bootstrapTable("load", json_data);
+                    $('#table_id_scan').bootstrapTable("destroy");
+                    $('#table_id_scan').bootstrapTable({
+                        data: json_data
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            {% if (other_options.remains is defined) %}
+                $('#table').bootstrapTable({
+                    data: {{ other_options.remains|json_encode|raw }}
+                });
+            {% endif %}
+            {% if (other_options.id_scans is defined) %}
+                $('#table_id_scan').bootstrapTable({
+                    data: {{ other_options.id_scans|json_encode|raw }}
+                });
+            {% endif %}
+        });
+
     </script>
 {% endblock %}
