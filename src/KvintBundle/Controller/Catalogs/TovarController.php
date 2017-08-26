@@ -215,13 +215,42 @@ class TovarController extends KvintFormsController
             $kodtov = $request->request->get('kodtov');
             $id_scan = $request->request->get('id_scan');
             $quantity = $request->request->get('quantity');
-            dump($kodtov);
             if (!is_null($kodtov) && !is_null($id_scan) && !is_null($quantity)) {
                 $em = $this->getDoctrine()->getManager('kvint');
                 $tovar = $em->getRepository('KvintBundle:Tovar')->find($kodtov);
-                $scanCode = (new ScanCode())->setKodtov($tovar)->setIdScan($id_scan)->setQuantity($quantity);
-                $em->persist($scanCode);
-                $em->flush();
+                if (!is_null($tovar)) {
+                    $scanCode = $em->getRepository('KvintBundle:ScanCode')->find(['kodtov' => $tovar, 'idScan' => $id_scan]);
+                    if (is_null($scanCode)) {
+                        $scanCode = (new ScanCode())->setKodtov($tovar)->setIdScan($id_scan);
+                        $em->persist($scanCode);
+                    }
+                    $scanCode->setQuantity($quantity);
+                    $em->flush();
+                }
+            }
+        }
+        return $this->getJSONscanCodesAction($kodtov);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/tov/dopscankoddelete", name = "kvint_tovar_dopscankod_delete", options = {"expose" = true})
+     * @return JsonResponse
+     */
+    public function dopScanCodesDeleteAction(Request $request) {
+        if ($this->hasRight('edit')) {
+            $kodtov = $request->request->get('kodtov');
+            $id_scan = $request->request->get('id_scan');
+            if (!is_null($kodtov) && !is_null($id_scan)) {
+                $em = $this->getDoctrine()->getManager('kvint');
+                $tovar = $em->getRepository('KvintBundle:Tovar')->find($kodtov);
+                if (!is_null($tovar)) {
+                    $scanCode = $em->getRepository('KvintBundle:ScanCode')->find(['kodtov' => $tovar, 'idScan' => $id_scan]);
+                    if (!is_null($scanCode)) {
+                        $em->remove($scanCode);
+                        $em->flush();
+                    }
+                }
             }
         }
         return $this->getJSONscanCodesAction($kodtov);

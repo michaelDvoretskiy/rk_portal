@@ -209,6 +209,51 @@ class Tovar
     protected $weightTovar;
 
     /**
+     * @ORM\OneToOne(targetEntity="KvintBundle\Entity\Tovar")
+     * @ORM\JoinColumn(name = "kodfas", referencedColumnName = "kod")
+     */
+    protected $tovarOfFasovka;
+
+    /**
+     * @ORM\Column(name = "kolfas", type = "decimal", length = 7, scale = 3)
+     */
+    protected $quantityOfFasovka;
+
+    /**
+     * @return mixed
+     */
+    public function getTovarOfFasovka()
+    {
+        return $this->tovarOfFasovka;
+    }
+
+    /**
+     * @param mixed $tovarOfFasovka
+     */
+    public function setTovarOfFasovka($tovarOfFasovka)
+    {
+        $this->tovarOfFasovka = $tovarOfFasovka;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantityOfFasovka()
+    {
+        return $this->quantityOfFasovka;
+    }
+
+    /**
+     * @param mixed $quantityOfFasovka
+     */
+    public function setQuantityOfFasovka($quantityOfFasovka)
+    {
+        $this->quantityOfFasovka = $quantityOfFasovka;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function isWeightTovar()
@@ -862,7 +907,24 @@ class Tovar
         if (is_null($this->fasov)) {
             $this->fasov = '';
         }
-
+        if (is_null($this->kvedRight)) {
+            $this->kvedRight = 'F';
+        }
+        if (is_null($this->import)) {
+            $this->import = 'F';
+        }
+        if (is_null($this->returntara)) {
+            $this->returntara = 'F';
+        }
+        if (is_null($this->unReturnTara)) {
+            $this->unReturnTara = 'F';
+        }
+        if (is_null($this->makedProduction)) {
+            $this->makedProduction = 'F';
+        }
+        if (is_null($this->weightTovar)) {
+            $this->weightTovar = 'F';
+        }
         $this->nds = $this->groupNalog->getPersent();
     }
 }

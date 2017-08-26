@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use KvintBundle\Entity\KvintListedEntities;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -270,6 +271,7 @@ class TovarType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'КВЭД',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -277,6 +279,7 @@ class TovarType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Дополнительно',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -356,6 +359,20 @@ class TovarType extends AbstractType
                     'required' => false,
                 ]
             )
+//            ->add(
+//                'tovarOfFasovka',
+//                EntityType::class,
+//                [
+//                    'label' => 'Группа товара',
+//                    'class' => 'KvintBundle\Entity\Tovar',
+//                    'choice_label' => 'tname',
+//                    'query_builder' => function (EntityRepository $er) {
+//                        return $er->createQueryBuilder('t')
+//                            ->where("t.active = 'T'")
+//                            ->orderBy('t.tname', 'ASC');
+//                    },
+//                ]
+//            )
             ->add(
                 'ok',
                 SubmitType::class

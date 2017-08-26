@@ -31,6 +31,8 @@
             </li>
             <li><a href="#4" data-toggle="tab">Наценка</a>
             </li>
+            <li><a href="#6" data-toggle="tab">Фасовка</a>
+            </li>
         </ul>
 
         <div class="tab-content">
@@ -136,29 +138,12 @@
             </div>
             <div class="tab-pane" id="5">
                 {{ elem_form.show_elem_row(tovarForm.idScan, type, {'style': 'width: 250px'}) }}
-                <button class="btn btn-primary btn-new" data-toggle="modal" data-target="#agregarRonda">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
-                </button>
+                {% if (type == 'edit') %}
+                    <button id="add_dopscankod" class="btn btn-primary btn-new" data-toggle="modal" data-target="#agregarRonda" type="button">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить
+                    </button>
+                {% endif %}
 
-                <div  style="display: none;"  class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">Добавить штрих-код</h4>
-                            </div>
-                            <div class="modal-body">
-                                {% if(tovarForm.kod.vars.data is defined) %}
-                                    {{ render(controller('KvintBundle:Catalogs/Tovar:dopScanCodesForm', {'kodtov': tovarForm.kod.vars.value})) }}
-                                {% endif %}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <table id="table_id_scan" class="table table-striped table-condensed">
                     <thead>
                     <tr>
@@ -168,10 +153,37 @@
                     </thead>
                 </table>
             </div>
+            <div class="tab-pane" id="6">
+                {#{{ elem_form.show_elem_row(tovarForm.tovarOfFasovka, type, {'style': 'width: 400px'}) }}#}
+            </div>
         </div>
     </div>
     <hr class="separator">
+
     {{ elem_form.show_elem_end(tovarForm) }}
+
+    {% if (type == 'edit') %}
+        <div style="display: none;" class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Штрих-код</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% if(tovarForm.kod.vars.data is defined) %}
+                            {{ render(controller('KvintBundle:Catalogs/Tovar:dopScanCodesForm', {'kodtov': tovarForm.kod.vars.value})) }}
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                        <button id="delete-idscan" type="button" class="btn btn-danger pull-left" data-dismiss="modal">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block jsfooter %}
@@ -179,26 +191,69 @@
         $('#kvint_bundle_tovar_type_groupTovar').select2({
             theme: "bootstrap"
         });
-
-        $('#add-new-idscan').click(function(){
-            $.ajax({
-                url : "{{ path("kvint_tovar_dopscankod_add") }}",
-                type: 'post',
-                data: {
-                    kodtov: {{ tovarForm.kod.vars.data }},
-                    id_scan: $('#kvint_bundle_scan_code_type_idScan').val(),
-                    quantity: $('#kvint_bundle_scan_code_type_quantity').val()
-                },
-                success: function(json_data) {
-//                    $('#table_id_scan').bootstrapTable("load", json_data);
-                    $('#table_id_scan').bootstrapTable("destroy");
-                    $('#table_id_scan').bootstrapTable({
-                        data: json_data
-                    });
-                }
-            });
+        $('#kvint_bundle_tovar_type_tovarOfFasovka').select2({
+            theme: "bootstrap"
         });
 
+        function setRowTableClickEvent() {
+            {% if (type == 'edit') %}
+                $('#table_id_scan tbody tr').click(function(event) {
+                    $('#agregarRonda').modal('show');
+                    $('#delete-idscan').show();
+                    $('.modal-body #kvint_bundle_scan_code_type_idScan').prop( "disabled", true );
+                    $('.modal-body #kvint_bundle_scan_code_type_idScan').val(event.currentTarget.children[0].innerHTML);
+                    $('.modal-body #kvint_bundle_scan_code_type_quantity').val(event.currentTarget.children[1].innerHTML);
+                });
+            {% endif %}
+        }
+
+        {% if (type == 'edit') %}
+            $('#add_dopscankod').click(function() {
+                $('#delete-idscan').hide();
+                $('.modal-body #kvint_bundle_scan_code_type_idScan').prop( "disabled", false );
+                $('.modal-body #kvint_bundle_scan_code_type_idScan').val("");
+                $('.modal-body #kvint_bundle_scan_code_type_quantity').val(1);
+            });
+
+
+            $('#add-new-idscan').click(function(){
+                $.ajax({
+                    url : "{{ path("kvint_tovar_dopscankod_add") }}",
+                    type: 'post',
+                    data: {
+                        kodtov: {{ tovarForm.kod.vars.data }},
+                        id_scan: $('#kvint_bundle_scan_code_type_idScan').val(),
+                        quantity: $('#kvint_bundle_scan_code_type_quantity').val()
+                    },
+                    success: function(json_data) {
+    //                    $('#table_id_scan').bootstrapTable("load", json_data);
+                        $('#table_id_scan').bootstrapTable("destroy");
+                        $('#table_id_scan').bootstrapTable({
+                            data: json_data
+                        });
+                        setRowTableClickEvent();
+                    }
+                });
+            });
+
+            $('#delete-idscan').click(function(){
+                $.ajax({
+                    url : "{{ path("kvint_tovar_dopscankod_delete") }}",
+                    type: 'post',
+                    data: {
+                        kodtov: {{ tovarForm.kod.vars.data }},
+                        id_scan: $('#kvint_bundle_scan_code_type_idScan').val()
+                    },
+                    success: function(json_data) {
+                        $('#table_id_scan').bootstrapTable("destroy");
+                        $('#table_id_scan').bootstrapTable({
+                            data: json_data
+                        });
+                        setRowTableClickEvent();
+                    }
+                });
+            });
+        {% endif %}
         $(function () {
             {% if (other_options.remains is defined) %}
                 $('#table').bootstrapTable({
@@ -209,6 +264,7 @@
                 $('#table_id_scan').bootstrapTable({
                     data: {{ other_options.id_scans|json_encode|raw }}
                 });
+                setRowTableClickEvent();
             {% endif %}
         });
 
