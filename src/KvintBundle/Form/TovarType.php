@@ -2,17 +2,22 @@
 
 namespace KvintBundle\Form;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use KvintBundle\Entity\KvintListedEntities;
+use KvintBundle\Entity\Tovar;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TovarType extends AbstractType
@@ -359,30 +364,76 @@ class TovarType extends AbstractType
                     'required' => false,
                 ]
             )
-//            ->add(
-//                'tovarOfFasovka',
-//                EntityType::class,
-//                [
-//                    'label' => 'Группа товара',
-//                    'class' => 'KvintBundle\Entity\Tovar',
-//                    'choice_label' => 'tname',
-//                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('t')
-//                            ->where("t.active = 'T'")
-//                            ->orderBy('t.tname', 'ASC');
-//                    },
-//                ]
-//            )
+            ->add(
+                'tovarOfFasovka',
+                ChoiceType::class,
+                [
+                    'choices' =>  [(is_null($builder->getData()->getTovarOfFasovka())) ? (new Tovar())->setKod(0)->setTname('Noname') : $builder->getData()->getTovarOfFasovka()],
+                    'choice_label' => 'tname',
+                    'choice_value' => function($v) {
+                        if ($v instanceof Tovar) {
+                            return $v->getKod();
+                        }
+                        if (count($v)) {
+                            return $v[0]->getKod();
+                        }
+                        return -1;
+                    },
+                    'label' => 'Товар фасовки ',
+                ]
+            )
+            ->add(
+                'quantityOfFasovka',
+                NumberType::class,
+                [
+                    'scale' => 3,
+                    'label' => 'Кол-во расфасовки',
+                    'required' => false,
+                ]
+            )
             ->add(
                 'ok',
                 SubmitType::class
             );
+
+//        $builder->get('tovarOfFasovka')->resetViewTransformers();
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+
+            function (FormEvent $event) use ($options) {
+                $form = $event->getForm();
+                $data = $event->getData();
+                if ($form->has('tovarOfFasovka')) {
+                    $form->remove('tovarOfFasovka');
+                    $form->add(
+                        'tovarOfFasovka',
+                        ChoiceType::class,
+                        [
+                            'choices' =>  [($data['tovarOfFasovka'] == "0") ? (new Tovar())->setKod(0)->setTname('Noname') : $options['em']->getRepository('KvintBundle:Tovar')->findByKod((int)$data['tovarOfFasovka'])],
+                            'choice_label' => 'tname',
+                            'choice_value' => function($v) {
+                                if ($v instanceof Tovar) {
+                                    return $v->getKod();
+                                }
+                                if (count($v)) {
+                                    return $v[0]->getKod();
+                                }
+                                return -1;
+                            },
+                            'label' => 'Товар фасовки ',
+                        ]
+                    );
+                }
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'KvintBundle\Entity\Tovar',
+            'em' => null,
         ));
     }
 

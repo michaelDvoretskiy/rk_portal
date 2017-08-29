@@ -14,7 +14,7 @@
     {#<div id="myModal"></div>#}
     {{ elem_form.show_elem_start(tovarForm, type, title) }}
     {% if (type != 'new') %}
-        {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 80px'}) }}
+        {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 100px'}) }}
     {% endif %}
     {{ elem_form.show_elem_row(tovarForm.tname, type, {'style': 'width: 400px'}) }}
 
@@ -154,7 +154,8 @@
                 </table>
             </div>
             <div class="tab-pane" id="6">
-                {#{{ elem_form.show_elem_row(tovarForm.tovarOfFasovka, type, {'style': 'width: 400px'}) }}#}
+                {{ elem_form.show_elem_row(tovarForm.tovarOfFasovka, type, {'style': 'width: 400px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.quantityOfFasovka, type, {'style': 'width: 100px'}) }}
             </div>
         </div>
     </div>
@@ -191,8 +192,32 @@
         $('#kvint_bundle_tovar_type_groupTovar').select2({
             theme: "bootstrap"
         });
-        $('#kvint_bundle_tovar_type_tovarOfFasovka').select2({
-            theme: "bootstrap"
+
+        $("#kvint_bundle_tovar_type_tovarOfFasovka").select2({
+            theme: "bootstrap",
+            ajax: {
+                url: "{{ path('kvint_tovar_list_ajax') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page,
+                        page_limit: 20
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 20) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 2
         });
 
         function setRowTableClickEvent() {

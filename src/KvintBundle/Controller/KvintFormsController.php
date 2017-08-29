@@ -68,7 +68,12 @@ class KvintFormsController extends Controller
             return $this->render("@Kvint/Default/err.html.twig", ['text' => "View " . $options['errTxt'] . " dictinary element. Access deny"]);
         }
 
-        $form = $this->createForm($options['form_type'], $element);
+        $form_type_options = [];
+        if (isset($options['form_type_options'])) {
+            $form_type_options = $options['form_type_options'];
+        }
+        $form = $this->createForm($options['form_type'], $element, $form_type_options);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (isset($options['return_parameters'])) {
@@ -95,7 +100,11 @@ class KvintFormsController extends Controller
             return $this->render("@Kvint/Default/err.html.twig", ['text' => "Edit " . $options['errTxt'] . " dictinary element. Access deny"]);
         }
 
-        $form = $this->createForm($options['form_type'], $element);
+        $form_type_options = [];
+        if (isset($options['form_type_options'])) {
+            $form_type_options = $options['form_type_options'];
+        }
+        $form = $this->createForm($options['form_type'], $element, $form_type_options);
 //        // only handles data on POST
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -142,7 +151,11 @@ class KvintFormsController extends Controller
             return $this->render("@Kvint/Default/err.html.twig", ['text' => "Add " . $options['errTxt'] . " dictinary element. Access deny"]);
         }
 
-        $form = $this->createForm($options['form_type'], $element);
+        $form_type_options = [];
+        if (isset($options['form_type_options'])) {
+            $form_type_options = $options['form_type_options'];
+        }
+        $form = $this->createForm($options['form_type'], $element, $form_type_options);
         $form->remove('kod');
 
         $form->handleRequest($request);

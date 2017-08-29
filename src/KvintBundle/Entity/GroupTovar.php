@@ -27,7 +27,7 @@ class GroupTovar
     protected $gname2;
 
     /**
-     * @ORM\Column(name = "pr1", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr1", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge1;
 
@@ -37,7 +37,7 @@ class GroupTovar
     protected $flagAutoExtraCharge1;
 
     /**
-     * @ORM\Column(name = "pr2", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr2", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge2;
 
@@ -47,7 +47,7 @@ class GroupTovar
     protected $flagAutoExtraCharge2;
 
     /**
-     * @ORM\Column(name = "pr3", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr3", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge3;
 
@@ -57,7 +57,7 @@ class GroupTovar
     protected $flagAutoExtraCharge3;
 
     /**
-     * @ORM\Column(name = "pr4", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr4", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge4;
 
@@ -67,7 +67,7 @@ class GroupTovar
     protected $flagAutoExtraCharge4;
 
     /**
-     * @ORM\Column(name = "pr5", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr5", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge5;
 
@@ -77,7 +77,7 @@ class GroupTovar
     protected $flagAutoExtraCharge5;
 
     /**
-     * @ORM\Column(name = "pr6", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr6", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge6;
 

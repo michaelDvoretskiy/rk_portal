@@ -88,7 +88,9 @@ class TovarController extends KvintFormsController
                     'extra1name' => array_search(1, KvintListedEntities::Prices()),
                     'extra2name' => array_search(2, KvintListedEntities::Prices()),
                 ],
-
+                'form_type_options' => [
+                    'em' => $this->getDoctrine()->getManager('kvint'),
+                ],
             ]
         );
     }
@@ -116,6 +118,9 @@ class TovarController extends KvintFormsController
                     'id_scans' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getDopScanCodes($tovar->getKod()),
                     'extra1name' => array_search(1, KvintListedEntities::Prices()),
                     'extra2name' => array_search(2, KvintListedEntities::Prices()),
+                ],
+                'form_type_options' => [
+                    'em' => $this->getDoctrine()->getManager('kvint'),
                 ],
             ]
         );
@@ -171,6 +176,9 @@ class TovarController extends KvintFormsController
                 'template' =>  '@Kvint/Catalogs/Tovar/tovarElement.html.twig',
                 'entity_name' => 'KvintBundle:Tovar',
                 'return_parameters' => $params,
+                'form_type_options' => [
+                    'em' => $this->getDoctrine()->getManager('kvint'),
+                ],
             ]
         );
     }
@@ -206,7 +214,6 @@ class TovarController extends KvintFormsController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/tov/dopscankodadd", name = "kvint_tovar_dopscankod_add", options = {"expose" = true})
      * @return JsonResponse
      */
@@ -233,7 +240,6 @@ class TovarController extends KvintFormsController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/tov/dopscankoddelete", name = "kvint_tovar_dopscankod_delete", options = {"expose" = true})
      * @return JsonResponse
      */
@@ -254,5 +260,41 @@ class TovarController extends KvintFormsController
             }
         }
         return $this->getJSONscanCodesAction($kodtov);
+    }
+
+    /**
+     * @return JsonResponse
+     * @Route("/tov/tovarlist/ajax", name = "kvint_tovar_list_ajax", options = {"expose" = true})
+     */
+    public function getAjaxTovarList(Request $request) {
+        if (!$this->hasRight('view')) {
+            return new JsonResponse();
+        }
+        $limit = $request->query->get('page_limit');
+        $q = $request->query->get('q');
+        $page = $request->query->get('page');
+        if (!$page) {
+            $page = 1;
+        }
+
+        $arrOfTovar = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getListByName($q, ($page - 1) * $limit, $limit);
+
+//        $res = [];
+//        for($i = 0; $i < $limit; $i++) {
+//            $numb = ($page - 1) * $limit + $i;
+//            $row['id'] =  + $numb;
+//            $row['text'] = 'Text ' . $numb;
+//            $res[] = $row;
+//        }
+        $ret['items'] = $arrOfTovar[0];
+        if ($page == 1) {
+            array_unshift($ret['items'], ['id' => 0, 'text' => 'noname']);
+        }
+
+        $ret['total_count'] = $arrOfTovar[1][0]['c'];
+        if ($ret['total_count'] > 1000) {
+            $ret['total_count'] = 1000;
+        }
+        return new JsonResponse($ret);
     }
 }

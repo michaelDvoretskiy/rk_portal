@@ -48,4 +48,11 @@ class TovarRepository extends EntityRepository {
 
         return $query->getResult();
     }
+
+    public function getListByName($text, $first = 1, $limit = 20) {
+        $q = $this->_em->createQuery("select t.kod id, t.tname text from KvintBundle:Tovar t where t.tname like '%" . $text . "%' order by t.tname");
+        $q->setFirstResult($first)->setMaxResults($limit);
+        $q2 = $this->_em->createQuery("select count(t.kod) c from KvintBundle:Tovar t where t.tname like '%" . $text . "%'");
+        return [$q->getArrayResult(), $q2->getScalarResult()];
+    }
 }

@@ -27,7 +27,7 @@ class Tovar
     protected $fasov;
 
     /**
-     * @ORM\Column(name = "pr1", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr1", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge1;
 
@@ -37,7 +37,7 @@ class Tovar
     protected $flagAutoExtraCharge1;
 
     /**
-     * @ORM\Column(name = "pr2", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr2", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge2;
 
@@ -47,7 +47,7 @@ class Tovar
     protected $flagAutoExtraCharge2;
 
     /**
-     * @ORM\Column(name = "pr3", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr3", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge3;
 
@@ -57,7 +57,7 @@ class Tovar
     protected $flagAutoExtraCharge3;
 
     /**
-     * @ORM\Column(name = "pr4", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr4", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge4;
 
@@ -67,7 +67,7 @@ class Tovar
     protected $flagAutoExtraCharge4;
 
     /**
-     * @ORM\Column(name = "pr5", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr5", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge5;
 
@@ -77,7 +77,7 @@ class Tovar
     protected $flagAutoExtraCharge5;
 
     /**
-     * @ORM\Column(name = "pr6", type = "decimal", length = 5, scale = 2)
+     * @ORM\Column(name = "pr6", type = "decimal", precision = 5, scale = 2)
      */
     protected $percentAutoExtraCharge6;
 
@@ -93,32 +93,32 @@ class Tovar
     protected $groupTovar;
 
     /**
-     * @ORM\Column(name = "co1", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co1", type = "decimal", precision = 15, scale = 6)
      */
     protected $price1;
 
     /**
-     * @ORM\Column(name = "co2", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co2", type = "decimal", precision = 15, scale = 6)
      */
     protected $price2;
 
     /**
-     * @ORM\Column(name = "co3", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co3", type = "decimal", precision = 15, scale = 6)
      */
     protected $price3;
 
     /**
-     * @ORM\Column(name = "co4", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co4", type = "decimal", precision = 15, scale = 6)
      */
     protected $price4;
 
     /**
-     * @ORM\Column(name = "co5", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co5", type = "decimal", precision = 15, scale = 6)
      */
     protected $price5;
 
     /**
-     * @ORM\Column(name = "co6", type = "decimal", length = 15, scale = 6)
+     * @ORM\Column(name = "co6", type = "decimal", precision = 15, scale = 6)
      */
     protected $price6;
 
@@ -129,7 +129,7 @@ class Tovar
     protected $groupNalog;
 
     /**
-     * @ORM\Column(name = "nds", type = "decimal", length = 8, scale = 2)
+     * @ORM\Column(name = "nds", type = "decimal", precision = 8, scale = 2)
      */
     protected $nds;
 
@@ -164,27 +164,27 @@ class Tovar
     protected $dopName;
 
     /**
-     * @ORM\Column(name = "optkol", type = "decimal", length = 15, scale = 3)
+     * @ORM\Column(name = "optkol", type = "decimal", precision = 15, scale = 3)
      */
     protected $optQuantity;
 
     /**
-     * @ORM\Column(name = "min_kol", type = "decimal", length = 15, scale = 3)
+     * @ORM\Column(name = "min_kol", type = "decimal", precision = 15, scale = 3)
      */
     protected $minQuantity;
 
     /**
-     * @ORM\Column(name = "ves", type = "decimal", length = 12, scale = 3)
+     * @ORM\Column(name = "ves", type = "decimal", precision = 12, scale = 3)
      */
     protected $weight;
 
     /**
-     * @ORM\Column(name = "ob", type = "decimal", length = 15, scale = 3)
+     * @ORM\Column(name = "ob", type = "decimal", precision = 15, scale = 3)
      */
     protected $volume;
 
     /**
-     * @ORM\Column(name = "kolInUpak", type = "decimal", length = 8, scale = 3)
+     * @ORM\Column(name = "kolInUpak", type = "decimal", precision = 8, scale = 3)
      */
     protected $quantityInPack;
 
@@ -215,7 +215,7 @@ class Tovar
     protected $tovarOfFasovka;
 
     /**
-     * @ORM\Column(name = "kolfas", type = "decimal", length = 7, scale = 3)
+     * @ORM\Column(name = "kolfas", type = "decimal", precision = 7, scale = 3)
      */
     protected $quantityOfFasovka;
 
@@ -232,7 +232,12 @@ class Tovar
      */
     public function setTovarOfFasovka($tovarOfFasovka)
     {
-        $this->tovarOfFasovka = $tovarOfFasovka;
+        if ($tovarOfFasovka->getKod() == 0) {
+            $this->tovarOfFasovka = null;
+            $this->quantityOfFasovka = null;
+        } else {
+            $this->tovarOfFasovka = $tovarOfFasovka;
+        }
         return $this;
     }
 
@@ -904,6 +909,7 @@ class Tovar
      * @ORM\PrePersist
      */
     public function updateDef() {
+        dump($this);
         if (is_null($this->fasov)) {
             $this->fasov = '';
         }
@@ -926,5 +932,8 @@ class Tovar
             $this->weightTovar = 'F';
         }
         $this->nds = $this->groupNalog->getPersent();
+        if ($this->getTovarOfFasovka() instanceof Tovar && $this->getTovarOfFasovka()->getKod() == 0) {
+            $this->setTovarOfFasovka(null);
+        }
     }
 }
