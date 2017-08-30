@@ -220,6 +220,226 @@ class Tovar
     protected $quantityOfFasovka;
 
     /**
+     * @ORM\Column(name = "flDisAN", length = 1)
+     */
+    protected $excludedFromExtra;
+
+    /**
+     * @ORM\Column(name = "flFisk", length = 1)
+     */
+    protected $fiscal;
+
+    /**
+     * @ORM\Column(name = "flNoDisk", length = 1)
+     */
+    protected $discountForbidden;
+
+    /**
+     * @ORM\Column(name = "ingradient", type = "string", length = 1500)
+     */
+    protected $additionalInfo;
+
+    /**
+     * @ORM\Column(name = "fl_indk", length = 1)
+     */
+    protected $manufacturerExtra;
+
+    /**
+     * @ORM\Column(name = "flIndA", length = 1)
+     */
+    protected $underExciseIndicative;
+
+    /**
+     * @ORM\Column(name = "flAcz", length = 1)
+     */
+    protected $excise;
+
+    /**
+     * @ORM\Column(name = "cena_pr", type = "decimal", precision = 12, scale = 3)
+     */
+    protected $manufacturerPrice;
+
+    /**
+     * @ORM\Column(name = "pr_indk", type = "decimal", precision = 5, scale = 3)
+     */
+    protected $manufacturerMaxExtra;
+
+    /**
+     * @ORM\Column(name = "cenaInd", type = "decimal", precision = 12, scale = 2)
+     */
+    protected $minimalPrice;
+
+    /**
+     * @return mixed
+     */
+    public function getManufacturerPrice()
+    {
+        return $this->manufacturerPrice;
+    }
+
+    /**
+     * @param mixed $manufacturerPrice
+     */
+    public function setManufacturerPrice($manufacturerPrice)
+    {
+        $this->manufacturerPrice = $manufacturerPrice;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManufacturerMaxExtra()
+    {
+        return $this->manufacturerMaxExtra;
+    }
+
+    /**
+     * @param mixed $manufacturerMaxExtra
+     */
+    public function setManufacturerMaxExtra($manufacturerMaxExtra)
+    {
+        $this->manufacturerMaxExtra = $manufacturerMaxExtra;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMinimalPrice()
+    {
+        return $this->minimalPrice;
+    }
+
+    /**
+     * @param mixed $minimalPrice
+     */
+    public function setMinimalPrice($minimalPrice)
+    {
+        $this->minimalPrice = $minimalPrice;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalInfo()
+    {
+        return $this->additionalInfo;
+    }
+
+    /**
+     * @param mixed $additionalInfo
+     */
+    public function setAdditionalInfo($additionalInfo)
+    {
+        $this->additionalInfo = $additionalInfo;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isManufacturerExtra()
+    {
+        return KvintTypeConverter::TFasBOOL($this->manufacturerExtra);
+    }
+
+    /**
+     * @param mixed $manufacturerExtra
+     */
+    public function setManufacturerExtra($manufacturerExtra)
+    {
+        $this->manufacturerExtra =  KvintTypeConverter::BOOLasTF($manufacturerExtra);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isUnderExciseIndicative()
+    {
+        return KvintTypeConverter::TFasBOOL($this->underExciseIndicative);
+    }
+
+    /**
+     * @param mixed $underExciseIndicative
+     */
+    public function setUnderExciseIndicative($underExciseIndicative)
+    {
+        $this->underExciseIndicative =  KvintTypeConverter::BOOLasTF($underExciseIndicative);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isExcise()
+    {
+        return KvintTypeConverter::TFasBOOL($this->excise);
+    }
+
+    /**
+     * @param mixed $excise
+     */
+    public function setExcise($excise)
+    {
+        $this->excise =  KvintTypeConverter::BOOLasTF($excise);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isDiscountForbidden()
+    {
+        return KvintTypeConverter::TFasBOOL($this->discountForbidden);
+    }
+
+    /**
+     * @param mixed $discountForbidden
+     */
+    public function setDiscountForbidden($discountForbidden)
+    {
+        $this->discountForbidden =  KvintTypeConverter::BOOLasTF($discountForbidden);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isFiscal()
+    {
+        return KvintTypeConverter::TFasBOOL($this->fiscal);
+    }
+
+    /**
+     * @param mixed $fiscal
+     */
+    public function setFiscal($fiscal)
+    {
+        $this->fiscal =  KvintTypeConverter::BOOLasTF($fiscal);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isExcludedFromExtra()
+    {
+        return KvintTypeConverter::TFasBOOL($this->excludedFromExtra);
+    }
+
+    /**
+     * @param mixed $excludedFromExtra
+     */
+    public function setExcludedFromExtra($excludedFromExtra)
+    {
+        $this->excludedFromExtra =  KvintTypeConverter::BOOLasTF($excludedFromExtra);
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getTovarOfFasovka()
@@ -232,7 +452,7 @@ class Tovar
      */
     public function setTovarOfFasovka($tovarOfFasovka)
     {
-        if ($tovarOfFasovka->getKod() == 0) {
+        if ((!is_null($tovarOfFasovka)) && ($tovarOfFasovka->getKod() == 0)) {
             $this->tovarOfFasovka = null;
             $this->quantityOfFasovka = null;
         } else {
@@ -909,7 +1129,6 @@ class Tovar
      * @ORM\PrePersist
      */
     public function updateDef() {
-        dump($this);
         if (is_null($this->fasov)) {
             $this->fasov = '';
         }
@@ -932,8 +1151,15 @@ class Tovar
             $this->weightTovar = 'F';
         }
         $this->nds = $this->groupNalog->getPersent();
-        if ($this->getTovarOfFasovka() instanceof Tovar && $this->getTovarOfFasovka()->getKod() == 0) {
+        if (!is_null($this->getTovarOfFasovka()) && $this->getTovarOfFasovka() instanceof Tovar && $this->getTovarOfFasovka()->getKod() == 0) {
             $this->setTovarOfFasovka(null);
         }
+    }
+
+    public function initEmptyForChoice() {
+        $arr = KvintListedEntities::emptyFieldForChoice();
+        $this->setKod($arr['id']);
+        $this->setTname($arr['text']);
+        return $this;
     }
 }

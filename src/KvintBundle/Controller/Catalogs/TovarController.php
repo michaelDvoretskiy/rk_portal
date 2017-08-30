@@ -288,7 +288,7 @@ class TovarController extends KvintFormsController
 //        }
         $ret['items'] = $arrOfTovar[0];
         if ($page == 1) {
-            array_unshift($ret['items'], ['id' => 0, 'text' => 'noname']);
+            array_unshift($ret['items'], KvintListedEntities::emptyFieldForChoice());
         }
 
         $ret['total_count'] = $arrOfTovar[1][0]['c'];

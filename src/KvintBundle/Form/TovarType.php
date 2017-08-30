@@ -8,12 +8,12 @@ use KvintBundle\Entity\KvintListedEntities;
 use KvintBundle\Entity\Tovar;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -368,7 +368,7 @@ class TovarType extends AbstractType
                 'tovarOfFasovka',
                 ChoiceType::class,
                 [
-                    'choices' =>  [(is_null($builder->getData()->getTovarOfFasovka())) ? (new Tovar())->setKod(0)->setTname('Noname') : $builder->getData()->getTovarOfFasovka()],
+                    'choices' =>  [(is_null($builder->getData()->getTovarOfFasovka())) ? (new Tovar())->initEmptyForChoice() : $builder->getData()->getTovarOfFasovka()],
                     'choice_label' => 'tname',
                     'choice_value' => function($v) {
                         if ($v instanceof Tovar) {
@@ -392,6 +392,89 @@ class TovarType extends AbstractType
                 ]
             )
             ->add(
+                'excludedFromExtra',
+                CheckboxType::class,
+                [
+                    'label' => 'исключить из автонаценки',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'fiscal',
+                CheckboxType::class,
+                [
+                    'label' => 'фискальный',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'discountForbidden',
+                CheckboxType::class,
+                [
+                    'label' => 'запретить диск.скидку',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'additionalInfo',
+                TextareaType::class,
+                [
+                    'label' => 'Доп.информация',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'manufacturerExtra',
+                CheckboxType::class,
+                [
+                    'label' => 'наценка от произв.',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'underExciseIndicative',
+                CheckboxType::class,
+                [
+                    'label' => 'подакцизный индикатев',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'excise',
+                CheckboxType::class,
+                [
+                    'label' => 'акцизный товар',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'manufacturerPrice',
+                NumberType::class,
+                [
+                    'scale' => 3,
+                    'label' => 'Цена производителя',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'manufacturerMaxExtra',
+                NumberType::class,
+                [
+                    'scale' => 3,
+                    'label' => 'Макс. % наценки',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'minimalPrice',
+                NumberType::class,
+                [
+                    'scale' => 2,
+                    'label' => 'Минимальная цена',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'ok',
                 SubmitType::class
             );
@@ -404,13 +487,13 @@ class TovarType extends AbstractType
             function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
                 $data = $event->getData();
-                if ($form->has('tovarOfFasovka')) {
+                if ($form->has('tovarOfFasovka') && isset($data['tovarOfFasovka'])) {
                     $form->remove('tovarOfFasovka');
                     $form->add(
                         'tovarOfFasovka',
                         ChoiceType::class,
                         [
-                            'choices' =>  [($data['tovarOfFasovka'] == "0") ? (new Tovar())->setKod(0)->setTname('Noname') : $options['em']->getRepository('KvintBundle:Tovar')->findByKod((int)$data['tovarOfFasovka'])],
+                            'choices' =>  [($data['tovarOfFasovka'] == "0") ? (new Tovar())->initEmptyForChoice() : $options['em']->getRepository('KvintBundle:Tovar')->findByKod((int)$data['tovarOfFasovka'])],
                             'choice_label' => 'tname',
                             'choice_value' => function($v) {
                                 if ($v instanceof Tovar) {

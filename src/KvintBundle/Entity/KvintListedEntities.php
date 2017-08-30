@@ -16,4 +16,8 @@ class KvintListedEntities
             'Дисконтная' => '1', 'Розничная' => '2', 'Оптовая' => '3', 'Пенсионная' => '4', 'Общепит' => '5', 'Сотрудник' => '6',
         ];
     }
+
+    public static function emptyFieldForChoice() {
+        return ['id' => 0, 'text' => 'Пустое поле'];
+    }
 }

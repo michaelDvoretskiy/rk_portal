@@ -33,6 +33,10 @@
             </li>
             <li><a href="#6" data-toggle="tab">Фасовка</a>
             </li>
+            <li><a href="#8" data-toggle="tab">Акциз/Инд.</a>
+            </li>
+            <li><a href="#7" data-toggle="tab">Дополнительно</a>
+            </li>
         </ul>
 
         <div class="tab-content">
@@ -49,6 +53,8 @@
                     {{ elem_form.show_elem_row(tovarForm.kved, type, {'style': 'width: 250px'}) }}
                     {{ elem_form.show_elem_row(tovarForm.kvedRight, type) }}
                     {{ elem_form.show_elem_row(tovarForm.import, type) }}
+                    <br>
+                    {{ elem_form.show_elem_row(tovarForm.fiscal, type) }}
                 </div>
             </div>
             <div class="tab-pane" id="2">
@@ -97,8 +103,14 @@
                     {% endif %}
                     {#<div style="height: 100px;"></div>#}
                 </div>
+                <div class="col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.discountForbidden, type) }}
+                </div>
             </div>
             <div class="tab-pane" id="4">
+                <div class="col-xs-12">
+                    {{ elem_form.show_elem_row(tovarForm.excludedFromExtra, type) }}
+                </div>
                 <div class="col-md-4 col-xs-12">
                     {{ elem_form.show_elem_row(tovarForm.flagAutoExtraCharge1, type) }}
                 </div>
@@ -156,6 +168,19 @@
             <div class="tab-pane" id="6">
                 {{ elem_form.show_elem_row(tovarForm.tovarOfFasovka, type, {'style': 'width: 400px'}) }}
                 {{ elem_form.show_elem_row(tovarForm.quantityOfFasovka, type, {'style': 'width: 100px'}) }}
+            </div>
+            <div class="tab-pane" id="7">
+                {{ elem_form.show_elem_row(tovarForm.additionalInfo, type, {'style': 'width: 500px; height: 200px'}) }}
+            </div>
+            <div class="tab-pane" id="8">
+                {{ elem_form.show_elem_row(tovarForm.excise, type) }}
+                <hr class="separator">
+                {{ elem_form.show_elem_row(tovarForm.manufacturerExtra, type) }}
+                {{ elem_form.show_elem_row(tovarForm.manufacturerPrice, type, {'style': 'width: 100px'}) }}
+                {{ elem_form.show_elem_row(tovarForm.manufacturerMaxExtra, type, {'style': 'width: 100px'}) }}
+                <hr class="separator">
+                {{ elem_form.show_elem_row(tovarForm.underExciseIndicative, type) }}
+                {{ elem_form.show_elem_row(tovarForm.minimalPrice, type, {'style': 'width: 100px'}) }}
             </div>
         </div>
     </div>

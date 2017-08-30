@@ -50,9 +50,25 @@ class TovarRepository extends EntityRepository {
     }
 
     public function getListByName($text, $first = 1, $limit = 20) {
-        $q = $this->_em->createQuery("select t.kod id, t.tname text from KvintBundle:Tovar t where t.tname like '%" . $text . "%' order by t.tname");
-        $q->setFirstResult($first)->setMaxResults($limit);
-        $q2 = $this->_em->createQuery("select count(t.kod) c from KvintBundle:Tovar t where t.tname like '%" . $text . "%'");
-        return [$q->getArrayResult(), $q2->getScalarResult()];
+        $qWhere = "t.tname like '%" . $text . "%'";
+        if(ctype_digit($text)) {
+            $qWhere = "(t.kod = " . $text . " or id_scan = '" . $text . "' or kod in(select kod from dopscankod where id_scan = '" . $text . "'))";
+        }
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult("kod", "id");
+        $rsm->addScalarResult("tname", "text");
+
+        $rsm2 = new ResultSetMapping();
+        $rsm2->addScalarResult("c", "c");
+
+        $last = $first + $limit - 1;
+        $qText = "WITH dctrn_cte AS (SELECT DISTINCT TOP " . $last . " t.kod, t.tname from tovar t where t.act = 'T' and " . $qWhere . " ORDER BY t.tname ASC) 
+            SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS doctrine_rownum FROM dctrn_cte) AS doctrine_tbl 
+            WHERE doctrine_rownum BETWEEN " . $first . " AND " . $last . " ORDER BY doctrine_rownum ASC";
+        $q = $this->_em->createNativeQuery($qText, $rsm);
+
+        $q2 = $this->_em->createNativeQuery("select count(t.kod) c from tovar t where t.act = 'T' and " . $qWhere, $rsm2);
+        return [$q->getResult(), $q2->getResult()];
     }
 }
