@@ -19,9 +19,12 @@ class MenuBuilder implements ContainerAwareInterface {
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
         //$menu->setAttribute("class", "nav navbar-nav row");
         $menu->addChild("accounts", ['label' => 'Справочники'])->setAttribute('icon', 'fa fa-list')->setAttribute('dropdown', true);
-        $menu->addChild("Документы", ['route' => 'kvint_documents'])->setAttribute('icon', 'fa fa-file-text');
-        $menu['accounts']->addChild('kvint_tovar', array('route' => 'kvint_tovar', 'label' => 'Товары'));
-        $menu['accounts']->addChild('kvint_grouptov', array('route' => 'kvint_grouptov', 'label' => 'Группы товара'))->setAttribute('divider_append', true);;
+        if (in_array('kvint_spr_tovar', $listAllowed)) {
+            $menu['accounts']->addChild('kvint_tovar', array('route' => 'kvint_tovar', 'label' => 'Товары'));
+        }
+        if (in_array('kvint_spr_grouptov', $listAllowed)) {
+            $menu['accounts']->addChild('kvint_grouptov', array('route' => 'kvint_grouptov', 'label' => 'Группы товара'))->setAttribute('divider_append', true);;
+        }
         if (in_array('kvint_spr_klient', $listAllowed)) {
             $menu['accounts']->addChild('kvint_klient', array('route' => 'kvint_klient', 'label' => 'Клиенты'))->setAttribute('divider_append', true);
         }
@@ -34,6 +37,14 @@ class MenuBuilder implements ContainerAwareInterface {
         if (in_array('kvint_spr_organization', $listAllowed)) {
             $menu['accounts']->addChild('kvint_ent', array('route' => 'kvint_ent', 'label' => 'Организации'));
         }
+
+        $menu->addChild("documents",  ['label' => 'Документы'])->setAttribute('icon', 'fa fa-file-text')->setAttribute('dropdown', true);
+        if (in_array('kvint_doc_income', $listAllowed)) {
+            $menu['documents']->addChild('kvint_doc_income', array('route' => 'kvint_documents_income_list', 'label' => 'Приход'));
+        }
+
+//        $menu->addChild("Документы", ['route' => 'kvint_documents'])->setAttribute('icon', 'fa fa-file-text');
+
         return $menu;
     }
 }

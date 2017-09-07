@@ -1,0 +1,98 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme filterForm 'bootstrap_3_layout.html.twig' %}
+{% import '@App/DefaultForms/list.html.twig' as list_form %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xm-12">
+                {{ form_start(filterForm) }}
+                <div class="col-lg-2 col-sm-3 col-xs-12">
+                    {{ form_row(filterForm.beginDate) }}
+                </div>
+                <div class="col-lg-2 col-sm-3 col-xs-12">
+                    {{ form_row(filterForm.endDate) }}
+                </div>
+                <div class="col-lg-3 col-sm-6 col-xs-12">
+                    {{ form_row(filterForm.wareHouse) }}
+                </div>
+                <div class="col-lg-4 col-sm-10 col-xs-12">
+                    {{ form_row(filterForm.customer) }}
+                </div>
+                <div class="col-lg-1 col-sm-2 col-xs-12">
+                    {{ form_row(filterForm.ok) }}
+                </div>
+            </div>
+            {{ form_end(filterForm) }}
+        </div>
+    </div>
+
+    {% if(options.return_parameters is defined) %}
+        {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}, {ffo_grp: options.return_parameters.ffo_grp, ffo_subgrp: options.return_parameters.ffo_subgrp}) }}
+    {% else %}
+        {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}) }}
+    {% endif %}
+{% endblock %}
+
+{% block jsfooter %}
+<script type="text/javascript">
+    $(function() {
+        $('#kvint_bundle_group_tovar_list_type_wareHouse').select2({
+            theme: "bootstrap"
+        });
+
+        $("#kvint_bundle_group_tovar_list_type_customer").select2({
+            theme: "bootstrap",
+            ajax: {
+                url: "{{ path('kvint_klient_list_ajax') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page,
+                        page_limit: 20
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 20) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 2
+        });
+
+        $('#kvint_bundle_group_tovar_list_type_ok').click(function() {
+            var begDate = $('#kvint_bundle_group_tovar_list_type_beginDate').val();
+            var endDate = $('#kvint_bundle_group_tovar_list_type_endDate').val();
+            var now = new Date();
+            if (begDate.trim() == '') {
+                begDate = now.myMonthBeg().dmyFormat();
+            }
+            if (endDate.trim() == '') {
+                endDate = now.myMonthEnd().dmyFormat();
+            }
+            var wareHouse = $('#kvint_bundle_group_tovar_list_type_wareHouse').val();
+            var customer = $('#kvint_bundle_group_tovar_list_type_customer').val();
+
+            window.location.href = Routing.generate(
+                'kvint_documents_income_list',
+                {
+                    'beginDate': begDate,
+                    'endDate': endDate,
+                    'wareHouse': wareHouse,
+                    'customer': customer
+                }
+            );
+        });
+    })
+
+
+</script>
+{% endblock %}

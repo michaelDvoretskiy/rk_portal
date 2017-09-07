@@ -24,6 +24,8 @@ class TovarType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        dump($builder->getData());
+        dump($builder->getData()->getKod());
         $builder
             ->add(
                 'kod',
@@ -34,7 +36,8 @@ class TovarType extends AbstractType
                     'data' => $builder->getData()->getKod(),
                     'attr' => [
                         'placeholder' => '0',
-                        'disabled' => true,
+//                        'disabled' => true,
+                        'readonly' => true,
                     ],
                 ]
             )
@@ -478,7 +481,6 @@ class TovarType extends AbstractType
                 'ok',
                 SubmitType::class
             );
-
 //        $builder->get('tovarOfFasovka')->resetViewTransformers();
 
         $builder->addEventListener(

@@ -3,18 +3,22 @@
 namespace KvintBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use KvintBundle\Entity\Sklad;
 
 class SkladRepository extends EntityRepository {
     public function generateKod() {
-//        $res = $this->getEntityManager("kvint")
-//            ->createQuery("select max(s.kod) as k from KvintBundle:Sklad s")
-//            ->getResult();
-//        $kod = $res[0]["k"];
-//        if (is_null($kod)) {
-//            $kod = 0;
-//        }
-//        $kod++;
-//        return $kod;
         return KvintCodeGetter::getCode($this->getEntityManager("kvint"), "KvintBundle:Sklad");
+    }
+
+    public function getList() {
+        $q = $this->getEntityManager("kvint")->createQuery("select s from KvintBundle:Sklad s order by s.sname");
+        return $q->getResult();
+    }
+
+    public function getListWithAllFirst() {
+        $res = $this->getList();
+        array_unshift($res, Sklad::getElementAll());
+
+        return $res;
     }
 }

@@ -39,8 +39,20 @@ class KvintFormsController extends Controller
             if (isset($options['filter']) && (!is_null($options['filter']))) {
                 $qb = $datatableQueryBuilder->getQb();
                 foreach($options['filter'] as $filter) {
-                    $qb->andWhere($filter['field'] . ' = :' . $filter['name']);
-                    $qb->setParameter($filter['name'], $filter['value']);
+                    if (isset($filter['value2'])) {
+                        $qb->andWhere(
+                            $qb->expr()->between(
+                                $filter['field'],
+                                ":" . $filter['name'],
+                                ':' . $filter['name2']
+                            )
+                        );
+                        $qb->setParameter($filter['name'], $filter['value']);
+                        $qb->setParameter($filter['name2'], $filter['value2']);
+                    } else {
+                        $qb->andWhere($filter['field'] . ' = :' . $filter['name']);
+                        $qb->setParameter($filter['name'], $filter['value']);
+                    }
                 }
             }
 
@@ -107,10 +119,20 @@ class KvintFormsController extends Controller
         $form = $this->createForm($options['form_type'], $element, $form_type_options);
 //        // only handles data on POST
         $form->handleRequest($request);
+        if (!$form->isValid()) {
+//            dump($element);
+//            dump($form->getData());
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $element = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
             $em->persist($element);
+            if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChanges')) {
+                $em->getRepository($options['entity_name'])->processChanges($element, [
+                    'type' => 'update',
+                    'userName' => $this->getUser()->getUsername(),
+                ]);
+            }
             $em->flush();
             $this->addFlash('success', $options['errTxt'] . " updated!");
             if (isset($options['return_parameters'])) {
@@ -164,6 +186,12 @@ class KvintFormsController extends Controller
             $em = $this->getDoctrine()->getManager("kvint");
             $element->setKod($em->getRepository($options['entity_name'])->generateKod());
             $em->persist($element);
+            if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChanges')) {
+                $em->getRepository($options['entity_name'])->processChanges($element, [
+                    'type' => 'insert',
+                    'userName' => $this->getUser()->getUsername(),
+                ]);
+            }
             $em->flush();
             if (isset($options['return_parameters'])) {
                 return $this->redirectToRoute($options['route_return'], $options['return_parameters']);

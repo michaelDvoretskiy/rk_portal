@@ -35,4 +35,10 @@ class KvintTypeConverter
         }
         return $variable;
     }
+    public static function DateToString($variable) {
+        if (!is_null($variable)) {
+            return $variable->format("Y-m-d");
+        }
+        return null;
+    }
 }

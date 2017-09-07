@@ -496,4 +496,11 @@ class Klient {
     {
         $this->org_list = new ArrayCollection();
     }
+
+    public function initEmptyForChoice() {
+        $arr = KvintListedEntities::emptyFieldForChoice();
+        $this->setKod($arr['id']);
+        $this->setKname($arr['text']);
+        return $this;
+    }
 }

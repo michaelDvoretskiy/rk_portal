@@ -187,5 +187,7 @@ class Sklad {
         $this->entKod = $entKod;
     }
 
-
+    public static function getElementAll() {
+        return (new self())->setKod(0)->setSname("Все склады");
+    }
 }

@@ -55,3 +55,12 @@ body {
 .btn i.mrg {
     margin-left: 10px;
 }
+
+.btn-bottom {
+    position:relative;
+    bottom:-20px;
+}
+
+td.align-right {
+    text-align: right;
+}

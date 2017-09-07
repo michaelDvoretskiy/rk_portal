@@ -47,3 +47,8 @@ http://symfony.com/doc/current/bundles/EasyAdminBundle/integration/fosuserbundle
 composer require symfony-cmf/tree-browser-bundle
 
 https://github.com/select2/select2-bootstrap-theme
+
+datepicker
+    https://uxsolutions.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&maxViewMode=4&todayBtn=false&clearBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&daysOfWeekDisabled=0&daysOfWeekDisabled=2&calendarWeeks=on&autoclose=on&keyboardNavigation=on&forceParse=on#sandbox
+http://eonasdan.github.io/bootstrap-datetimepicker/
+http://ajaxray.com/blog/symfony2-forms-bootstrap-3-datepicker-for-date-field/

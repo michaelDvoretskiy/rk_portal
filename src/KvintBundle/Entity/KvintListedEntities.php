@@ -18,6 +18,6 @@ class KvintListedEntities
     }
 
     public static function emptyFieldForChoice() {
-        return ['id' => 0, 'text' => 'Пустое поле'];
+        return ['id' => 0, 'text' => 'Не выбран'];
     }
 }

@@ -4,10 +4,12 @@ namespace KvintBundle\Controller;
 
 use KvintBundle\Datatables\KlientDatatable;
 use KvintBundle\Entity\Klient;
+use KvintBundle\Entity\KvintListedEntities;
 use KvintBundle\Form\KlientType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -104,5 +106,33 @@ class KlientController extends KvintFormsController
                 'entity_name' => 'KvintBundle:Klient',
             ]
         );
+    }
+
+    /**
+     * @return JsonResponse
+     * @Route("/klient/filllist/ajax", name = "kvint_klient_list_ajax", options = {"expose" = true})
+     */
+    public function getAjaxKlientList(Request $request) {
+        if (!$this->hasRight('view')) {
+            return new JsonResponse();
+        }
+        $limit = $request->query->get('page_limit');
+        $q = $request->query->get('q');
+        $page = $request->query->get('page');
+        if (!$page) {
+            $page = 1;
+        }
+
+        $arrOfKlient = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Klient')->getListByName($q, ($page - 1) * $limit, $limit);
+        $ret['items'] = $arrOfKlient[0];
+        if ($page == 1) {
+            array_unshift($ret['items'], KvintListedEntities::emptyFieldForChoice());
+        }
+
+        $ret['total_count'] = $arrOfKlient[1][0]['c'];
+        if ($ret['total_count'] > 1000) {
+            $ret['total_count'] = 1000;
+        }
+        return new JsonResponse($ret);
     }
 }

@@ -11,6 +11,7 @@ namespace KvintBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use KvintBundle\Entity\Tovar;
+use KvintBundle\Entity\TovarPriceHistory;
 
 class TovarRepository extends EntityRepository {
 
@@ -70,5 +71,42 @@ class TovarRepository extends EntityRepository {
 
         $q2 = $this->_em->createNativeQuery("select count(t.kod) c from tovar t where t.act = 'T' and " . $qWhere, $rsm2);
         return [$q->getResult(), $q2->getResult()];
+    }
+
+    public function processChanges(Tovar $tovar, $options) {
+        if ($options['type'] == 'update') {
+            $originalData = $this->_em->getUnitOfWork()->getOriginalEntityData($tovar);
+            if ($originalData['price1'] != $tovar->getPrice1() ||
+                $originalData['price2'] != $tovar->getPrice2() ||
+                $originalData['price3'] != $tovar->getPrice3() ||
+                $originalData['price4'] != $tovar->getPrice4() ||
+                $originalData['price5'] != $tovar->getPrice5() ||
+                $originalData['price6'] != $tovar->getPrice6()) {
+
+                $this->writePriceChangeHistory($tovar, $options['userName']);
+            }
+        } elseif ($options['type'] == 'insert') {
+            if (null !== $tovar->getPrice1() ||
+                null !== $tovar->getPrice2() ||
+                null !== $tovar->getPrice3() ||
+                null !== $tovar->getPrice4() ||
+                null !== $tovar->getPrice5() ||
+                null !== $tovar->getPrice6()) {
+
+                $this->writePriceChangeHistory($tovar, $options['userName']);
+            }
+        }
+    }
+
+    private function writePriceChangeHistory(Tovar $tovar, $userName) {
+        $tovarPriceHist = (new TovarPriceHistory())->setTovar($tovar)->setUserName($userName)
+            ->setPrice1($tovar->getPrice1())
+            ->setPrice2($tovar->getPrice2())
+            ->setPrice3($tovar->getPrice3())
+            ->setPrice4($tovar->getPrice4())
+            ->setPrice5($tovar->getPrice5())
+            ->setPrice6($tovar->getPrice6());
+
+        $this->_em->persist($tovarPriceHist);
     }
 }

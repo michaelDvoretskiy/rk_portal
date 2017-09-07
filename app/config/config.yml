@@ -90,6 +90,9 @@ doctrine:
               connection: kvint
               mappings:
                 KvintBundle: ~
+              dql:
+                datetime_functions:
+                  get_formatted_date: KvintBundle\DQL\TsqlFormattedDate
 #        auto_generate_proxy_classes: '%kernel.debug%'
 #        naming_strategy: doctrine.orm.naming_strategy.underscore
 #        auto_mapping: true

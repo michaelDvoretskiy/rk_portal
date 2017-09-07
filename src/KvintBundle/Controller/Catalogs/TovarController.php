@@ -107,6 +107,7 @@ class TovarController extends KvintFormsController
         return $this->editAction($request, $tovar,
             [
                 'errTxt' => 'tovar',
+                'entity_name' => 'KvintBundle:Tovar',
                 'form_type' => TovarType::class,
                 'form_name' => 'tovarForm',
                 'route_return' => 'kvint_tovar',

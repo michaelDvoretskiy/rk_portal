@@ -2,6 +2,7 @@
 
 namespace KvintBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass = "KvintBundle\Repository\TovarRepository")
@@ -160,6 +161,7 @@ class Tovar
 
     /**
      * @ORM\Column(name = "dop", length = 20)
+     * @Assert\Length(max = 20)
      */
     protected $dopName;
 
@@ -1150,6 +1152,28 @@ class Tovar
         if (is_null($this->weightTovar)) {
             $this->weightTovar = 'F';
         }
+        if (is_null($this->active)) {
+            $this->active = 'F';
+        }
+        if (is_null($this->excludedFromExtra)) {
+            $this->excludedFromExtra = 'F';
+        }
+        if (is_null($this->fiscal)) {
+            $this->fiscal = 'T';
+        }
+        if (is_null($this->discountForbidden)) {
+            $this->discountForbidden = 'F';
+        }
+        if (is_null($this->manufacturerExtra)) {
+            $this->manufacturerExtra = 'F';
+        }
+        if (is_null($this->underExciseIndicative)) {
+            $this->underExciseIndicative = 'F';
+        }
+        if (is_null($this->excise)) {
+            $this->excise = 'F';
+        }
+
         $this->nds = $this->groupNalog->getPersent();
         if (!is_null($this->getTovarOfFasovka()) && $this->getTovarOfFasovka() instanceof Tovar && $this->getTovarOfFasovka()->getKod() == 0) {
             $this->setTovarOfFasovka(null);
