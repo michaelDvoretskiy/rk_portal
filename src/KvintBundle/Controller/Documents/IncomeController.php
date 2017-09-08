@@ -33,12 +33,12 @@ class IncomeController extends KvintFormsController
         if (!is_null($beginDate)) {
             $beginDateDT = \DateTime::createFromFormat('d.m.Y', $beginDate);
         } else {
-            $beginDateDT = null;
+            $beginDateDT = new \DateTime('first day of this month');
         }
         if (!is_null($endDate)) {
             $endDateDT = \DateTime::createFromFormat('d.m.Y', $endDate);
         } else {
-            $endDateDT = null;
+            $endDateDT = new \DateTime('last day of this month');;
         }
 
         $form = $this->createForm(IncomeDocFilterType::class, null,

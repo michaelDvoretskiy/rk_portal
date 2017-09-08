@@ -23,6 +23,15 @@ class IncomeDatatable extends AbstractDatatable
         $formatter = function($row) {
             $row['Grg2DocDate'] = substr($row['docDateStr'], 8, 2) . "." . substr($row['docDateStr'], 5, 2) . "." . substr($row['docDateStr'], 0, 4);
             $row['grdSumOfSalePrice'] = number_format($row['sumOfSalePrice'], 2, '.', ' ');
+
+            if ($row['status'] == 'T') {
+                $icoClass = "fa-check-square-o";
+            } elseif ($row['status'] == 'D') {
+                $icoClass = "fa-window-close";
+            } else {
+                $icoClass = "fa-square-o";
+            }
+            $row['statusIco'] = "<i class='fa $icoClass' aria-hidden='true'></i>";
             return $row;
         };
         return $formatter;
@@ -57,6 +66,15 @@ class IncomeDatatable extends AbstractDatatable
 //                'width' => "100px",
 //                'dql' => "get_formatted_date(incomedocument.docDateStr, 104)",
 //            ))
+            ->add('statusIco', VirtualColumn::class, array(
+                'title' => '',
+                'width' => "40px",
+                'orderable' => false,
+                'class_name' => 'align-center',
+            ))
+            ->add('status', Column::class, array(
+                'visible' => false,
+            ))
             ->add('Grg2DocDate', VirtualColumn::class, array(
                 'title' => 'Дата',
                 'width' => "100px",
