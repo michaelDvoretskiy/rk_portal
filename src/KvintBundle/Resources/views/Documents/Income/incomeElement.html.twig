@@ -1,0 +1,119 @@
+{% extends '@Kvint/Default/index.html.twig' %}
+{% form_theme docForm 'bootstrap_3_layout.html.twig' %}
+
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+{% block content %}
+    {{ elem_form.show_elem_start(docForm, type, title) }}
+    <div class="col-sm-3 col-xs-12">
+        {% if (type != 'new') %}
+            {{ elem_form.show_elem_row(docForm.kod, type, {'style': 'width: 100px'}) }}
+        {% endif %}
+    </div>
+    <div class="col-sm-4 col-xs-12">
+        {{ elem_form.show_elem_row(docForm.number, type, {'style': 'width: 150px'}) }}
+    </div>
+    <div class="col-sm-5 col-xs-12">
+        {{ elem_form.show_elem_row(docForm.docDate, type, {'style': 'width: 150px'}) }}
+    </div>
+    <div id="exTab" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#1" data-toggle="tab">Основные</a>
+            </li>
+            <li><a href="#2" data-toggle="tab">Доп.</a>
+            </li>
+            <li><a href="#3" data-toggle="tab">Товары</a>
+            </li>
+            <li><a href="#4" data-toggle="tab">Наценка</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <br>
+            <div class="tab-pane active" id="1">
+                <div class="col-md-5 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.wareHouse, type, {'style': 'width: 300px'}) }}
+                    {{ elem_form.show_elem_row(docForm.customer, type, {'style': 'width: 300px'}) }}
+                    {{ elem_form.show_elem_row(docForm.manager, type, {'style': 'width: 300px'}) }}
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.allowedToPass, type) }}
+                    <br>
+                    {{ elem_form.show_elem_row(docForm.digitalInput, type) }}
+                    <br>
+                    {{ elem_form.show_elem_row(docForm.salesPriceNeedUpdate, type) }}
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.sumOfTara, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(docForm.sumOfFare, type, {'style': 'width: 100px'}) }}
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.sumOfCostPrice, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(docForm.sumOfNDS, type, {'style': 'width: 100px'}) }}
+                    {{ elem_form.show_elem_row(docForm.sumOfSalePrice, type, {'style': 'width: 100px'}) }}
+                </div>
+            </div>
+            <div class="tab-pane" id="2">
+                <div class="col-md-7 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.basis, type, {'style': 'width: 400px'}) }}
+                    {{ elem_form.show_elem_row(docForm.proxyPerson, type, {'style': 'width: 400px'}) }}
+                    {{ elem_form.show_elem_row(docForm.proxyPaper, type, {'style': 'width: 400px'}) }}
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    {{ elem_form.show_elem_row(docForm.hiddenDoc, type) }}
+                    {{ elem_form.show_elem_row(docForm.innerDocument, type) }}
+                    {{ elem_form.show_elem_row(docForm.termOfPayment, type, {'style': 'width: 150px'}) }}
+
+                </div>
+            </div>
+            <div class="tab-pane" id="3">
+            </div>
+            <div class="tab-pane" id="4">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <hr class="separator">
+        {{ elem_form.show_elem_end(docForm) }}
+    </div>
+{% endblock %}
+
+{% block jsfooter %}
+    <script type="text/javascript">
+        $('#kvint_bundle_income_document_type_wareHouse').select2({
+            theme: "bootstrap"
+        });
+        $('#kvint_bundle_income_document_type_manager').select2({
+            theme: "bootstrap"
+        });
+        $("#kvint_bundle_income_document_type_customer").select2({
+            theme: "bootstrap",
+            ajax: {
+                url: "{{ path('kvint_klient_list_ajax') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                        page: params.page,
+                        page_limit: 20
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 20) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: "Не выбран",
+            allowClear: true,
+            minimumInputLength: 2
+        });
+    </script>
+{% endblock %}

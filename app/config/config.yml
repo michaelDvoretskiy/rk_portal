@@ -61,6 +61,8 @@ doctrine:
             dbname: '%kvint_db_name%'
             user: '%kvint_db_user%'
             password: '%kvint_db_password%'
+      types:
+        datetime_sql2000:  KvintBundle\DoctrineType\DateTimeSql2000
 #        driver: pdo_mysql
 #        host: '%database_host%'
 #        port: '%database_port%'

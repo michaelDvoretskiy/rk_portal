@@ -119,10 +119,6 @@ class KvintFormsController extends Controller
         $form = $this->createForm($options['form_type'], $element, $form_type_options);
 //        // only handles data on POST
         $form->handleRequest($request);
-        if (!$form->isValid()) {
-//            dump($element);
-//            dump($form->getData());
-        }
         if ($form->isSubmitted() && $form->isValid()) {
             $element = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
@@ -132,6 +128,9 @@ class KvintFormsController extends Controller
                     'type' => 'update',
                     'userName' => $this->getUser()->getUsername(),
                 ]);
+            }
+            if (isset($options['entity_name']) && method_exists($element, 'beforeUpdate')) {
+                $element->beforeUpdate();
             }
             $em->flush();
             $this->addFlash('success', $options['errTxt'] . " updated!");

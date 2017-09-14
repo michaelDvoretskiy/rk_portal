@@ -3,15 +3,6 @@
 
 {% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
 {% block content %}
-    {#<button type="button" data-toggle="modal" data-target="#myModal">I register !</button>#}
-
-    {#<div id="myModal" class="modal hide fade">#}
-        {##}
-    {#</div>#}
-
-    {#<a data-toggle="modal" href="{{ path('fos_user_registration_register') }}" data-target="#myModal">click me</a>#}
-
-    {#<div id="myModal"></div>#}
     {{ elem_form.show_elem_start(tovarForm, type, title) }}
     {% if (type != 'new') %}
         {{ elem_form.show_elem_row(tovarForm.kod, type, {'style': 'width: 100px'}) }}

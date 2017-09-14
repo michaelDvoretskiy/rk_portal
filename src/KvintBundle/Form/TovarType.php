@@ -24,8 +24,6 @@ class TovarType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        dump($builder->getData());
-        dump($builder->getData()->getKod());
         $builder
             ->add(
                 'kod',

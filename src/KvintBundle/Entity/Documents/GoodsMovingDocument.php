@@ -5,6 +5,7 @@ namespace KvintBundle\Entity\Documents;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use KvintBundle\Entity\KvintTypeConverter;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Entity()
@@ -12,7 +13,6 @@ use KvintBundle\Entity\KvintTypeConverter;
  * @ORM\DiscriminatorColumn(name = "typd", type = "integer")
  * @ORM\DiscriminatorMap({1 = "IncomeDocument", 2 = "ExpenseDocument"})
  * @ORM\Table(name="RABFOLD")
- * @ORM\HasLifecycleCallbacks()
  */
 abstract class GoodsMovingDocument {
 
@@ -75,16 +75,19 @@ abstract class GoodsMovingDocument {
      */
     protected $sumOfFare;
 
+//    /**
+//     * @ORM\Column(name = "datadok", type = "string")
+//     */
+//    protected $docDateStr;
+
     /**
-     * @ORM\Column(name = "datadok", type = "string")
+     * @ORM\Column(name = "datadok", type = "datetime_sql2000")
      */
-    protected $docDateStr;
     protected $docDate;
 
     /**
-     * @ORM\Column(name = "srok", type = "string")
+     * @ORM\Column(name = "srok", type = "datetime_sql2000")
      */
-    protected $termOfPaymentStr;
     protected $termOfPayment;
 
     /**
@@ -146,7 +149,7 @@ abstract class GoodsMovingDocument {
 
     /**
      * @ORM\ManyToOne(targetEntity = "KvintBundle\Entity\Catalogs\Cash")
-     * @ORM\JoinColumn(name = "num_kas", referencedColumnName = "kod")
+     * @ORM\JoinColumn(name = "num_kas", referencedColumnName = "kassa")
      */
     protected $cashNumber;
 
@@ -182,12 +185,12 @@ abstract class GoodsMovingDocument {
 
     /**
      * @ORM\ManyToOne(targetEntity = "KvintBundle\Entity\Catalogs\Bank")
-     * @ORM\JoinColumn(name = "bank", referencedColumnName = "kod")
+     * @ORM\JoinColumn(name = "kodbank", referencedColumnName = "kod")
      */
     protected $bank;
 
     /**
-     * @ORM\Column(name = "fActs5", length = 1)
+     * @ORM\Column(name = "flActs5", length = 1)
      */
     protected $excise5;
 
@@ -195,6 +198,11 @@ abstract class GoodsMovingDocument {
      * @ORM\Column(name = "belowCostPrice", length = 1)
      */
     protected $bellowCostPrice;
+
+    /**
+     * @ORM\Column(name = "flNewCO", length = 1)
+     */
+    protected $salesPriceNeedUpdate;
 
     public function __construct()
     {
@@ -226,23 +234,6 @@ abstract class GoodsMovingDocument {
     /**
      * @return mixed
      */
-    public function getTermOfPaymentStr()
-    {
-        return substr($this->termOfPaymentStr, 0, 10);
-    }
-
-    /**
-     * @param mixed $termOfPaymentStr
-     */
-    public function setTermOfPaymentStr($termOfPaymentStr)
-    {
-        $this->termOfPaymentStr = substr($termOfPaymentStr, 0, 10);;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTermOfPayment()
     {
         return $this->termOfPayment;
@@ -257,23 +248,6 @@ abstract class GoodsMovingDocument {
         return $this;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getDocDateStr()
-    {
-        return substr($this->docDateStr, 0, 10);
-    }
-
-    /**
-     * @param mixed $docDateStr
-     */
-    public function setDocDateStr($docDateStr)
-    {
-        $this->docDateStr = substr($docDateStr, 0, 10);
-        return $this;
-    }
 
     /**
      * @return mixed
@@ -823,7 +797,7 @@ abstract class GoodsMovingDocument {
     /**
      * @return mixed
      */
-    public function getBellowCostPrice()
+    public function isBellowCostPrice()
     {
         return KvintTypeConverter::TFasBOOL($this->bellowCostPrice);
     }
@@ -838,11 +812,32 @@ abstract class GoodsMovingDocument {
     }
 
     /**
-     * @ORM\PreUpdate()
-     * @ORM\PrePersist()
+     * @return mixed
      */
-    public function prepareDocument() {
-        $this->docDateStr = KvintTypeConverter::DateToString($this->docDate);
-        $this->termOfPaymentStr = KvintTypeConverter::DateToString($this->termOfPayment);
+    public function isSalesPriceNeedUpdate()
+    {
+        return KvintTypeConverter::TFasBOOL($this->salesPriceNeedUpdate);
+    }
+
+    /**
+     * @param mixed $bellowCostPrice
+     */
+    public function setSalesPriceNeedUpdate($salesPriceNeedUpdate)
+    {
+        $this->salesPriceNeedUpdate =  KvintTypeConverter::BOOLasTF($salesPriceNeedUpdate);
+        return $this;
+    }
+
+    public function beforeUpdate() {
+        if (!is_null($this->getCustomer()) && $this->getCustomer()->getKod() == 0) {
+            $this->setCustomer(null);
+        }
+        if (!is_null($this->getManager()) && $this->getManager()->getKod() == 0) {
+            $this->setManager(null);
+        }
+    }
+
+    public function getDocTitle() {
+        return "№ " . $this->number . " от " . $this->getDocDate()->format('d.m.Y');
     }
 }

@@ -27,11 +27,7 @@
         </div>
     </div>
 
-    {% if(options.return_parameters is defined) %}
-        {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}, {ffo_grp: options.return_parameters.ffo_grp, ffo_subgrp: options.return_parameters.ffo_subgrp}) }}
-    {% else %}
-        {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}) }}
-    {% endif %}
+    {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}, options.return_parameters) }}
 {% endblock %}
 
 {% block jsfooter %}

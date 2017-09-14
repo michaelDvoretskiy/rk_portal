@@ -59,6 +59,7 @@ class DataTableUtil {
         }
 
         $res['actions'] = $actions;
+        $res['width'] = "150px";
 
         return $res;
 

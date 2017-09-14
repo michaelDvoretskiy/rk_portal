@@ -11,13 +11,6 @@ body {
 .navbar-brand img {
     height: 45px;
 }
-/*section#buttom {*/
-    /*background: url('../images/retail-industry2.jpg') center top;*/
-    /*background-repeat: no-repeat;*/
-    /*background-size: 100% 100%;*/
-    /*background-position: center top;*/
-    /*min-height: 250px;*/
-/*}*/
 
 .buttom-home {
     margin-top: 40px;
@@ -29,6 +22,12 @@ body {
 
 .title-home {
     margin-bottom: 20px;
+}
+
+.title-home h1 {
+    letter-spacing: 0.5em;
+    font-style: oblique;
+    font-weight: 900;
 }
 
 .i-home {

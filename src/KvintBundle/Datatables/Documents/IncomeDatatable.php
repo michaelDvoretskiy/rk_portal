@@ -21,7 +21,7 @@ class IncomeDatatable extends AbstractDatatable
     public function getLineFormatter()
     {
         $formatter = function($row) {
-            $row['Grg2DocDate'] = substr($row['docDateStr'], 8, 2) . "." . substr($row['docDateStr'], 5, 2) . "." . substr($row['docDateStr'], 0, 4);
+//            $row['Grg2DocDate'] = substr($row['docDateStr'], 8, 2) . "." . substr($row['docDateStr'], 5, 2) . "." . substr($row['docDateStr'], 0, 4);
             $row['grdSumOfSalePrice'] = number_format($row['sumOfSalePrice'], 2, '.', ' ');
 
             if ($row['status'] == 'T') {
@@ -75,14 +75,19 @@ class IncomeDatatable extends AbstractDatatable
             ->add('status', Column::class, array(
                 'visible' => false,
             ))
-            ->add('Grg2DocDate', VirtualColumn::class, array(
+//            ->add('Grg2DocDate', VirtualColumn::class, array(
+//                'title' => 'Дата',
+//                'width' => "100px",
+//                'orderable' => true,
+//                'order_column' => 'docDateStr',
+//            ))
+//            ->add('docDateStr', Column::class, array(
+//                'visible' => false,
+//            ))
+            ->add('docDate', DateTimeColumn::class, array(
                 'title' => 'Дата',
                 'width' => "100px",
-                'orderable' => true,
-                'order_column' => 'docDateStr',
-            ))
-            ->add('docDateStr', Column::class, array(
-                'visible' => false,
+                'date_format' => 'DD.MM.YYYY',
             ))
             ->add('number', Column::class, array(
                 'title' => 'Номер',
@@ -90,7 +95,7 @@ class IncomeDatatable extends AbstractDatatable
                 ))
             ->add('wareHouse.sname', Column::class, array(
                 'title' => 'Склад',
-                'width' => "200px",
+                'width' => "250px",
                 'searchable' => false,
             ))
             ->add('customer.kname', Column::class, array(
@@ -103,7 +108,7 @@ class IncomeDatatable extends AbstractDatatable
             ))
             ->add('grdSumOfSalePrice', VirtualColumn::class, array(
                 'title' => 'Сумма',
-                'width' => "90px",
+                'width' => "50px",
                 'orderable' => true,
                 'order_column' => 'sumOfSalePrice',
                 'class_name' => 'align-right',
@@ -113,7 +118,7 @@ class IncomeDatatable extends AbstractDatatable
                 'width' => "150px",
             ));
 
-        $this->addActions('kvint_tovar',
+        $this->addActions('kvint_documents_income',
             $this->translator->trans('sg.datatables.actions.show'),
             $this->translator->trans('sg.datatables.actions.edit'),
             "delete"

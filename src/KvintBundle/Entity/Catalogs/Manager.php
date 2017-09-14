@@ -4,10 +4,11 @@ namespace KvintBundle\Entity\Catalogs;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use KvintBundle\Entity\KvintListedEntities;
 use KvintBundle\Entity\KvintTypeConverter;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\ManagerRepository")
  * @ORM\Table(name = "manager")
  */
 class Manager {
@@ -55,5 +56,10 @@ class Manager {
         $this->name = $name;
     }
 
-
+    public function initEmptyForChoice() {
+        $arr = KvintListedEntities::emptyFieldForChoice();
+        $this->setKod($arr['id']);
+        $this->setName($arr['text']);
+        return $this;
+    }
 }
