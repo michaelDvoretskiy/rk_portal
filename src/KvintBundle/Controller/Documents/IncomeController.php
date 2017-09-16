@@ -5,6 +5,7 @@ namespace KvintBundle\Controller\Documents;
 use AppBundle\Utils\MyHelper;
 use KvintBundle\Controller\KvintFormsController;
 use KvintBundle\Datatables\Documents\IncomeDatatable;
+use KvintBundle\Datatables\Documents\IncomeRowDatatable;
 use KvintBundle\Entity\Documents\IncomeDocument;
 use KvintBundle\Form\Documents\IncomeDocFilterType;
 use KvintBundle\Form\Documents\IncomeDocType;
@@ -16,7 +17,41 @@ use Symfony\Component\Routing\Annotation\Route;
 class IncomeController extends KvintFormsController
 {
     protected $entity_name = 'kvint_doc_income';
+
     /**
+     * @param IncomeDocument $doc
+     *
+     * @Route("/documents/income/tovarlist/{id}", name = "kvint_documents_income_tovar_list", options = {"expose" = true})
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return Response
+     */
+    public function getTovarListAction(Request $request, $id = null) {
+        if (!$this->hasRight('view')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => "View " . $options['errTxt'] . " dictinary element. Access deny"]);
+        }
+        $isAjax = $request->isXmlHttpRequest();
+
+        $datatable = $this->get('sg_datatables.factory')->create(IncomeRowDatatable::class);
+//        $datatable->ajaxUrl = $this->generateUrl('kvint_documents_income_tovar_list');
+        $datatable->buildDatatable();
+
+        if ($isAjax) {
+            $responseService = $this->get('sg_datatables.response');
+            $responseService->setDatatable($datatable);
+
+            $datatableQueryBuilder = $responseService->getDatatableQueryBuilder();
+            $datatableQueryBuilder->buildQuery();
+
+            $qb = $datatableQueryBuilder->getQb();
+//            dump($qb);
+            $qb->andWhere('IDENTITY(docrow.document) = :document');
+            $qb->setParameter('document', $id);
+
+            return $responseService->getResponse(false);
+        }
+    }
+        /**
      * @Route("/documents/income/list/{beginDate}/{endDate}/{wareHouse}/{customer}", options={"expose"=true}, name = "kvint_documents_income_list")
      * @Template()
      */
@@ -89,7 +124,6 @@ class IncomeController extends KvintFormsController
         $options['return_parameters']['ffo_beginDate'] = $beginDateDT->format('d.m.Y');
         $options['return_parameters']['ffo_endDate'] = $endDateDT->format('d.m.Y');
 
-
         return $this->listAction($request, IncomeDatatable::class, $options);
     }
 
@@ -115,6 +149,9 @@ class IncomeController extends KvintFormsController
                 'form_type_options' => [
                     'em' => $this->getDoctrine()->getManager('kvint'),
                 ],
+                'additional_datatables' => [
+                    ['name'=>'tovar', 'data_table_type' => IncomeRowDatatable::class, 'ajax_url' => $this->generateUrl('kvint_documents_income_tovar_list', ['id' => $doc->getKod()])],
+                ],
             ]
         );
     }
@@ -128,6 +165,9 @@ class IncomeController extends KvintFormsController
      * @return Response
      */
     public function editIncomeAction(Request $request, IncomeDocument $doc) {
+//        foreach($doc->getRows() as $row) {
+//            dump($row->getTovar()->getTname());
+//        }
         return $this->editAction($request, $doc,
             [
                 'errTxt' => 'income document',
@@ -140,6 +180,9 @@ class IncomeController extends KvintFormsController
                 'return_parameters' => MyHelper::getPrefixed('ffo', $request->query->all()),
                 'form_type_options' => [
                     'em' => $this->getDoctrine()->getManager('kvint'),
+                ],
+                'additional_datatables' => [
+                    ['name'=>'tovar', 'data_table_type' => IncomeRowDatatable::class, 'ajax_url' => $this->generateUrl('kvint_documents_income_tovar_list', ['id' => $doc->getKod()])],
                 ],
             ]
         );

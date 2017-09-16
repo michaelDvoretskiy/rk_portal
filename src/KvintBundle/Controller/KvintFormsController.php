@@ -26,7 +26,6 @@ class KvintFormsController extends Controller
         if (isset($options['return_parameters'])) {
             $datatable->returnParameters = $options['return_parameters'];
         }
-
         $datatable->buildDatatable();
 
         if ($isAjax) {
@@ -55,13 +54,6 @@ class KvintFormsController extends Controller
                     }
                 }
             }
-
-//            if (isset($options['order']) && (!is_null($options['order']))) {
-//                foreach($options['order'] as $order) {
-//                    $qb->addOrderBy($order['field'], $order['type']);
-//                }
-//            }
-
             return $responseService->getResponse();
         }
         if (!isset($options['filterForm'])) {
@@ -99,11 +91,33 @@ class KvintFormsController extends Controller
             $other_options = $options['other_options'];
         }
 
+        $additional_datatables = null;
+        if (isset($options['additional_datatables'])) {
+            $additional_datatables = [];
+            foreach($options['additional_datatables'] as $additional_datatable_options) {
+                $dt = $this->get('sg_datatables.factory')->create($additional_datatable_options['data_table_type']);
+                $rightEdit = $this->hasRight('edit');
+                $dt->rights = [
+                    'view' => false,
+                    'add' => $rightEdit,
+                    'edit' => $rightEdit,
+                    'delete' => $rightEdit,
+                ];
+                if (isset($additional_datatable_options['return_parameters'])) {
+                    $dt->returnParameters = $additional_datatable_options['return_parameters'];
+                }
+                $dt->ajaxUrl = $additional_datatable_options['ajax_url'];
+                $dt->buildDatatable();
+                $additional_datatables[$additional_datatable_options['name']] = $dt;
+            }
+        }
+
         return $this->render($options['template'], [
             $options['form_name'] => $form->createView(),
             'title' => $options['titleTxt'],
             'type' => 'show',
             'other_options' => $other_options,
+            'additional_datatables' => $additional_datatables,
         ]);
     }
 
@@ -145,11 +159,33 @@ class KvintFormsController extends Controller
             $other_options = $options['other_options'];
         }
 
+        $additional_datatables = null;
+        if (isset($options['additional_datatables'])) {
+            $additional_datatables = [];
+            foreach($options['additional_datatables'] as $additional_datatable_options) {
+                $dt = $this->get('sg_datatables.factory')->create($additional_datatable_options['data_table_type']);
+                $rightEdit = $this->hasRight('edit');
+                $dt->rights = [
+                    'view' => false,
+                    'add' => $rightEdit,
+                    'edit' => $rightEdit,
+                    'delete' => $rightEdit,
+                ];
+                if (isset($additional_datatable_options['return_parameters'])) {
+                    $dt->returnParameters = $additional_datatable_options['return_parameters'];
+                }
+                $dt->ajaxUrl = $additional_datatable_options['ajax_url'];
+                $dt->buildDatatable();
+                $additional_datatables[$additional_datatable_options['name']] = $dt;
+            }
+        }
+
         return $this->render($options['template'], [
             $options['form_name'] => $form->createView(),
             'title' => $options['titleTxt'],
             'type' => 'edit',
             'other_options' => $other_options,
+            'additional_datatables' => $additional_datatables,
         ]);
     }
 

@@ -11,10 +11,10 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @ORM\Entity()
  * @ORM\InheritanceType(value="SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name = "typd", type = "integer")
- * @ORM\DiscriminatorMap({1 = "IncomeDocument", 2 = "ExpenseDocument"})
+ * @ORM\DiscriminatorMap({0 = "GoodsMovingDocument", 1 = "IncomeDocument", 2 = "ExpenseDocument"})
  * @ORM\Table(name="RABFOLD")
  */
-abstract class GoodsMovingDocument {
+class GoodsMovingDocument {
 
     /**
      * @ORM\Id()
@@ -204,8 +204,24 @@ abstract class GoodsMovingDocument {
      */
     protected $salesPriceNeedUpdate;
 
+    /**
+     * @ORM\OneToMany(targetEntity = "KvintBundle\Entity\Documents\DocRow", mappedBy = "document")
+     */
+    protected $rows;
+
+    public function getRows() {
+        return $this->rows;
+    }
+
+    public function setRows($rows) {
+        $this->rows = $rows;
+        return $this;
+    }
+
     public function __construct()
     {
+        $this->rows = new ArrayCollection();
+
         $this->docDate = new \DateTime();
         $this->setAllowedToPass(false);
         $this->setBellowCostPrice(false);

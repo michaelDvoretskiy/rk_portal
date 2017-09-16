@@ -2,7 +2,6 @@
 
 namespace KvintBundle\Form\Documents;
 
-
 use Doctrine\ORM\EntityRepository;
 use KvintBundle\Entity\Catalogs\Manager;
 use KvintBundle\Entity\Klient;
@@ -212,6 +211,7 @@ class IncomeDocType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Основание',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -219,6 +219,7 @@ class IncomeDocType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Через',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -226,6 +227,7 @@ class IncomeDocType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Доверенность',
+                    'required' => false,
                 ]
             )
             ->add(

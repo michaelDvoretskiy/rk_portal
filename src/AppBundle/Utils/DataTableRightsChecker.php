@@ -7,6 +7,7 @@ use Sg\DatatablesBundle\Datatable\Column\ActionColumn;
 trait DataTableRightsChecker {
     public $rights;
     public $returnParameters = array();
+    public $ajaxUrl = null;
 
     public function addActions($path, $show, $edit, $delete) {
         $preparedActions = DataTableUtil::getActions(
