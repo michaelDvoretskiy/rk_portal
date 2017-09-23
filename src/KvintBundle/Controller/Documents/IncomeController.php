@@ -6,12 +6,18 @@ use AppBundle\Utils\MyHelper;
 use KvintBundle\Controller\KvintFormsController;
 use KvintBundle\Datatables\Documents\IncomeDatatable;
 use KvintBundle\Datatables\Documents\IncomeRowDatatable;
+use KvintBundle\Entity\Documents\DocRow;
 use KvintBundle\Entity\Documents\IncomeDocument;
+use KvintBundle\Entity\Klient;
+use KvintBundle\Entity\Tovar;
 use KvintBundle\Form\Documents\IncomeDocFilterType;
 use KvintBundle\Form\Documents\IncomeDocType;
+use KvintBundle\Form\Documents\IncomeRowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IncomeController extends KvintFormsController
@@ -206,5 +212,38 @@ class IncomeController extends KvintFormsController
         $doc->markDel();
         $em->flush();
         return $this->redirectToRoute('kvint_documents_income_list', MyHelper::getPrefixed('ffo', $request->query->all()));
+    }
+
+    /**
+     * @Route("/documents/income/row_edit/{id}", name = "kvint_documents_income_rowedit", options = {"expose" = true})
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
+     */
+    public function RowFormAction(Request $request, DocRow $row) {
+        $form = $this->createForm(IncomeRowType::class, $row);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $element = $form->getData();
+            $em = $this->getDoctrine()->getManager("kvint");
+//            $em->persist($element);
+//            $em->flush();
+
+            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->updateRow($row);
+            if ($arr[0]['rez'] == 0) {
+                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
+            }
+            return new JsonResponse(
+                [
+                    'addRowStatus' => $arr[0]['rez'],
+                    'docHeader' => $docHead[0],
+                ]
+            );
+        }
+
+        return [
+            'form' => $form->createView(),
+            'type' => 'edit',
+        ];
     }
 }

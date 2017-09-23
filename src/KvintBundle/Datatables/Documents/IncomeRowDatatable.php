@@ -22,6 +22,8 @@ class IncomeRowDatatable extends AbstractDatatable
     {
         $formatter = function($row) {
             $row['saleSumma'] = number_format($row['salePrice'] * $row['incomeQuantity'], 2, '.', ' ');
+            $row['jsActions'] = "<div class='my-row-action-btn' onclick='editDocRow(" . $row['id'] . ")'><i class='fa fa-pencil' aria-hidden='true'\"></i></div>
+                <div class='my-row-action-btn' onclick='delDocRow(" . $row['id'] . ")'><i class='glyphicon glyphicon-trash my-action-delete' aria-hidden='true'></i></div>";
             $row['grdSalePrice'] = number_format($row['salePrice'] , 2, '.', ' ');
             return $row;
         };
@@ -41,6 +43,9 @@ class IncomeRowDatatable extends AbstractDatatable
         $this->ajax->setUrl($this->ajaxUrl);
 
         $opt = DataTableUtil::getOptions();
+        $opt['order'] = [
+            [2, 'asc'],
+        ];
         $this->options->set($opt);
         $this->options->setDom('ltpr');
 
@@ -49,6 +54,9 @@ class IncomeRowDatatable extends AbstractDatatable
         );
 
         $this->columnBuilder
+            ->add('id', Column::class, array(
+                'visible' => false,
+            ))
             ->add('tovar.kod', Column::class, array(
                 'title' => 'Код',
                 'width' => "50px",
@@ -88,6 +96,12 @@ class IncomeRowDatatable extends AbstractDatatable
             ->add('supplier.kname', Column::class, array(
                 'title' => 'Поставщик',
                 'width' => "150px",
+            ))
+            ->add('jsActions', VirtualColumn::class, array(
+                'title' => '',
+                'width' => "80px",
+                'orderable' => false,
+                'class_name' => 'align-center',
             ));
 
 //        $this->addActions('kvint_documents_income',

@@ -77,6 +77,26 @@
         <hr class="separator">
         {{ elem_form.show_elem_end(docForm) }}
     </div>
+
+    {% if (type == 'edit') %}
+        <div style="display: none;" class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Редактирование строки</h4>
+                    </div>
+                    <div class="modal-body">
+                        {#{{ render(controller('KvintBundle:Documents/Income:RowForm')) }}#}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block jsfooter %}
@@ -120,6 +140,52 @@
             if (event.keyCode == 13) {
                 event.preventDefault();
             }
+        });
+
+        function delDocRow(id) {
+            $.ajax({
+                url : Routing.generate("kvint_doc_row_delete", {"id": id}),
+                type: 'post',
+                success: function(json_data) {
+                    $('#sg-datatables-income_document_row_datatable-head-filter-2').trigger("change");
+                    refreshSums(json_data);
+                }
+            });
+        }
+
+        function editDocRow(id) {
+            $('#agregarRonda div.modal-body').html("");
+            $('#agregarRonda').modal('show');
+            $.ajax({
+                url: Routing.generate("kvint_documents_income_rowedit", {"id": id}),
+                data_type: "html",
+                success: function(data) {
+                    $('#agregarRonda div.modal-body').html(data);
+                }
+            });
+        }
+
+        function refreshSums(data) {
+            if (data.addRowStatus == 0) {
+                var headSum = data.docHeader;
+                for (var prop in headSum) {
+                    $('#kvint_bundle_income_document_type_' + prop).val(headSum[prop]);
+                }
+            }
+        }
+
+        $('#add-new-idscan').click(function() {
+            $.ajax({
+                type: "POST",
+                url: Routing.generate("kvint_documents_income_rowedit", {"id": $("#kvint_bundle_income_row_type_id").val()}),
+                data: $("form[name='kvint_bundle_income_row_type']").serialize(), // serializes the form's elements.
+
+                success: function(data)
+                {
+                    $('#sg-datatables-income_document_row_datatable-head-filter-2').trigger("change");
+                    refreshSums(data);
+                }
+            });
         });
     </script>
 {% endblock %}

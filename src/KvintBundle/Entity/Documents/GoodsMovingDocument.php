@@ -8,7 +8,7 @@ use KvintBundle\Entity\KvintTypeConverter;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\Documents\GoodsMovingDocumentRepository")
  * @ORM\InheritanceType(value="SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name = "typd", type = "integer")
  * @ORM\DiscriminatorMap({0 = "GoodsMovingDocument", 1 = "IncomeDocument", 2 = "ExpenseDocument"})

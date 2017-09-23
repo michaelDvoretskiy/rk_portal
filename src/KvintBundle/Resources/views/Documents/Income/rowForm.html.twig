@@ -1,0 +1,9 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+
+{{ form_start(form) }}
+{{ elem_form.show_elem_row(form.tovar, type) }}
+{{ elem_form.show_elem_row(form.supplier, type) }}
+{{ elem_form.show_elem_row(form.incomeQuantity, type) }}
+{{ elem_form.show_elem_row(form.costPrice, type) }}
+{{ form_end(form) }}

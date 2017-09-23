@@ -5,7 +5,7 @@ namespace KvintBundle\Entity\Documents;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="KvintBundle\Repository\Documents\DocRowRepository")
  * @ORM\Table(name = "RABSOD")
  */
 class DocRow {
@@ -86,5 +86,102 @@ class DocRow {
     {
         $this->tovar = $tovar;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSupplier()
+    {
+        return $this->supplier;
+    }
+
+    /**
+     * @param mixed $supplier
+     */
+    public function setSupplier($supplier)
+    {
+        $this->supplier = $supplier;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIncomeQuantity()
+    {
+        return $this->incomeQuantity;
+    }
+
+    /**
+     * @param mixed $incomeQuantity
+     */
+    public function setIncomeQuantity($incomeQuantity)
+    {
+        $this->incomeQuantity = $incomeQuantity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOutcomeQuantity()
+    {
+        return $this->outcomeQuantity;
+    }
+
+    /**
+     * @param mixed $outcomeQuantity
+     */
+    public function setOutcomeQuantity($outcomeQuantity)
+    {
+        $this->outcomeQuantity = $outcomeQuantity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCostPrice()
+    {
+        return $this->costPrice;
+    }
+
+    /**
+     * @param mixed $costPrice
+     */
+    public function setCostPrice($costPrice)
+    {
+        $this->costPrice = $costPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSalePrice()
+    {
+        return $this->salePrice;
+    }
+
+    /**
+     * @param mixed $salePrice
+     */
+    public function setSalePrice($salePrice)
+    {
+        $this->salePrice = $salePrice;
     }
 }
