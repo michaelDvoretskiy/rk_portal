@@ -74,4 +74,13 @@ div.my-row-action-btn {
     padding-top: 5px;
     padding-bottom: 5px;
     display: inline-block;
+    border: 1px black solid;
+    border-radius: 3px;
+}
+
+body .modal-add-row {
+    /* new custom width */
+    width: 450px;
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    /*margin-left: -375px;*/
 }

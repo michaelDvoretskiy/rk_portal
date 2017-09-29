@@ -50,10 +50,15 @@ class TovarRepository extends EntityRepository {
         return $query->getResult();
     }
 
-    public function getListByName($text, $first = 1, $limit = 20) {
+    public function getListByName($text, $first = 1, $limit = 20, $active = true) {
+
         $qWhere = "t.tname like '%" . $text . "%'";
         if(ctype_digit($text)) {
             $qWhere = "(t.kod = " . $text . " or id_scan = '" . $text . "' or kod in(select kod from dopscankod where id_scan = '" . $text . "'))";
+        }
+        $activeWhere = "";
+        if ($active) {
+            $activeWhere = " t.act = 'T' and ";
         }
 
         $rsm = new ResultSetMapping();
@@ -64,12 +69,12 @@ class TovarRepository extends EntityRepository {
         $rsm2->addScalarResult("c", "c");
 
         $last = $first + $limit - 1;
-        $qText = "WITH dctrn_cte AS (SELECT DISTINCT TOP " . $last . " t.kod, t.tname from tovar t where t.act = 'T' and " . $qWhere . " ORDER BY t.tname ASC) 
+        $qText = "WITH dctrn_cte AS (SELECT DISTINCT TOP " . $last . " t.kod, t.tname from tovar t where " . $activeWhere . $qWhere . " ORDER BY t.tname ASC) 
             SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS doctrine_rownum FROM dctrn_cte) AS doctrine_tbl 
             WHERE doctrine_rownum BETWEEN " . $first . " AND " . $last . " ORDER BY doctrine_rownum ASC";
         $q = $this->_em->createNativeQuery($qText, $rsm);
 
-        $q2 = $this->_em->createNativeQuery("select count(t.kod) c from tovar t where t.act = 'T' and " . $qWhere, $rsm2);
+        $q2 = $this->_em->createNativeQuery("select count(t.kod) c from tovar t where " . $activeWhere . $qWhere, $rsm2);
         return [$q->getResult(), $q2->getResult()];
     }
 

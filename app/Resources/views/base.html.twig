@@ -34,6 +34,22 @@
             <script type="text/javascript" src="{{ asset('resources/js/bootstrap-datepicker.js') }}"></script>
             {#<script type="text/javascript" src="{{ asset('resources/js/dataTables.buttons.min.js') }}"></script>#}
             <script type="text/javascript" src="{{ asset('resources/js/main.js') }}"></script>
+            <script type="text/javascript">
+                var myApp;
+                $().ready(function() {
+                    myApp = myApp || (function () {
+                        var pleaseWaitDiv = $('#pleaseWaitDialog');
+                        return {
+                            showPleaseWait: function() {
+                                pleaseWaitDiv.modal('show');
+                            },
+                            hidePleaseWait: function () {
+                                pleaseWaitDiv.modal('hide');
+                            },
+                        };
+                    })();
+                });
+            </script>
         {% endblock %}
     </head>
     <body>
@@ -48,6 +64,22 @@
             <div class="content" style="height: 60px;"></div>
         {% endblock %}
         {% block content %}
+        {% endblock %}
+        {% block additional_content %}
+            <div style="display: none;" class="modal fade" id="pleaseWaitDialog" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog" id="modal-wait-form">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Processing...</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="progress progress-striped active">
+                                <div class="bar" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endblock %}
         {% block jsfooter %}{% endblock %}
     </body>

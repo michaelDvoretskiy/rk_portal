@@ -69,6 +69,7 @@ class DocRow {
     public function setDocument($document)
     {
         $this->document = $document;
+        return $this;
     }
 
     /**
@@ -183,5 +184,9 @@ class DocRow {
     public function setSalePrice($salePrice)
     {
         $this->salePrice = $salePrice;
+    }
+
+    public function getCostPriceWithNdsDoc() {
+        return $this->getCostPrice() * (1 + $this->getDocument()->getPercentOfNDS() / 100);
     }
 }

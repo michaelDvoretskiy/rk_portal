@@ -66,6 +66,9 @@
                 </div>
             </div>
             <div class="tab-pane" id="3">
+                <div class='my-row-action-btn btn-new' id="add_new_row">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Добавить строку
+                </div>
                 {{ sg_datatables_render(additional_datatables['tovar']) }}
             </div>
             <div class="tab-pane" id="4">
@@ -79,24 +82,41 @@
     </div>
 
     {% if (type == 'edit') %}
-        <div style="display: none;" class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Редактирование строки</h4>
-                    </div>
-                    <div class="modal-body">
-                        {#{{ render(controller('KvintBundle:Documents/Income:RowForm')) }}#}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                    </div>
+    <div style="display: none;" class="modal fade" id="agregarRonda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Редактирование строки</h4>
+                </div>
+                <div class="modal-body">
+                    {#{{ render(controller('KvintBundle:Documents/Income:RowForm')) }}#}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="add-new-idscan" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
                 </div>
             </div>
         </div>
-    {% endif %}
+    </div>
+
+    <div style="display: none;" class="modal fade" id="addNewRowModalForm" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+        <div class="modal-dialog modal-add-row" id="modal-add-row-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление строки</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="add-new-row-add" type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block jsfooter %}
@@ -136,6 +156,40 @@
             minimumInputLength: 2
         });
 
+        function makeTovarSelect2() {
+            $("#kvint_bundle_income_row_add_type_tovar").select2({
+                theme: "bootstrap",
+                ajax: {
+                    url: "{{ path('kvint_tovar_list_ajax') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        var act = "0";
+                        if ($('#kvint_bundle_income_row_add_type_activeFlg').is(":checked")) {
+                            act = "1";
+                        }
+                        return {
+                            q: params.term, // search term
+                            page: params.page,
+                            page_limit: 20,
+                            act: act
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 20) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 2
+            });
+        }
+
         $(document).on("keypress", ":input:not(textarea)", function(event) {
             if (event.keyCode == 13) {
                 event.preventDefault();
@@ -143,24 +197,31 @@
         });
 
         function delDocRow(id) {
-            $.ajax({
-                url : Routing.generate("kvint_doc_row_delete", {"id": id}),
-                type: 'post',
-                success: function(json_data) {
-                    $('#sg-datatables-income_document_row_datatable-head-filter-2').trigger("change");
-                    refreshSums(json_data);
-                }
-            });
+            var r = confirm("Удалить строку ?");
+            if (r == true) {
+                myApp.showPleaseWait();
+                $.ajax({
+                    url : Routing.generate("kvint_doc_row_delete", {"id": id}),
+                    type: 'post',
+                    success: function(json_data) {
+                        $("select[name='sg-datatables-income_document_row_datatable_length']").trigger("change");
+                        refreshSums(json_data);
+                        myApp.hidePleaseWait();
+                    }
+                });
+            }
         }
 
         function editDocRow(id) {
+            myApp.showPleaseWait();
             $('#agregarRonda div.modal-body').html("");
-            $('#agregarRonda').modal('show');
+            myApp.showPleaseWait();
             $.ajax({
                 url: Routing.generate("kvint_documents_income_rowedit", {"id": id}),
-                data_type: "html",
                 success: function(data) {
-                    $('#agregarRonda div.modal-body').html(data);
+                    $('#agregarRonda div.modal-body').html(data.formReturn);
+                    myApp.hidePleaseWait();
+                    $('#agregarRonda').modal('show');
                 }
             });
         }
@@ -175,15 +236,61 @@
         }
 
         $('#add-new-idscan').click(function() {
+            myApp.showPleaseWait();
             $.ajax({
                 type: "POST",
                 url: Routing.generate("kvint_documents_income_rowedit", {"id": $("#kvint_bundle_income_row_type_id").val()}),
                 data: $("form[name='kvint_bundle_income_row_type']").serialize(), // serializes the form's elements.
+                success: function(data) {
+                    if (data.addRowStatus == 1) {
+                        $('#agregarRonda div.modal-body').html("");
+                        $('#agregarRonda div.modal-body').html(data.formReturn);
+                        makeTovarSelect2();
+                        myApp.hidePleaseWait();
+                        $('#agregarRonda').modal('show');
+                    } else {
+                        $("select[name='sg-datatables-income_document_row_datatable_length']").trigger("change");
+                        refreshSums(data);
+                        myApp.hidePleaseWait();
+                    }
+                }
+            });
+        });
 
+        $('#add_new_row').click(function() {
+            $('#addNewRowModalForm div.modal-body').html("");
+            myApp.showPleaseWait();
+            $.ajax({
+                url: Routing.generate("kvint_documents_income_rowadd", {"id": $('#kvint_bundle_income_document_type_kod').val()}),
+//                data_type: "html",
+                success: function(data) {
+                    $('#addNewRowModalForm div.modal-body').html(data.formReturn);
+                    makeTovarSelect2();
+                    myApp.hidePleaseWait();
+                    $('#addNewRowModalForm').modal('show');
+                }
+            });
+        });
+
+        $('#add-new-row-add').click(function() {
+            myApp.showPleaseWait();
+            $.ajax({
+                type: "POST",
+                url: Routing.generate("kvint_documents_income_rowadd", {"id": $('#kvint_bundle_income_document_type_kod').val()}),
+                data: $("form[name='kvint_bundle_income_row_add_type']").serialize(), // serializes the form's elements.
                 success: function(data)
                 {
-                    $('#sg-datatables-income_document_row_datatable-head-filter-2').trigger("change");
-                    refreshSums(data);
+                    if (data.addRowStatus == 1) {
+                        $('#addNewRowModalForm div.modal-body').html("");
+                        $('#addNewRowModalForm div.modal-body').html(data.formReturn);
+                        makeTovarSelect2();
+                        myApp.hidePleaseWait();
+                        $('#addNewRowModalForm').modal('show');
+                    } else {
+                        $("select[name='sg-datatables-income_document_row_datatable_length']").trigger("change");
+                        refreshSums(data);
+                        myApp.hidePleaseWait();
+                    }
                 }
             });
         });

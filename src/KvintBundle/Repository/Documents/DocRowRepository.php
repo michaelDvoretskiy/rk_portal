@@ -7,6 +7,31 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use KvintBundle\Entity\Documents\DocRow;
 
 class  DocRowRepository extends EntityRepository {
+    public function addRow(DocRow $row) {
+        $conn = $this->_em->getConnection()->getWrappedConnection();
+        $stmt = $conn->prepare("declare @res int
+        exec @res = sp_TranAddRabsod @Kod = " . $row->getDocument()->getKod() . ", @KodTov = " . $row->getTovar()->getKod() . ", @KolInUp = 1,
+                                   @CU  = " . $row->getCostPrice() . ", @CO = " . $row->getCostPriceWithNdsDoc() . ", @Kol = " . $row->getIncomeQuantity() . ", 
+                                   @prt  = " . $row->getSupplier()->getKod() . ", @R1 = 0, @R2 = 0
+        select @res rez");
+
+        $stmt->execute();
+
+        $results = array();
+        do {
+            try {
+                $results[] = $stmt->fetch(\PDO::FETCH_ASSOC);
+            }
+            catch (\Exception $e) {}
+        } while($stmt->nextRowset());
+
+        $stmt->closeCursor(); // Clean up
+        return $results;
+//        return [
+//           0 => ['rez' => 0, ],
+//        ];
+    }
+
     public function updateRow(DocRow $row) {
         $conn = $this->_em->getConnection()->getWrappedConnection();
         $originalData = $this->_em->getUnitOfWork()->getOriginalEntityData($row);
@@ -32,7 +57,6 @@ class  DocRowRepository extends EntityRepository {
 
     public function deleteRow(DocRow $row) {
         $conn = $this->_em->getConnection()->getWrappedConnection();
-        $originalData = $this->_em->getUnitOfWork()->getOriginalEntityData($row);
         $stmt = $conn->prepare("declare @res int
                 exec @res = sp_TranDelRabsod @Kod = " . $row->getDocument()->getKod() . ", @KodTov = " . $row->getTovar()->getKod() . ", 
                 @CU  = " . $row->getCostPrice() . ", @KolInUp = 1, @Prt  = " . $row->getSupplier()->getKod() . "

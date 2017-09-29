@@ -271,22 +271,22 @@ class TovarController extends KvintFormsController
         if (!$this->hasRight('view')) {
             return new JsonResponse();
         }
+
         $limit = $request->query->get('page_limit');
         $q = $request->query->get('q');
         $page = $request->query->get('page');
+
+        $act = true;
+        if ($request->query->get('act', "1") != "1") {
+            $act = false;
+        }
+
         if (!$page) {
             $page = 1;
         }
 
-        $arrOfTovar = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getListByName($q, ($page - 1) * $limit, $limit);
+        $arrOfTovar = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Tovar')->getListByName($q, ($page - 1) * $limit, $limit, $act);
 
-//        $res = [];
-//        for($i = 0; $i < $limit; $i++) {
-//            $numb = ($page - 1) * $limit + $i;
-//            $row['id'] =  + $numb;
-//            $row['text'] = 'Text ' . $numb;
-//            $res[] = $row;
-//        }
         $ret['items'] = $arrOfTovar[0];
         if ($page == 1) {
             array_unshift($ret['items'], KvintListedEntities::emptyFieldForChoice());

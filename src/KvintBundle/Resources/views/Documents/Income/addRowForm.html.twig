@@ -1,0 +1,12 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+
+{{ form_start(form) }}
+{{ elem_form.show_elem_row(form.supplier, type, {'style': 'width: 400px'}) }}
+<br>
+{{ elem_form.show_elem_row(form.tovar, type, {'style': 'width: 400px'}) }}
+{{ elem_form.show_elem_row(form.activeFlg, type) }}
+<br>
+{{ elem_form.show_elem_row(form.incomeQuantity, type, {'style': 'width: 100px'}) }}
+{{ elem_form.show_elem_row(form.costPrice, type, {'style': 'width: 100px'}) }}
+{{ form_end(form) }}

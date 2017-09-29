@@ -213,37 +213,4 @@ class IncomeController extends KvintFormsController
         $em->flush();
         return $this->redirectToRoute('kvint_documents_income_list', MyHelper::getPrefixed('ffo', $request->query->all()));
     }
-
-    /**
-     * @Route("/documents/income/row_edit/{id}", name = "kvint_documents_income_rowedit", options = {"expose" = true})
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Template()
-     */
-    public function RowFormAction(Request $request, DocRow $row) {
-        $form = $this->createForm(IncomeRowType::class, $row);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $element = $form->getData();
-            $em = $this->getDoctrine()->getManager("kvint");
-//            $em->persist($element);
-//            $em->flush();
-
-            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->updateRow($row);
-            if ($arr[0]['rez'] == 0) {
-                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
-            }
-            return new JsonResponse(
-                [
-                    'addRowStatus' => $arr[0]['rez'],
-                    'docHeader' => $docHead[0],
-                ]
-            );
-        }
-
-        return [
-            'form' => $form->createView(),
-            'type' => 'edit',
-        ];
-    }
 }
