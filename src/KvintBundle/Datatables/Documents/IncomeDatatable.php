@@ -31,7 +31,7 @@ class IncomeDatatable extends AbstractDatatable
             } else {
                 $icoClass = "fa-square-o";
             }
-            $row['statusIco'] = "<i class='fa $icoClass' aria-hidden='true'></i>";
+            $row['statusIco'] = "<div class='my-doc-status-btn' onclick='editDocStatus(" . $row['kod'] . ")'><i class='fa $icoClass' aria-hidden='true'></i></div>";
             return $row;
         };
         return $formatter;
@@ -66,6 +66,9 @@ class IncomeDatatable extends AbstractDatatable
 //                'width' => "100px",
 //                'dql' => "get_formatted_date(incomedocument.docDateStr, 104)",
 //            ))
+            ->add('kod', Column::class, array(
+                'visible' => false,
+            ))
             ->add('statusIco', VirtualColumn::class, array(
                 'title' => '',
                 'width' => "40px",

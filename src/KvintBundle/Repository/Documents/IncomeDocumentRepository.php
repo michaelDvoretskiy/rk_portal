@@ -14,10 +14,11 @@ class IncomeDocumentRepository extends EntityRepository {
             if ($doc->getStatus() != $originalData['status'] && in_array('T', [$doc->getStatus(),$originalData['status'] ])) {
                 //document status was changed to passed or from passed
                 //we need to create or delete movements for remains
-            }
-            if ($originalData['status'] == 'T') {
+                dump($doc->getStatus());
+            } elseif ($originalData['status'] == 'T') {
                 if ($doc->getWareHouse() != $originalData['wareHouse'] || $doc->getCustomer() != $originalData['customer']) {
                     //refill remains based on new customer or wareHouse
+                    dump([$doc->getWareHouse(), $doc->getCustomer()]);
                 }
             }
         }

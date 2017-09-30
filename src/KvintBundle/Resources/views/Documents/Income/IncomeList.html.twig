@@ -27,6 +27,23 @@
         </div>
     </div>
 
+    <div style="display: none;" class="modal fade" id="changeDocStatusForm" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+        <div class="modal-dialog modal-change-doc-status" id="modal-change-doc-status-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Документ</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button id="change-status-btn" type="button" class="btn btn-primary" data-dismiss="modal">Change</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}, options.return_parameters) }}
 {% endblock %}
 
@@ -89,6 +106,39 @@
         });
     })
 
+    function editDocStatus(kod) {
+        myApp.showPleaseWait();
+        $('#changeDocStatusForm div.modal-body').html("");
+        $.ajax({
+            url: Routing.generate("kvint_documents_status_edit", {"id": kod}),
+            success: function(data) {
+                $('#changeDocStatusForm div.modal-body').html(data.formReturn);
+                myApp.hidePleaseWait();
+                $('#changeDocStatusForm').modal('show');
+            }
+        });
+    }
+    $('#change-status-btn').click(function() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: Routing.generate("kvint_documents_status_edit", {"id": $('#kvint_bundle_document_status_type_kod').val()}),
+            data: $("form[name='kvint_bundle_document_status_type']").serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                if (data.addRowStatus == 1) {
+                    $('#changeDocStatusForm div.modal-body').html("");
+                    $('#changeDocStatusForm div.modal-body').html(data.formReturn);
+                    myApp.hidePleaseWait();
+                    $('#changeDocStatusForm').modal('show');
+                } else {
+                    $("select[name='sg-datatables-income_document_datatable_length']").trigger("change");
+//                    refreshSums(data);
+                    myApp.hidePleaseWait();
+                }
+            }
+        });
+    });
 
 </script>
 {% endblock %}

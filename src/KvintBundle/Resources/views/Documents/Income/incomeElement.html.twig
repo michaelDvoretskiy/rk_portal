@@ -15,6 +15,7 @@
     <div class="col-sm-5 col-xs-12">
         {{ elem_form.show_elem_row(docForm.docDate, type, {'style': 'width: 150px'}) }}
     </div>
+
     <div id="exTab" class="container">
         <ul class="nav nav-tabs">
             <li class="active">
@@ -105,7 +106,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Добавление строки</h4>
+                    <h4 class="modal-title" id="myModalLabel">Состояние</h4>
                 </div>
                 <div class="modal-body">
                 </div>
@@ -215,7 +216,6 @@
         function editDocRow(id) {
             myApp.showPleaseWait();
             $('#agregarRonda div.modal-body').html("");
-            myApp.showPleaseWait();
             $.ajax({
                 url: Routing.generate("kvint_documents_income_rowedit", {"id": id}),
                 success: function(data) {

@@ -79,8 +79,11 @@ div.my-row-action-btn {
 }
 
 body .modal-add-row {
-    /* new custom width */
     width: 450px;
     /* must be half of the width, minus scrollbar on the left (30px) */
     /*margin-left: -375px;*/
+}
+
+body .modal-change-doc-status {
+    width: 250px;
 }

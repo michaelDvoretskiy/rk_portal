@@ -5,6 +5,7 @@ namespace KvintBundle\Form\Documents;
 use Doctrine\ORM\EntityRepository;
 use KvintBundle\Entity\Catalogs\Manager;
 use KvintBundle\Entity\Klient;
+use KvintBundle\Entity\KvintListedEntities;
 use KvintBundle\Repository\SkladRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

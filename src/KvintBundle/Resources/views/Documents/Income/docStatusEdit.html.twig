@@ -1,0 +1,6 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% import 'AppBundle:DefaultForms:element.html.twig' as elem_form %}
+
+{{ form_start(form) }}
+{{ elem_form.show_elem_row(form.status, type) }}
+{{ form_end(form) }}

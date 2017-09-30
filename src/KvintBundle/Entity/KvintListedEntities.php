@@ -20,4 +20,10 @@ class KvintListedEntities
     public static function emptyFieldForChoice() {
         return ['id' => 0, 'text' => 'Не выбран'];
     }
+
+    public static function DocStatuses() {
+        return [
+            'Рабочая папка' => 'F', 'Проведен' => 'T', 'Удален' => 'D',
+        ];
+    }
 }
