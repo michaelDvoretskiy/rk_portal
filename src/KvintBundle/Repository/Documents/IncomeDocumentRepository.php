@@ -3,24 +3,29 @@
 namespace KvintBundle\Repository\Documents;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
 use KvintBundle\Entity\Documents\DocRow;
 use KvintBundle\Entity\Documents\IncomeDocument;
 
 class IncomeDocumentRepository extends EntityRepository {
+
+    public function processChangesAfter(IncomeDocument $doc, $options, $beforeRezult) {
+        return $this->_em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->processChangesAfter($doc, $options, $beforeRezult);
+    }
+
     public function processChanges(IncomeDocument $doc, $options) {
-        if ($options['type'] == 'update') {
-            $originalData = $this->_em->getUnitOfWork()->getOriginalEntityData($doc);
-            if ($doc->getStatus() != $originalData['status'] && in_array('T', [$doc->getStatus(),$originalData['status'] ])) {
-                //document status was changed to passed or from passed
-                //we need to create or delete movements for remains
-                dump($doc->getStatus());
-            } elseif ($originalData['status'] == 'T') {
-                if ($doc->getWareHouse() != $originalData['wareHouse'] || $doc->getCustomer() != $originalData['customer']) {
-                    //refill remains based on new customer or wareHouse
-                    dump([$doc->getWareHouse(), $doc->getCustomer()]);
-                }
+        $uow = $this->_em->getUnitOfWork();
+        $originalData = $uow->getOriginalEntityData($doc);
+
+        $rez = $this->_em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->processChanges($doc, $options);
+
+        if ($doc->getCustomer() != $originalData['customer'] || $doc->getPercentOfNDS() != $originalData['percentOfNDS']) {
+            $rows = $doc->getRows();
+            foreach($rows as $row) {
+                $row->setSupplier($doc->getCustomer());
+                $row->setSalePrice($row->getCostPriceWithNdsDoc());
+                $this->_em->persist($row);
             }
         }
+        return $rez;
     }
 }

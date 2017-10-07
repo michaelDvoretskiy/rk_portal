@@ -23,6 +23,11 @@ class Group extends BaseGroup
      */
     protected $rights;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DocRight", mappedBy="group")
+     */
+    protected $docRights;
+
     public function __construct()
     {
         parent::__construct("");
@@ -49,4 +54,19 @@ class Group extends BaseGroup
         $this->rights = $rights;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDocRights()
+    {
+        return $this->docRights;
+    }
+
+    /**
+     * @param mixed $docRights
+     */
+    public function setDocRights($docRights)
+    {
+        $this->docRights = $docRights;
+    }
 }

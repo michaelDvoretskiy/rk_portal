@@ -5,7 +5,9 @@ namespace AppBundle\Utils;
 use Sg\DatatablesBundle\Datatable\Style;
 
 class DataTableUtil {
-    public static function getActions($path, $show, $edit, $delete, $rights = ['view' => true, 'add' => 'false', 'edit' => false, 'delete' => false], $returnParameters = array()) {
+    public static function getActions($path, $show, $edit, $delete, $others,
+                                      $rights = ['view' => true, 'add' => 'false', 'edit' => false, 'delete' => false, 'journal' => false],
+                                      $returnParameters = array()) {
         $returnParameters['id'] = 'kod';
         $res = [
             'title' => '', //$this->translator->trans('sg.datatables.actions.title'),
@@ -55,6 +57,22 @@ class DataTableUtil {
                     'class' => 'btn btn-danger btn-xs',
                     'role' => 'button'
                 ),
+            ];
+        }
+
+        if (isset($others['journal']) && isset($rights['journal']) && $rights['journal']) {
+            $actions[] = [
+                'label' => '',
+                'icon' => 'fa fa-file-text-o',
+                'attributes' => array(
+                    'rel' => 'tooltip',
+                    'title' => 'Журнал изменений',
+                    'class' => 'btn btn-info btn-xs',
+                    'role' => 'button',
+                    'onclick' => "showJournal(this);",
+                ),
+                'button' => true,
+                'button_value' => 'kod',
             ];
         }
 

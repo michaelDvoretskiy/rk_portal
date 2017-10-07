@@ -20,6 +20,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotEqualTo;
 
 class IncomeDocType extends AbstractType
 {
@@ -110,7 +112,14 @@ class IncomeDocType extends AbstractType
                         return $v->getKod();
                     },
                     'label' => 'Менеджер',
-//                    'data' => $data2,
+//                    'constraints' => [
+//                        new NotEqualTo(
+//                            [
+//                                'value' => (new Manager())->initEmptyForChoice(),
+//                            ]
+//                        ),
+//                        new NotBlank(),
+//                    ],
                 ]
             )
 //            ->add(
@@ -248,6 +257,14 @@ class IncomeDocType extends AbstractType
                 ]
             )
             ->add(
+                'percentOfNDS',
+                ChoiceType::class,
+                [
+                    'label' => 'НДС',
+                    'choices' => KvintListedEntities::NDSTypes(),
+                ]
+            )
+            ->add(
                 'termOfPayment',
                 DateType::class,
                 [
@@ -274,6 +291,7 @@ class IncomeDocType extends AbstractType
             function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
                 $data = $event->getData();
+
                 if ($form->has('customer')) {
                     if (!isset($data['customer'])) {
                         $data['customer'] = 0;
@@ -292,6 +310,14 @@ class IncomeDocType extends AbstractType
                                 return $v->getKod();
                             },
                             'label' => 'Клиент ',
+                            'constraints' => [
+                                new NotEqualTo(
+                                    [
+                                        'value' => (new Klient())->initEmptyForChoice(),
+                                    ]
+                                ),
+                                new NotBlank(),
+                            ],
                         ]
                     );
                 }

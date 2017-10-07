@@ -9,12 +9,13 @@ trait DataTableRightsChecker {
     public $returnParameters = array();
     public $ajaxUrl = null;
 
-    public function addActions($path, $show, $edit, $delete) {
+    public function addActions($path, $show, $edit, $delete, $others = []) {
         $preparedActions = DataTableUtil::getActions(
             $path,
             $show, //$this->translator->trans('sg.datatables.actions.show'),
             $edit, //$this->translator->trans('sg.datatables.actions.edit'),
             $delete, //"delete",
+            $others,
             $this->rights,
             $this->returnParameters
         );

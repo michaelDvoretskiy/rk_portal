@@ -26,4 +26,10 @@ class KvintListedEntities
             'Рабочая папка' => 'F', 'Проведен' => 'T', 'Удален' => 'D',
         ];
     }
+
+    public static function NDSTypes() {
+        return [
+            '20 %' => '20.00', '7 %' => '7.00', '0 %' => '.00',
+        ];
+    }
 }

@@ -131,6 +131,7 @@ class IncomeController extends KvintFormsController
         $options['return_parameters']['ffo_customer'] = is_null($customerEnt) ? 0 : $customerEnt->getKod();
         $options['return_parameters']['ffo_beginDate'] = $beginDateDT->format('d.m.Y');
         $options['return_parameters']['ffo_endDate'] = $endDateDT->format('d.m.Y');
+        $options['grd_total'] = false;
 
         return $this->listAction($request, IncomeDatatable::class, $options);
     }
@@ -192,6 +193,7 @@ class IncomeController extends KvintFormsController
                 'additional_datatables' => [
                     ['name'=>'tovar', 'data_table_type' => IncomeRowDatatable::class, 'ajax_url' => $this->generateUrl('kvint_documents_income_tovar_list', ['id' => $doc->getKod()])],
                 ],
+                'comp_name' => $request->getHost(),
             ]
         );
     }
@@ -205,7 +207,6 @@ class IncomeController extends KvintFormsController
      * @return Response
      */
     public function removeIncomeAction(Request $request, IncomeDocument $doc) {
-
         if (!$this->hasRight('delete')) {
             return $this->render("@Kvint/Default/err.html.twig", ['text' => "Delete " . "Income document element. Access deny"]);
         }
@@ -220,7 +221,11 @@ class IncomeController extends KvintFormsController
      * @Route("/documents/status/edit/{id}", name = "kvint_documents_status_edit", options = {"expose" = true})
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function RowFormAction(Request $request, GoodsMovingDocument $doc) {
+    public function StatusEditAction(Request $request, GoodsMovingDocument $doc) {
+        if (!$this->hasRight('edit')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => "Delete " . "Income document element. Access deny"]);
+        }
+
         $form = $this->createForm(DocStatusType::class, $doc);
 
         $form->handleRequest($request);
@@ -228,10 +233,8 @@ class IncomeController extends KvintFormsController
             $doc = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
 
-            //$arr = $em->getRepository("KvintBundle:Documents\DocRow")->updateRow($row);
-//            if ($arr[0]['rez'] == 0) {
-//                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
-//            }
+            $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->processStatusChange($doc, $this->getUser()->getUsername(), $request->getHost());
+
             $em->persist($doc);
             $em->flush();
 
@@ -252,5 +255,19 @@ class IncomeController extends KvintFormsController
                 'formReturn' => $formReturn->getContent(),
             ]
         );
+    }
+
+    /**
+     * @Route("/documents/change/journal/show/{id}", name = "kvint_documents_change_journal", options = {"expose" = true})
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("@Kvint/Documents/changeJournal.html.twig")
+     */
+    public function RowFormAction(Request $request, $id) {
+        $docData = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Documents\GoodsMovingDocument')->getGeneralDocChangeJournal($id);
+        $rowsData = [];
+        return [
+            'docData' => $docData,
+            'rowsData' => $rowsData,
+        ];
     }
 }

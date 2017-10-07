@@ -124,7 +124,8 @@ class IncomeDatatable extends AbstractDatatable
         $this->addActions('kvint_documents_income',
             $this->translator->trans('sg.datatables.actions.show'),
             $this->translator->trans('sg.datatables.actions.edit'),
-            "delete"
+            "delete",
+            ['journal' => true]
         );
     }
 

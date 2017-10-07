@@ -44,6 +44,20 @@
         </div>
     </div>
 
+    <div style="display: none;" class="modal fade" id="showJournalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Журнал изменений документа</h4>
+                </div>
+                <div class="modal-body">
+                    {#{{ render(controller('KvintBundle:Documents/Income:RowForm')) }}#}
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{ list_form.show_list("Список приходов :", "kvint_documents_income_add", datatable, is_add_btn, {sm: 12, md: 12, lg: 12}, options.return_parameters) }}
 {% endblock %}
 
@@ -139,6 +153,18 @@
             }
         });
     });
-
+    function showJournal(elem) {
+        var id = $(elem).val();
+        myApp.showPleaseWait();
+        $('#showJournalForm div.modal-body').html("");
+        $.ajax({
+            url: Routing.generate("kvint_documents_change_journal", {"id": id}),
+            success: function(data) {
+                $('#showJournalForm div.modal-body').html(data);
+                myApp.hidePleaseWait();
+                $('#showJournalForm').modal('show');
+            }
+        });
+    }
 </script>
 {% endblock %}

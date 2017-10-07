@@ -40,9 +40,15 @@ class DocRowController extends KvintFormsController
 //        $em->remove($row);
 //        $em->flush();
 
-        $arr = $em->getRepository("KvintBundle:Documents\DocRow")->deleteRow($row);
+        $arr = $em->getRepository("KvintBundle:Documents\DocRow")->deleteRow($row,
+            [
+                'user_name' => $this->getUser()->getUserName(),
+                'comp_name' => $request->getHost(),
+            ]
+        );
         if ($arr[0]['rez'] == 0) {
-            $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
+            $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod(),
+                $this->getUser()->getUserName(), $request->getHost());
         }
         return new JsonResponse(
             [
@@ -65,9 +71,15 @@ class DocRowController extends KvintFormsController
             $row = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
 
-            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->updateRow($row);
+            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->updateRow($row,
+                [
+                    'user_name' => $this->getUser()->getUserName(),
+                    'comp_name' => $request->getHost(),
+                ]
+            );
             if ($arr[0]['rez'] == 0) {
-                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
+                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod(),
+                    $this->getUser()->getUserName(), $request->getHost());
             }
             return new JsonResponse(
                 [
@@ -105,9 +117,15 @@ class DocRowController extends KvintFormsController
         if ($form->isSubmitted() && $form->isValid()) {
             $row = $form->getData();
 
-            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->addRow($row);
+            $arr = $em->getRepository("KvintBundle:Documents\DocRow")->addRow($row,
+                [
+                    'user_name' => $this->getUser()->getUserName(),
+                    'comp_name' => $request->getHost(),
+                ]
+            );
             if ($arr[0]['rez'] == 0) {
-                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod());
+                $docHead = $em->getRepository('KvintBundle:Documents\GoodsMovingDocument')->updateHeaderByTableValues($row->getDocument()->getKod(),
+                    $this->getUser()->getUserName(), $request->getHost());
             }
             return new JsonResponse(
                 [

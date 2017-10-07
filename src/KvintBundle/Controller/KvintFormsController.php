@@ -54,7 +54,7 @@ class KvintFormsController extends Controller
                     }
                 }
             }
-            return $responseService->getResponse();
+            return $responseService->getResponse((isset($options['grd_total'])) ? $options['grd_total'] : true);
         }
         if (!isset($options['filterForm'])) {
             $options['filterForm'] = null;
@@ -136,18 +136,11 @@ class KvintFormsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $element = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
-            $em->persist($element);
-            if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChanges')) {
-                $em->getRepository($options['entity_name'])->processChanges($element, [
-                    'type' => 'update',
-                    'userName' => $this->getUser()->getUsername(),
-                ]);
-            }
-            if (isset($options['entity_name']) && method_exists($element, 'beforeUpdate')) {
-                $element->beforeUpdate();
-            }
-            $em->flush();
+
+            $this->flushWithBeforeAfter($em, $element, $options);
+
             $this->addFlash('success', $options['errTxt'] . " updated!");
+
             if (isset($options['return_parameters'])) {
                 return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
             }
@@ -220,14 +213,9 @@ class KvintFormsController extends Controller
             $element = $form->getData();
             $em = $this->getDoctrine()->getManager("kvint");
             $element->setKod($em->getRepository($options['entity_name'])->generateKod());
-            $em->persist($element);
-            if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChanges')) {
-                $em->getRepository($options['entity_name'])->processChanges($element, [
-                    'type' => 'insert',
-                    'userName' => $this->getUser()->getUsername(),
-                ]);
-            }
-            $em->flush();
+
+            $this->flushWithBeforeAfter($em, $element, $options);
+
             if (isset($options['return_parameters'])) {
                 return $this->redirectToRoute($options['route_return'], $options['return_parameters']);
             }
@@ -245,5 +233,51 @@ class KvintFormsController extends Controller
             'type' => 'new',
             'other_options' => $other_options,
         ]);
+    }
+
+    private function handleBeforePersist($em, $element, $options) {
+        if (isset($options['entity_name']) && method_exists($element, 'beforePersist')) {
+            $element->beforePersist();
+        }
+    }
+
+    private function handleBeforeUpdate($em, $element, $options) {
+        $repositoryRezult = [];
+        if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChanges')) {
+            $repositoryRezult = $em->getRepository($options['entity_name'])->processChanges($element, [
+                'type' => 'update',
+                'userName' => $this->getUser()->getUsername(),
+                'comp_name' => isset($options['comp_name']) ? $options['comp_name'] : '',
+            ]);
+        }
+        $objectRezult = [];
+        if (isset($options['entity_name']) && method_exists($element, 'beforeUpdate')) {
+            $objectRezult = $element->beforeUpdate();
+        }
+        return [
+            'from_rep' => $repositoryRezult,
+            'from_obj' => $objectRezult,
+        ];
+    }
+
+    private function handleAfterUpdate($em, $element, $options, $beforeRezult) {
+        if (isset($options['entity_name']) && method_exists($em->getRepository($options['entity_name']), 'processChangesAfter')) {
+            $em->getRepository($options['entity_name'])->processChangesAfter($element, [
+                'type' => 'update',
+                'userName' => $this->getUser()->getUsername(),
+                'comp_name' => isset($options['comp_name']) ? $options['comp_name'] : '',
+            ], $beforeRezult);
+        }
+        if (isset($options['entity_name']) && method_exists($element, 'afterUpdate')) {
+            $element->afterUpdate();
+        }
+    }
+
+    private function flushWithBeforeAfter($em, $element, $options) {
+        $this->handleBeforePersist($em, $element, $options);
+        $em->persist($element);
+        $rezBefore = $this->handleBeforeUpdate($em, $element, $options);
+        $em->flush();
+        $this->handleAfterUpdate($em, $element, $options, $rezBefore);
     }
 }

@@ -160,7 +160,12 @@ easy_admin:
           fields:
             - name
       Rights:
-        label: Права
+        label: Общие права
         class: AppBundle\Entity\Right
         list:
           fields: ['group', 'pEntity', 'list', 'view', 'add', 'edit', 'delete']
+      DocRights:
+        label: Права документы
+        class: AppBundle\Entity\DocRight
+        list:
+          fields: ['group', 'pEntity', 'changeStatus', 'viewChangesJournal']

@@ -844,7 +844,7 @@ class GoodsMovingDocument {
         return $this;
     }
 
-    public function beforeUpdate() {
+    public function beforePersist() {
         if (!is_null($this->getCustomer()) && $this->getCustomer()->getKod() == 0) {
             $this->setCustomer(null);
         }
