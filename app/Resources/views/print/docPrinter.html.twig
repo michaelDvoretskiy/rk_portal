@@ -1,0 +1,67 @@
+{% macro showTitle(title) %}
+    <div class = "document-title">
+        {{ title }}
+    </div>
+{% endmacro %}
+
+{% macro showAttr(attr) %}
+    <div class = "document-head-attr">
+        <div class = "attr-caption">
+            {{ attr.caption }} :
+        </div>
+        <div class = "attr-value">
+            {{ attr.value }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro showTable(table) %}
+    {% set styleClass = '' %}
+    {% if table.styleClass is defined %}
+        {% set styleClass =  table.styleClass %}
+    {% endif %}
+    <table class = "doc-table {{ styleClass }}">
+        <THEAD>
+            <TR>
+                {% for colHead in table.head %}
+                    {% set styleClass = '' %}
+                    {% if colHead.styleClass is defined %}
+                        {% set styleClass =  colHead.styleClass %}
+                    {% endif %}
+                    <TH class = "doc-th {{ styleClass }} ">{{ colHead.caption  }}</TH>
+                {% endfor %}
+            </TR>
+        </THEAD>
+        <TBODY>
+            {% for row in table.rows %}
+                <TR>
+                {% for cell in row %}
+                    {% set styleClass = '' %}
+                    {% if cell.styleClass is defined %}
+                        {% set styleClass =  cell.styleClass %}
+                    {% endif %}
+                    <TD class = "doc-td {{ styleClass }} ">{{ cell.value  }}</TD>
+                {% endfor %}
+                </TR>
+            {% endfor %}
+        </TBODY>
+        <tfoot>
+            {% for attr in table.foot %}
+                <tr>
+                    {% if attr.valColSpan is defined %}
+                        {% set colSpan2 = attr.valColSpan %}
+                    {% else %}
+                        {% set colSpan2 = 1 %}
+                    {% endif %}
+                    {% set colSpan1 = table.head|length - colSpan2 %}
+                    <td colspan="{{ colSpan1 }}" class = "doc-tbl-foot-caption">
+                        {{ attr.caption }}
+                    </td>
+                    <td colspan="{{ colSpan2 }}" class = "doc-tbl-foot-value">
+                        {{ attr.value }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tfoot>
+    </table>
+{% endmacro %}

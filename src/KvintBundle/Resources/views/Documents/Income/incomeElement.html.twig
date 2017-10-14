@@ -27,6 +27,13 @@
             </li>
             <li><a href="#4" data-toggle="tab">Наценка</a>
             </li>
+            {% if other_options.journal_right is defined %}
+                {% if (other_options.journal_right) %}
+                    <li><a href="#5" data-toggle="tab">Журнал</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
         </ul>
 
         <div class="tab-content">
@@ -75,7 +82,37 @@
             </div>
             <div class="tab-pane" id="4">
             </div>
+            <div class="tab-pane" id="5">
+                {% if other_options.journal_right is defined %}
+                    {% if (other_options.journal_right) %}
+                        <table id="table_doc_journal" class="table table-striped table-condensed mytable-font-small">
+                            <thead>
+                            <tr>
+                                <th data-field="dateTime" data-halign="center" data-align="left">Дата/время</th>
+                                <th data-field="tovarKod" data-halign="center" data-align="left">Код</th>
+                                <th data-field="tovarName" data-halign="center" data-align="left">Наименование</th>
+                                <th data-field="operType" data-halign="center" data-align="left">Операция</th>
+                                <th data-field="userName" data-halign="center" data-align="left">Пользователь</th>
+                                <th data-field="oldCostPrice" data-halign="center" data-align="right">СтУчЦена</th>
+                                <th data-field="newCostPrice" data-halign="center" data-align="right">НовУчЦена</th>
+                                <th data-field="oldSalePrice" data-halign="center" data-align="right">СтОтпЦена</th>
+                                <th data-field="newSalePrice" data-halign="center" data-align="right">НовОтпЦена</th>
+                                <th data-field="oldQuantity" data-halign="center" data-align="right">СтКол</th>
+                                <th data-field="newQuantity" data-halign="center" data-align="right">НовКол</th>
+                                <th data-field="skid" data-halign="center" data-align="right">Скидка</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
+    </div>
+
+    <div class="col-xs-12">
+        <a href=" {{ path("kvint_documents_income_print", {"id": docForm.kod.vars.value}) }} " target="_blank" class="btn tn-success btn-default btn-new">
+            <i class="fa fa-print" aria-hidden="true"></i> Печать
+        </a>
     </div>
 
     <div class="col-xs-12">
@@ -123,6 +160,16 @@
 
 {% block jsfooter %}
     <script type="text/javascript">
+        {% if other_options.journal_right is defined %}
+            {% if (other_options.journal_right) %}
+                $(function () {
+                    $('#table_doc_journal').bootstrapTable({
+                        data: {{ other_options.journalData|json_encode|raw }}
+                    });
+                });
+            {% endif %}
+        {% endif %}
+
         $('#kvint_bundle_income_document_type_wareHouse').select2({
             theme: "bootstrap"
         });

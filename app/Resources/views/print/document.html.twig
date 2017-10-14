@@ -1,0 +1,27 @@
+{% extends 'print/base.html.twig' %}
+{% import ':print:docPrinter.html.twig' as docPrinter %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    {% block head %}
+        {{ docPrinter.showTitle(doc.title) }}
+        {% for attr in doc.attrList %}
+            {{ docPrinter.showAttr(attr) }}
+        {% endfor %}
+    {% endblock %}
+    <br><br>
+    {% block table %}
+        {% for table in doc.tables %}
+            {{ docPrinter.showTable(table) }}
+            <br><br>
+        {% endfor %}
+    {% endblock %}
+    {% block foot %}
+        {% for attr in doc.attrListFooter %}
+            {{ docPrinter.showAttr(attr) }}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}

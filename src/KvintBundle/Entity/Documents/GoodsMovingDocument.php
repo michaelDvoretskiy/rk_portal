@@ -853,7 +853,15 @@ class GoodsMovingDocument {
         }
     }
 
-    public function getDocTitle() {
-        return "№ " . $this->number . " от " . $this->getDocDate()->format('d.m.Y');
+    public function getDocTitle($connWord = " от ") {
+        return "№ " . $this->number . $connWord . $this->getDocDate()->format('d.m.Y');
+    }
+
+    public function getRowsSortedByName() {
+        $iterator = $this->getRows()->getIterator();
+        $iterator->uasort(function ($a, $b) {
+            return ($a->getTovar()->getTname() < $b->getTovar()->getTname()) ? -1 : 1;
+        });
+        return new ArrayCollection(iterator_to_array($iterator));
     }
 }

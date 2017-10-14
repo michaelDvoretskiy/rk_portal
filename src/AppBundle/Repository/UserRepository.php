@@ -3,20 +3,49 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\QueryException;
 use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class UserRepository extends EntityRepository
 {
     public function checkRight(UserInterface $user, $entityName, $type) {
-        $res = $this->getEntityManager("symf_portal")
-            ->createQuery("select max(r." . $type . " * 1) allowed
+        return $this->checkGeneralRight($user, $entityName, $type) || $this->checkDocRight($user, $entityName, $type);
+    }
+
+    public function checkGeneralRight(UserInterface $user, $entityName, $type) {
+        try {
+            $res = $this->getEntityManager("symf_portal")
+                ->createQuery("select max(r." . $type . " * 1) allowed
                 from AppBundle:User u join u.groups g left join g.rights r left join r.pEntity e
                 where u.id = ?2 and e.name = ?3" )
-            ->setParameter(2, $user->getId())
-            ->setParameter(3, $entityName)
-            ->getResult();
-        $allowed = $res[0]["allowed"];
-        if (is_null($allowed)) {
+                ->setParameter(2, $user->getId())
+                ->setParameter(3, $entityName)
+                ->getResult();
+            $allowed = $res[0]["allowed"];
+            if (is_null($allowed)) {
+                $allowed = false;
+            }
+        } catch(QueryException $e) {
+            $allowed = false;
+        }
+        return (boolean)$allowed;
+    }
+
+    public function checkDocRight(UserInterface $user, $entityName, $type) {
+        try {
+            $res = $this->getEntityManager("symf_portal")
+                ->createQuery("select max(r." . $type . " * 1) allowed
+                    from AppBundle:User u join u.groups g left join g.docRights r left join r.pEntity e
+                    where u.id = ?2 and e.name = ?3" )
+                ->setParameter(2, $user->getId())
+                ->setParameter(3, $entityName)
+                ->getResult();
+            $allowed = $res[0]["allowed"];
+            if (is_null($allowed)) {
+                $allowed = false;
+            }
+        } catch(QueryException $e) {
             $allowed = false;
         }
         return (boolean)$allowed;

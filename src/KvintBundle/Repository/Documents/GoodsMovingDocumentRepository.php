@@ -223,4 +223,27 @@ class GoodsMovingDocumentRepository extends EntityRepository {
 
         return $q->getResult();
     }
+
+    public function getRowsDocChangeJournal($id) {
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult("dt", "dateTime");
+        $rsm->addScalarResult("kodtov", "tovarKod");
+        $rsm->addScalarResult("tname", "tovarName");
+        $rsm->addScalarResult("typ", "operType");
+        $rsm->addScalarResult("uname", "userName");
+        $rsm->addScalarResult("cuo", "oldCostPrice");
+        $rsm->addScalarResult("cun", "newCostPrice");
+        $rsm->addScalarResult("coo", "oldSalePrice");
+        $rsm->addScalarResult("con", "newSalePrice");
+        $rsm->addScalarResult("kolo", "oldQuantity");
+        $rsm->addScalarResult("koln", "newQuantity");
+        $rsm->addScalarResult("skid", "skid");
+        $q = $this->_em->createNativeQuery("select CONVERT(varchar, data, 104) + ' ' + left(CONVERT(varchar, data, 114),8) dt, kodtov, tname, 
+                case typ when 1 then 'Добавлена' when 2 then 'Изменена' when 3 then 'Удалена' end typ,
+                uname, cuo, cun, coo, con, kolo, koln, skid
+                from sysgurndok s inner join tovar t on s.kodtov = t.kod
+                where s.kod = " . $id . " order by data desc", $rsm);
+
+        return $q->getResult();
+    }
 }

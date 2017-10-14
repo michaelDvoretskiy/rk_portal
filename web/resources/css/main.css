@@ -87,3 +87,7 @@ body .modal-add-row {
 body .modal-change-doc-status {
     width: 250px;
 }
+
+table.mytable-font-small {
+    font-size: 11px;
+}

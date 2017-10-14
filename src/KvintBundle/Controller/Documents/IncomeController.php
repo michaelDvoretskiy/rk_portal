@@ -3,6 +3,7 @@
 namespace KvintBundle\Controller\Documents;
 
 use AppBundle\Utils\MyHelper;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use KvintBundle\Controller\KvintFormsController;
 use KvintBundle\Datatables\Documents\IncomeDatatable;
 use KvintBundle\Datatables\Documents\IncomeRowDatatable;
@@ -194,6 +195,10 @@ class IncomeController extends KvintFormsController
                     ['name'=>'tovar', 'data_table_type' => IncomeRowDatatable::class, 'ajax_url' => $this->generateUrl('kvint_documents_income_tovar_list', ['id' => $doc->getKod()])],
                 ],
                 'comp_name' => $request->getHost(),
+                'other_options' => [
+                    'journal_right' => $this->hasRight('viewChangesJournal'),
+                    'journalData' => $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Documents\GoodsMovingDocument')->getRowsDocChangeJournal($doc->getKod()),
+                ]
             ]
         );
     }
@@ -262,12 +267,41 @@ class IncomeController extends KvintFormsController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Template("@Kvint/Documents/changeJournal.html.twig")
      */
-    public function RowFormAction(Request $request, $id) {
+    public function ViewJournalAction(Request $request, $id) {
+        if (!$this->hasRight('viewChangesJournal')) {
+            return $this->render("@Kvint/Default/err.html.twig", ['text' => "Document journal change. Access deny"]);
+        }
         $docData = $this->getDoctrine()->getManager('kvint')->getRepository('KvintBundle:Documents\GoodsMovingDocument')->getGeneralDocChangeJournal($id);
         $rowsData = [];
         return [
             'docData' => $docData,
             'rowsData' => $rowsData,
         ];
+    }
+
+    /**
+     * @Route("/documents/income/pdf/{id}", name = "kvint_documents_income_pdf", options = {"expose" = true})
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function PdfAction(IncomeDocument $doc) {
+
+        $html = $this->renderView('print/document.html.twig', [
+            'doc' => $doc->getArrayToPrint(),
+        ]);
+
+        return new PdfResponse(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            'file.pdf'
+        );
+    }
+
+    /**
+     * @Route("/documents/income/print/{id}", name = "kvint_documents_income_print", options = {"expose" = true})
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function PrintAction(IncomeDocument $doc) {
+        return $this->render('print/document.html.twig', [
+            'doc' => $doc->getArrayToPrint(),
+        ]);
     }
 }
